@@ -362,12 +362,12 @@
       </header>
 
       <nav class="tabs" role="tablist">
-        <button class="tab-btn" role="tab" aria-selected="false" data-tab="work">업무</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="home">홈</button>
         <button class="tab-btn" role="tab" aria-selected="false" data-tab="gpt-hawaii">지피티_하와이</button>
-        <button class="tab-btn" role="tab" aria-selected="true" data-tab="claude-hawaii">클로드_하와이 ✨</button>
+        <button class="tab-btn" role="tab" aria-selected="true" data-tab="claude-hawaii">클로드_하와이</button>
       </nav>
 
-      <section class="tab-panel" id="tab-work" role="tabpanel">
+      <section class="tab-panel" id="tab-home" role="tabpanel">
         <section class="grid">
           <article class="card hero">
             <h2 class="section-title">업무 요약</h2>
@@ -463,7 +463,7 @@
             <h2 class="section-title">여행 요약 — Claude v2 (검증 완료)</h2>
             <div class="kpis" id="c-kpi-grid"></div>
             <p class="claude-note">
-              KE053 기준 7박 8일 · 마우이 4박 + 오아후 3박 · <strong>호텔 베이스</strong> · 캠핑 0박 · 일출 2회 · 신혼 디너 1회 ·
+              KE053/054 · <strong>8박 9일 (7/12~7/20)</strong> · 마우이 4박 + 오아후 4박 · <strong>호텔 4박 + 캠핑 4박</strong> · 일출 2회 · Hanauma 스노쿨링 · 신혼 디너 1회 ·
               ⚠️ 표기는 사전 예약 필수 항목.
             </p>
           </article>
@@ -514,7 +514,45 @@
           </article>
 
           <article class="card" style="grid-column: span 12">
-            <h2 class="section-title">💰 예상 비용 (2인 / 7박 8일 / USD)</h2>
+            <h2 class="section-title">📅 캠핑 예약 스케줄 — 4박 적용 (Day 3~6)</h2>
+            <table class="errors-table" id="c-camp-schedule-table">
+              <thead>
+                <tr>
+                  <th>일자</th>
+                  <th>캠핑장</th>
+                  <th>사이트 추천</th>
+                  <th>가격</th>
+                  <th>예약처</th>
+                  <th>예약 오픈</th>
+                  <th>특이사항</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <p class="muted claude-note">
+              ⚠️ 7월 성수기 — <strong>Camp Olowalu 캐빈 + Malaekahana 유르트는 매진 매우 빠름</strong>. 항공권 확정 후 즉시 예약. Wai'ānapanapa는 입장과 캠핑이 별도 예약이라 둘 다 잡아야 해.
+            </p>
+          </article>
+
+          <article class="card" style="grid-column: span 12">
+            <h2 class="section-title">🎒 캠핑 준비물 (4박)</h2>
+            <table class="errors-table" id="c-gear-table">
+              <thead>
+                <tr>
+                  <th>항목</th>
+                  <th>우선순위</th>
+                  <th>비고</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <p class="muted claude-note">
+              텐트·매트·침낭은 <strong>현지 대여 가능</strong> (REI / Camp Olowalu). 가스류는 비행기 휴대 불가 — 현지 마트(Foodland·Times Supermarket)에서 구매. Day 4 Camp Olowalu·Day 6 Malaekahana 캐빈/유르트 선택 시 텐트 장비 부담 ↓.
+            </p>
+          </article>
+
+          <article class="card" style="grid-column: span 12">
+            <h2 class="section-title">💰 예상 비용 (2인 / 8박 9일 / USD)</h2>
             <table class="errors-table" id="c-budget-table">
               <thead>
                 <tr>
@@ -770,7 +808,7 @@
 
       // ===== 클로드_하와이 패널 =====
       const DATA_CLAUDE = [
-        {"Day":1,"날짜":"7/12","요일":"일","섬":"마우이","시간":"11:25","장소":"HNL 도착 (KE053)","카테고리":"✈️ 이동","예약":"","메모":"국제선 입국·짐찾기 60~90분","비용":"-","숙박":"Paia Inn","fix":false},
+        {"Day":1,"날짜":"7/12","요일":"일","섬":"마우이","시간":"10:55","장소":"HNL 도착 (KE053 · 프레스티지)","카테고리":"✈️ 이동","예약":"","메모":"e-티켓 확인. ICN 21:05 → HNL 10:55 (8h 50m). 입국·짐찾기 60~90분","비용":"-","숙박":"Paia Inn","fix":false},
         {"Day":1,"날짜":"7/12","요일":"일","섬":"마우이","시간":"13:30","장소":"HNL→OGG 국내선","카테고리":"✈️ 이동","예약":"⚠️ Hawaiian Air","메모":"35분 비행. 미예약이면 즉시 발권","비용":"$$","숙박":"Paia Inn","fix":false},
         {"Day":1,"날짜":"7/12","요일":"일","섬":"마우이","시간":"14:30","장소":"OGG 렌트카 픽업","카테고리":"🚗 이동","예약":"⚠️ 사전 예약","메모":"Costco Travel·Discount Hawaii 비교","비용":"$$$","숙박":"Paia Inn","fix":false},
         {"Day":1,"날짜":"7/12","요일":"일","섬":"마우이","시간":"16:00","장소":"Paia Fish Market","카테고리":"🍽️ 식사","예약":"","메모":"Tin Roof 일요일 휴무 가능성 회피. 마히마히 추천","비용":"$$","숙박":"Paia Inn","fix":true},
@@ -784,52 +822,61 @@
         {"Day":2,"날짜":"7/13","요일":"월","섬":"마우이","시간":"15:00","장소":"Big Beach (Makena)","카테고리":"🏖️ 해변","예약":"","메모":"마우이 남부 최고 해변. 일출 후 회복","비용":"무료","숙박":"Paia/Kahului","fix":false},
         {"Day":2,"날짜":"7/13","요일":"월","섬":"마우이","시간":"18:30","장소":"Coconut's Fish Cafe","카테고리":"🍽️ 저녁","예약":"","메모":"Kihei 캐주얼 시푸드","비용":"$$","숙박":"Paia/Kahului","fix":false},
 
-        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"06:30","장소":"Paia 출발 (Hana Hwy)","카테고리":"🚗 이동","예약":"","메모":"원본의 일출+Hana 동시 강행 분리. 4~6h 풀데이","비용":"-","숙박":"Hana Resort","fix":true},
-        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"07:00","장소":"Twin Falls","카테고리":"💧 폭포","예약":"","메모":"첫 정차. 짧은 트레일","비용":"무료","숙박":"Hana Resort","fix":false},
-        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"10:00","장소":"Aunty Sandy's 바나나빵","카테고리":"🍩 디저트","예약":"","메모":"Keʻanae Peninsula 명물","비용":"$","숙박":"Hana Resort","fix":false},
-        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"11:30","장소":"Wailua Falls","카테고리":"💧 폭포","예약":"","메모":"로드사이드 사진 명소","비용":"무료","숙박":"Hana Resort","fix":false},
-        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"12:30","장소":"Wai'ānapanapa 흑사 해변","카테고리":"🌿 자연","예약":"⚠️ gostateparks.hawaii.gov","메모":"흑사+용암 동굴+블로우홀","비용":"$10/인","숙박":"Hana Resort","fix":false},
-        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"14:00","장소":"Hana Farms / Thai by Pranee","카테고리":"🍽️ 점심","예약":"","메모":"Hana 마을 도착 점심","비용":"$$","숙박":"Hana Resort","fix":false},
-        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"15:30","장소":"Hamoa Beach","카테고리":"🏖️ 해변","예약":"","메모":"Hana 최고 비치","비용":"무료","숙박":"Hana Resort","fix":false},
-        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"17:30","장소":"Hana-Maui Resort 체크인","카테고리":"🛏️ 숙박","예약":"⚠️ 사전 예약","메모":"Wai'ānapanapa 캠핑 폐기. 호텔로 변경 (신혼 컨셉)","비용":"$$$$","숙박":"Hana Resort","fix":true},
+        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"06:30","장소":"Paia 출발 (Hana Hwy)","카테고리":"🚗 이동","예약":"","메모":"원본의 일출+Hana 동시 강행 분리. 4~6h 풀데이","비용":"-","숙박":"Wai'ānapanapa Camp","fix":true},
+        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"07:00","장소":"Twin Falls","카테고리":"💧 폭포","예약":"","메모":"첫 정차. 짧은 트레일","비용":"무료","숙박":"Wai'ānapanapa Camp","fix":false},
+        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"10:00","장소":"Aunty Sandy's 바나나빵","카테고리":"🍩 디저트","예약":"","메모":"Keʻanae Peninsula 명물","비용":"$","숙박":"Wai'ānapanapa Camp","fix":false},
+        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"11:30","장소":"Wailua Falls","카테고리":"💧 폭포","예약":"","메모":"로드사이드 사진 명소","비용":"무료","숙박":"Wai'ānapanapa Camp","fix":false},
+        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"12:30","장소":"Wai'ānapanapa 흑사 해변","카테고리":"🌿 자연","예약":"⚠️ gostateparks.hawaii.gov","메모":"흑사+용암 동굴+블로우홀","비용":"$10/인","숙박":"Wai'ānapanapa Camp","fix":false},
+        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"14:00","장소":"Hana Farms / Thai by Pranee","카테고리":"🍽️ 점심","예약":"","메모":"Hana 마을 도착 점심","비용":"$$","숙박":"Wai'ānapanapa Camp","fix":false},
+        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"15:30","장소":"Hamoa Beach","카테고리":"🏖️ 해변","예약":"","메모":"Hana 최고 비치","비용":"무료","숙박":"Wai'ānapanapa Camp","fix":false},
+        {"Day":3,"날짜":"7/14","요일":"화","섬":"마우이","시간":"17:30","장소":"Wai'ānapanapa SP 캠핑 체크인 🏕️","카테고리":"🏕️ 캠핑","예약":"⚠️ 입장+캠핑 별도 (gostateparks.hawaii.gov)","메모":"4박 캠핑 1일차. 흑사 해변 옆. 냉수 샤워. 텐트 $20 / 케이빈 $130. 30일 전부터 예약","비용":"$20","숙박":"Wai'ānapanapa Camp","fix":true},
 
-        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"09:00","장소":"Hana → Kaanapali","카테고리":"🚗 이동","예약":"","메모":"Hana Hwy 역방향 약 3시간. Pi'ilani 백로드는 비포장·약관 위반 흔함","비용":"-","숙박":"Sheraton Maui","fix":true},
-        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"12:30","장소":"Sam Sato's (Wailuku)","카테고리":"🍽️ 점심","예약":"","메모":"드라이 누들 명물","비용":"$","숙박":"Sheraton Maui","fix":false},
-        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"14:30","장소":"Sheraton Maui 체크인","카테고리":"🛏️ 숙박","예약":"⚠️ 사전 예약","메모":"Black Rock 위치 베스트","비용":"$$$$","숙박":"Sheraton Maui","fix":false},
-        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"15:30","장소":"Black Rock 스노클링","카테고리":"🤿 액티비티","예약":"","메모":"호텔 앞 스노클링. 거북·열대어","비용":"무료","숙박":"Sheraton Maui","fix":false},
-        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"17:30","장소":"Black Rock 절벽 다이빙 의식","카테고리":"🌅 일몰","예약":"","메모":"Sheraton 매일 일몰 호롱불 의식 (무료)","비용":"무료","숙박":"Sheraton Maui","fix":true},
-        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"19:00","장소":"Star Noodle (1287 Front St)","카테고리":"🍜 저녁","예약":"⚠️ 1주 전 권장","메모":"2023 화재 후 새 주소로 재오픈. 갈릭 누들 必","비용":"$$$","숙박":"Sheraton Maui","fix":true},
+        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"09:00","장소":"Hana → Olowalu","카테고리":"🚗 이동","예약":"","메모":"Hana Hwy 역방향 약 3시간 + Olowalu 추가 30분. Pi'ilani 백로드는 비포장·약관 위반 흔함","비용":"-","숙박":"Camp Olowalu","fix":true},
+        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"12:30","장소":"Sam Sato's (Wailuku)","카테고리":"🍽️ 점심","예약":"","메모":"드라이 누들 명물","비용":"$","숙박":"Camp Olowalu","fix":false},
+        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"14:30","장소":"Camp Olowalu 체크인 🏕️","카테고리":"🏕️ 캠핑","예약":"⚠️ campolowalu.com","메모":"🟢 전기+온수 사설 캠핑. 신혼 캐빈 ($200~300) 또는 텐트 ($40~60). Black Rock까지 차로 25분","비용":"$220","숙박":"Camp Olowalu","fix":true},
+        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"15:30","장소":"Black Rock 스노클링","카테고리":"🤿 액티비티","예약":"","메모":"Sheraton 앞 비치. 거북·열대어. Camp에서 약 25분 운전","비용":"무료","숙박":"Camp Olowalu","fix":false},
+        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"17:30","장소":"Black Rock 절벽 다이빙 의식","카테고리":"🌅 일몰","예약":"","메모":"Sheraton 매일 일몰 호롱불 의식 (외부 무료 관람 가능)","비용":"무료","숙박":"Camp Olowalu","fix":true},
+        {"Day":4,"날짜":"7/15","요일":"수","섬":"마우이","시간":"19:00","장소":"Star Noodle (1287 Front St)","카테고리":"🍜 저녁","예약":"⚠️ 1주 전 권장","메모":"2023 화재 후 새 주소로 재오픈. 갈릭 누들 必","비용":"$$$","숙박":"Camp Olowalu","fix":true},
 
-        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"09:30","장소":"Kaanapali → OGG","카테고리":"🚗 이동","예약":"","메모":"약 1시간 운전","비용":"-","숙박":"Kailua","fix":false},
-        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"12:30","장소":"OGG → HNL 국내선","카테고리":"✈️ 이동","예약":"⚠️ 사전 예약 시급","메모":"35분 비행. 원본 시트도 동일 경고","비용":"$$","숙박":"Kailua","fix":false},
-        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"13:30","장소":"HNL 렌트카 픽업","카테고리":"🚗 이동","예약":"⚠️ 사전 예약","메모":"오아후 별도 렌트카 계약","비용":"$$$","숙박":"Kailua","fix":false},
-        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"15:30","장소":"Kailua Beach","카테고리":"🏖️ 해변","예약":"","메모":"오아후 최고 비치 (카약은 Day 6, 외부 상점 픽업)","비용":"무료","숙박":"Kailua","fix":true},
-        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"18:00","장소":"Buzz's Original Steakhouse","카테고리":"🍽️ 저녁","예약":"⚠️ 권장","메모":"오바마도 다녀간 곳","비용":"$$$","숙박":"Kailua","fix":false},
-        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"20:00","장소":"Kailua 호텔 체크인","카테고리":"🛏️ 숙박","예약":"⚠️ 사전 예약","메모":"Waimānalo 캠핑 폐기. Pillbox 트레일 접근성 ↑","비용":"$$$","숙박":"Kailua","fix":true},
+        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"09:30","장소":"Olowalu → OGG","카테고리":"🚗 이동","예약":"","메모":"Camp Olowalu 정리·약 40분 운전","비용":"-","숙박":"Waimānalo Camp","fix":true},
+        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"12:30","장소":"OGG → HNL 국내선","카테고리":"✈️ 이동","예약":"⚠️ 사전 예약 시급","메모":"35분 비행. 원본 시트도 동일 경고","비용":"$$","숙박":"Waimānalo Camp","fix":false},
+        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"13:30","장소":"HNL 렌트카 픽업","카테고리":"🚗 이동","예약":"⚠️ 사전 예약","메모":"오아후 별도 렌트카 계약","비용":"$$$","숙박":"Waimānalo Camp","fix":false},
+        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"15:30","장소":"Kailua Beach","카테고리":"🏖️ 해변","예약":"","메모":"오아후 최고 비치. Waimānalo 캠프까지 약 10분","비용":"무료","숙박":"Waimānalo Camp","fix":true},
+        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"18:00","장소":"Buzz's Original Steakhouse","카테고리":"🍽️ 저녁","예약":"⚠️ 권장","메모":"오바마도 다녀간 곳. Kailua 위치","비용":"$$$","숙박":"Waimānalo Camp","fix":false},
+        {"Day":5,"날짜":"7/16","요일":"목","섬":"오아후","시간":"20:00","장소":"Waimānalo Beach 캠핑 체크인 🏕️","카테고리":"🏕️ 캠핑","예약":"⚠️ honolulu.gov (Camping Permits) 14일 전","메모":"오아후 4박 캠핑 1일차. 3km 백사장. 냉수 샤워. ⚠️ Bellows는 금~일만 → 목요일은 Waimānalo로","비용":"$32","숙박":"Waimānalo Camp","fix":true},
 
-        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"05:00","장소":"Lanikai Pillbox 출발","카테고리":"🥾 하이킹","예약":"","메모":"왕복 1시간. 헤드램프 필수. 가파름·미끄러움","비용":"무료","숙박":"Waikiki","fix":false},
-        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"05:50","장소":"Pillbox 정상 일출","카테고리":"🌅 일출","예약":"","메모":"라니카이+모쿠루아 섬 일출 (인생샷)","비용":"무료","숙박":"Waikiki","fix":false},
-        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"07:30","장소":"Cinnamon's (Kailua)","카테고리":"☕ 아침","예약":"","메모":"구아바 시폰 팬케이크 명물","비용":"$$","숙박":"Waikiki","fix":false},
-        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"09:30","장소":"Kailua → 노스쇼어","카테고리":"🚗 이동","예약":"","메모":"H-3 또는 H-1 약 1시간","비용":"-","숙박":"Waikiki","fix":false},
-        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"11:00","장소":"Hale'iwa 마을 산책","카테고리":"🛍️ 마을","예약":"","메모":"Matsumoto 쉐이브 아이스 + 갤러리","비용":"$","숙박":"Waikiki","fix":false},
-        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"12:30","장소":"Giovanni's Shrimp Truck","카테고리":"🦐 점심","예약":"","메모":"카드 결제 가능 (원본 '현금만'은 부정확)","비용":"$$","숙박":"Waikiki","fix":true},
-        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"14:00","장소":"Waimea Bay Beach","카테고리":"🏖️ 해변","예약":"","메모":"여름엔 잔잔. 거북 자주 출현","비용":"무료","숙박":"Waikiki","fix":false},
-        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"17:30","장소":"Sunset Beach 일몰","카테고리":"🌇 일몰","예약":"","메모":"7월 일몰 19:15","비용":"무료","숙박":"Waikiki","fix":false},
-        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"21:30","장소":"와이키키 호텔 체크인","카테고리":"🛏️ 숙박","예약":"⚠️ 사전 예약","메모":"Day 6~7 와이키키 베이스","비용":"$$$$","숙박":"Waikiki","fix":false},
+        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"05:00","장소":"Lanikai Pillbox 출발","카테고리":"🥾 하이킹","예약":"","메모":"Waimānalo 캠프에서 차로 약 15분. 왕복 1시간. 헤드램프 필수","비용":"무료","숙박":"Malaekahana Camp","fix":false},
+        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"05:50","장소":"Pillbox 정상 일출","카테고리":"🌅 일출","예약":"","메모":"라니카이+모쿠루아 섬 일출 (인생샷)","비용":"무료","숙박":"Malaekahana Camp","fix":false},
+        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"07:30","장소":"Cinnamon's (Kailua)","카테고리":"☕ 아침","예약":"","메모":"구아바 시폰 팬케이크 명물","비용":"$$","숙박":"Malaekahana Camp","fix":false},
+        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"09:30","장소":"Waimānalo → 노스쇼어","카테고리":"🚗 이동","예약":"","메모":"Waimānalo 캠프 정리·이동. H-3 경로 약 1시간","비용":"-","숙박":"Malaekahana Camp","fix":true},
+        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"11:00","장소":"Hale'iwa 마을 산책","카테고리":"🛍️ 마을","예약":"","메모":"Matsumoto 쉐이브 아이스 + 갤러리","비용":"$","숙박":"Malaekahana Camp","fix":false},
+        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"12:30","장소":"Giovanni's Shrimp Truck","카테고리":"🦐 점심","예약":"","메모":"카드 결제 가능 (원본 '현금만'은 부정확)","비용":"$$","숙박":"Malaekahana Camp","fix":true},
+        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"14:00","장소":"Waimea Bay Beach","카테고리":"🏖️ 해변","예약":"","메모":"여름엔 잔잔. 거북 자주 출현","비용":"무료","숙박":"Malaekahana Camp","fix":false},
+        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"17:30","장소":"Sunset Beach 일몰","카테고리":"🌇 일몰","예약":"","메모":"7월 일몰 19:15","비용":"무료","숙박":"Malaekahana Camp","fix":false},
+        {"Day":6,"날짜":"7/17","요일":"금","섬":"오아후","시간":"21:30","장소":"Malaekahana 캠핑 체크인 🏕️","카테고리":"🏕️ 캠핑","예약":"⚠️ malaekahana.net","메모":"🟢 전기+온수 사설 캠핑. 유르트 ($90~150) 또는 캐빈 ($150~250). North Shore 직결","비용":"$120","숙박":"Malaekahana Camp","fix":true},
 
+        {"Day":7,"날짜":"7/18","요일":"토","섬":"오아후","시간":"04:30","장소":"Malaekahana 캠핑 정리·출발","카테고리":"🚗 이동","예약":"","메모":"North Shore → Diamond Head 약 50분 운전. 06:00 트레일 시작 위해 일찍 출발","비용":"-","숙박":"Waikiki","fix":true},
         {"Day":7,"날짜":"7/18","요일":"토","섬":"오아후","시간":"06:00","장소":"Diamond Head 트레일","카테고리":"🥾 하이킹","예약":"⚠️ gostateparks.hawaii.gov","메모":"원본 '토일 휴무'는 거짓 — 매일 06:00~18:00 운영. 토 정상 진행","비용":"$5+10","숙박":"Waikiki","fix":true},
         {"Day":7,"날짜":"7/18","요일":"토","섬":"오아후","시간":"08:00","장소":"Eggs 'n Things (이른 아침)","카테고리":"☕ 아침","예약":"","메모":"빨리 먹고 Hanauma Bay 이동 (Diamond Head→Hanauma 약 20분)","비용":"$$","숙박":"Waikiki","fix":false},
         {"Day":7,"날짜":"7/18","요일":"토","섬":"오아후","시간":"09:30","장소":"Hanauma Bay 스노쿨링 ⭐","카테고리":"🤿 스노쿨링","예약":"⚠️ pros.hnl.info (2일 전 07:00 오픈·매진 빠름)","메모":"오아후 최고 스노쿨링. 월·화 휴무 (토요일 정상). $25/인+$3주차. 9분 교육영상 후 입장. 모닝 슬롯이 시야 최고","비용":"$28/인","숙박":"Waikiki","fix":true},
         {"Day":7,"날짜":"7/18","요일":"토","섬":"오아후","시간":"13:00","장소":"Koko Marina Center (점심)","카테고리":"🍽️ 점심","예약":"","메모":"Hanauma Bay 차로 5분. Kona Brewing·포케 등 옵션","비용":"$$","숙박":"Waikiki","fix":true},
         {"Day":7,"날짜":"7/18","요일":"토","섬":"오아후","시간":"14:30","장소":"USS Arizona Memorial","카테고리":"🏛️ 역사","예약":"⚠️ recreation.gov ($1)","메모":"펄 하버. 원본에 없던 항목 추가","비용":"$1","숙박":"Waikiki","fix":true},
-        {"Day":7,"날짜":"7/18","요일":"토","섬":"오아후","시간":"17:30","장소":"와이키키 호텔 휴식·샤워","카테고리":"🛏️ 휴식","예약":"","메모":"디너 준비. La Mer 드레스 코드 확인 (스마트 캐주얼)","비용":"-","숙박":"Waikiki","fix":false},
+        {"Day":7,"날짜":"7/18","요일":"토","섬":"오아후","시간":"17:30","장소":"와이키키 호텔 체크인 + 샤워","카테고리":"🛏️ 숙박","예약":"⚠️ 사전 예약","메모":"4박 캠핑 후 호텔 입성. La Mer 디너 준비 (스마트 캐주얼). 출국 전날 마지막 호텔","비용":"$$$$","숙박":"Waikiki","fix":true},
         {"Day":7,"날짜":"7/18","요일":"토","섬":"오아후","시간":"19:30","장소":"La Mer (Halekulani)","카테고리":"🍷 신혼 디너","예약":"⚠️ 2~4주 전 필수","메모":"마지막 밤 파인 다이닝. 원본에 없던 항목 추가","비용":"$$$$$","숙박":"Waikiki","fix":true},
 
-        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"07:30","장소":"Leonard's Bakery 말라사다","카테고리":"🍩 아침","예약":"","메모":"공항용 픽업. 05:30부터 영업","비용":"$","숙박":"-","fix":false},
-        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"09:00","장소":"호텔 체크아웃","카테고리":"🚗 이동","예약":"","메모":"","비용":"-","숙박":"-","fix":false},
-        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"10:30","장소":"렌트카 반납","카테고리":"🚗 이동","예약":"","메모":"","비용":"-","숙박":"-","fix":false},
-        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"11:00","장소":"HNL 국제선 체크인","카테고리":"✈️ 이동","예약":"","메모":"국제선 3시간 전 도착","비용":"-","숙박":"-","fix":false},
-        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"13:50","장소":"KE054 출발 (예시)","카테고리":"✈️ 이동","예약":"⚠️ e-티켓 시간 본인 확인","메모":"원본 13:05은 부정확 가능. 통상 13:30~14:00","비용":"-","숙박":"-","fix":true}
+        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"08:00","장소":"와이키키 비치 모닝 산책","카테고리":"🏖️ 해변","예약":"","메모":"마지막 풀데이 슬로우 스타트. 듀크 카하나모쿠 동상 포토","비용":"무료","숙박":"Waikiki","fix":false},
+        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"09:30","장소":"Heavenly Island Lifestyle (조식)","카테고리":"☕ 아침","예약":"","메모":"건강한 아일랜드 보울. Waikiki 위치","비용":"$$","숙박":"Waikiki","fix":false},
+        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"11:00","장소":"Manoa Falls Trail","카테고리":"💧 폭포","예약":"","메모":"왕복 1.5시간. 정글 폭포. 모기 스프레이·진흙 대비. 주차 $5","비용":"$5","숙박":"Waikiki","fix":false},
+        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"14:00","장소":"Highway Inn (점심)","카테고리":"🍽️ 점심","예약":"","메모":"하와이안 플레이트. 라우라우·포이·로미 새먼. 일요일 영업 (Helena's는 일 휴무라 대체)","비용":"$$","숙박":"Waikiki","fix":false},
+        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"16:00","장소":"Waikiki 쇼핑 (Royal Hawaiian Center)","카테고리":"🛍️ 쇼핑","예약":"","메모":"기념품·ABC Store·Honolulu Cookie Company","비용":"$$","숙박":"Waikiki","fix":false},
+        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"17:30","장소":"Maita'i Catamaran 일몰 크루즈","카테고리":"⛵ 액티비티","예약":"⚠️ 사전 예약","메모":"90분 일몰 크루즈. 와이키키 비치 직접 출발. 신혼 분위기","비용":"$50대/인","숙박":"Waikiki","fix":false},
+        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"19:30","장소":"Roy's Waikiki 또는 Marukame Udon","카테고리":"🍽️ 저녁","예약":"권장","메모":"Day 7 La Mer 못 갔으면 Roy's. 캐주얼이면 Marukame Udon","비용":"$$~$$$","숙박":"Waikiki","fix":false},
+        {"Day":8,"날짜":"7/19","요일":"일","섬":"오아후","시간":"21:30","장소":"호텔 복귀·짐 정리","카테고리":"🛏️ 숙박","예약":"","메모":"Day 9 출국 준비. 수하물·여권·기내수속 점검","비용":"-","숙박":"Waikiki","fix":false},
+        {"Day":9,"날짜":"7/20","요일":"월","섬":"오아후","시간":"07:30","장소":"Leonard's Bakery 말라사다","카테고리":"🍩 아침","예약":"","메모":"공항용 픽업. 05:30부터 영업","비용":"$","숙박":"-","fix":false},
+        {"Day":9,"날짜":"7/20","요일":"월","섬":"오아후","시간":"09:00","장소":"호텔 체크아웃","카테고리":"🚗 이동","예약":"","메모":"","비용":"-","숙박":"-","fix":false},
+        {"Day":9,"날짜":"7/20","요일":"월","섬":"오아후","시간":"10:00","장소":"HNL 렌트카 반납","카테고리":"🚗 이동","예약":"","메모":"국제선 3시간 전 도착 권장 → 10:05까지 공항 도착","비용":"-","숙박":"-","fix":false},
+        {"Day":9,"날짜":"7/20","요일":"월","섬":"오아후","시간":"10:30","장소":"HNL 국제선 체크인","카테고리":"✈️ 이동","예약":"","메모":"수하물 위탁·면세점·라운지","비용":"-","숙박":"-","fix":false},
+        {"Day":9,"날짜":"7/20","요일":"월","섬":"오아후","시간":"13:05","장소":"KE054 출발 (일반석 Q)","카테고리":"✈️ 이동","예약":"","메모":"e-티켓 확인됨. HNL 13:05 → ICN 7/21(화) 17:40 (9h 35m)","비용":"-","숙박":"-","fix":false}
       ];
 
       const ERRORS = [
@@ -842,10 +889,10 @@
         {n:7, item:"Tin Roof 영업", orig:"화~일 영업", fix:"일요일 휴무 가능 — 도착일 Paia Fish 대체", type:"정보"},
         {n:8, item:"Giovanni's", orig:"현금만 $20 준비", fix:"카드 결제 가능", type:"정보"},
         {n:9, item:"Kailua 카약", orig:"비치에서 렌탈", fix:"비치 내 상업 렌탈 금지. 외부 상점 픽업", type:"규정"},
-        {n:10, item:"KE054 시간", orig:"13:05", fix:"통상 13:30~14:00. e-티켓 재확인", type:"정보"},
-        {n:11, item:"일수", orig:"7박 8일인데 7일만 표기", fix:"도착일(7/12) 포함 8일로 재구성", type:"누락"},
+        {n:10, item:"(클로드 자체 정정) KE054 시간", orig:"v2에서 13:05을 부정확이라 표기", fix:"실제 e-티켓 13:05 → 원본 시트가 정확. 클로드 분석 오류 정정", type:"정정"},
+        {n:11, item:"일수", orig:"7박 8일 표기 (실제 8박 9일)", fix:"7/12~7/20 = 8박 9일로 재구성. 사용자 e-티켓 기준", type:"누락"},
         {n:12, item:"숙박 누락", orig:"Day 3·5·6 숙소 미표시", fix:"전 일자 숙소 명시", type:"누락"},
-        {n:13, item:"캠핑 3박", orig:"Hosmer/Wai'ānapanapa/Waimānalo", fix:"호텔 7박 (신혼 컨셉)", type:"컨셉"},
+        {n:13, item:"캠핑 3박 → 4박 재배치", orig:"Hosmer/Wai'ānapanapa/Waimānalo (도착당일 캠핑 포함)", fix:"Day 3·4·5·6 캠핑 4박 (Camp Olowalu·Malaekahana 포함) + 호텔 4박", type:"컨셉"},
         {n:14, item:"Hosmer 해발", orig:"2,000m", fix:"실제 2,073m (경미)", type:"정보"},
         {n:15, item:"Pi'ilani 백로드", orig:"언급 없음", fix:"비포장+렌트카 약관 위반 흔함 — 경고 추가", type:"안전"},
         {n:16, item:"비용 정보", orig:"전혀 없음", fix:"일별 비용대 추정", type:"누락"},
@@ -978,7 +1025,7 @@
           const cats = uniq(DATA_CLAUDE.map((r) => r["카테고리"])).length;
 
           cKpiGrid.innerHTML = `
-            <div class="kpi"><strong>${days}일 / 7박</strong>여행 기간</div>
+            <div class="kpi"><strong>${days}일 / 8박</strong>여행 기간</div>
             <div class="kpi"><strong>${total}</strong>총 일정</div>
             <div class="kpi"><strong>${reservations}</strong>예약 필요</div>
             <div class="kpi"><strong>${hotels}</strong>호텔 베이스</div>
@@ -1035,18 +1082,19 @@
           {name:"Kualoa Regional Park", island:"오아후 (East side)", elec:"🔴", shower:"🟡 냉수", price:"$32/박", booking:"honolulu.gov", note:"Mokoliʻi 섬 뷰"}
         ];
 
-        // ===== 예산 (2인 / 7박 8일 / USD) =====
+        // ===== 예산 (2인 / 8박 9일 / USD) =====
         const BUDGET = [
-          {item:"국제선 KE053/054 (2인 왕복)", low:3000, mid:4000, high:5500, note:"시즌·예약시점 변동 큼"},
+          {item:"국제선 KE053(프레스티지) + KE054(이코노미) 2인", low:3000, mid:4000, high:5500, note:"7/12 출발·7/20 귀국. 마일/이미 지불 가정. 현금가는 더 높을 수 있음"},
           {item:"HNL ↔ OGG 국내선 (왕복 2회)", low:400, mid:500, high:700, note:"Hawaiian Air 또는 Southwest"},
-          {item:"숙박 7박 (호텔 베이스 / v2 권장)", low:2000, mid:3500, high:5500, note:"Hana-Maui Resort 1박 비중 큼"},
-          {item:"렌트카 8일 (마우이 4 + 오아후 4)", low:640, mid:800, high:1000, note:"Costco/Discount Hawaii 비교"},
-          {item:"식사 8일 (3끼 + La Mer 디너)", low:700, mid:1000, high:1500, note:"La Mer 신혼 디너 ~$300 포함"},
-          {item:"액티비티·입장료 (Hanauma·일출·USS·Diamond Head)", low:300, mid:450, high:650, note:"Hanauma Bay $56/2인 + 기타"},
-          {item:"가스·주차·팁", low:200, mid:300, high:500, note:"Hana Hwy 거리 있음"},
-          {item:"기타·예비비", low:200, mid:400, high:700, note:"기념품·약·SIM 등"},
-          {item:"━━━ 합계 (호텔 베이스) ━━━", low:7440, mid:10950, high:16050, note:"Claude v2 권장안", isTotal:true},
-          {item:"━━━ 합계 (캠핑 혼합) ━━━", low:6240, mid:8950, high:13550, note:"Camp Olowalu+Malaekahana 활용 시 약 $1,200~2,500 절감", isTotal:true, isAlt:true}
+          {item:"숙박 — 호텔 4박 + 캠핑 4박 (✅ 적용)", low:1450, mid:2150, high:3200, note:"호텔: Day 1·2·7·8 (Waikiki 2박 연속) / 캠핑: Day 3·4·5·6"},
+          {item:"렌트카 9일 (마우이 4 + 오아후 5)", low:720, mid:900, high:1125, note:"Costco/Discount Hawaii 비교"},
+          {item:"식사 9일 (3끼 + La Mer 디너)", low:800, mid:1150, high:1700, note:"La Mer 신혼 디너 ~$300 포함"},
+          {item:"액티비티·입장료 (Hanauma·일출·USS·Diamond Head·Maita'i)", low:400, mid:550, high:800, note:"Day 8 카타마란 크루즈 추가"},
+          {item:"캠핑 장비 대여·구매", low:50, mid:150, high:300, note:"REI 텐트·침낭 대여, 가스·랜턴 현지 구매"},
+          {item:"가스·주차·팁", low:230, mid:340, high:565, note:"Hana Hwy 거리 있음"},
+          {item:"기타·예비비", low:250, mid:450, high:750, note:"기념품·약·SIM 등"},
+          {item:"━━━ 합계 (캠핑 4박 ✅ 적용 / 8박 9일) ━━━", low:7300, mid:10190, high:14640, note:"사용자 확정안", isTotal:true, isAlt:true},
+          {item:"(참고) 호텔 베이스 8박", low:8200, mid:11890, high:17640, note:"호텔만 8박 시 — 약 $900~3,000 더 비쌈", isTotal:true}
         ];
 
         function renderCCamps() {
@@ -1090,6 +1138,70 @@
 
         renderCCamps();
         renderCBudget();
+
+        // ===== 캠핑 예약 스케줄 (4박 적용) =====
+        const CAMPSCHEDULE = [
+          {day:"Day 3 (7/14 화)", camp:"Wai'ānapanapa State Park", site:"텐트 또는 케이빈", price:"텐트 $20 / 케이빈 $130", booking:"gostateparks.hawaii.gov", open:"30일 전 (즉시 가능)", note:"⚠️ 입장 예약 + 캠핑 예약 별도 필수. 케이빈 매진 매우 빠름. 흑사 해변 옆"},
+          {day:"Day 4 (7/15 수)", camp:"Camp Olowalu", site:"캐빈 (신혼 추천)", price:"텐트 $40~60 / 캐빈 $200~300", booking:"campolowalu.com", open:"연중 (6개월 전 권장)", note:"🟢 전기+온수. 캐빈 6개월 전부터 매진. 사이트 직접 예약. Lahaina/Kaanapali 근접"},
+          {day:"Day 5 (7/16 목)", camp:"Waimānalo Beach Park", site:"텐트 사이트", price:"$32/박", booking:"honolulu.gov (Camping Permits)", open:"14일 전 12:00 PM HST", note:"⚠️ Bellows는 금~일만 → 목요일은 Waimānalo. Honolulu City Permit 시스템. 화·수 휴무 정책 본인 확인"},
+          {day:"Day 6 (7/17 금)", camp:"Malaekahana Campground", site:"유르트 또는 캐빈", price:"텐트 $25~35 / 유르트 $90~150 / 캐빈 $150~250", booking:"malaekahana.net", open:"연중 (사설)", note:"🟢 전기+온수. 유르트는 6주 전부터 매진. North Shore 직결. Friends of Malaekahana 운영"}
+        ];
+
+        // ===== 캠핑 준비물 =====
+        const GEAR = [
+          {item:"텐트 (2인용)", priority:"필수", note:"REI Honolulu / Camp Olowalu 대여 가능 ($25~40/일)"},
+          {item:"침낭 (3시즌)", priority:"필수", note:"Wai'ānapanapa·Waimānalo 밤 약간 쌀쌀 (15~20°C)"},
+          {item:"매트 (에어 또는 폼)", priority:"필수", note:"지면 차가움 차단"},
+          {item:"헤드램프 + 여분 배터리", priority:"필수", note:"Wai'ānapanapa는 야간 매우 어두움"},
+          {item:"모기 스프레이 (DEET 함유)", priority:"필수", note:"Hana·정글 지역 모기 많음"},
+          {item:"식수 (큰 통)", priority:"필수", note:"Wai'ānapanapa는 음수 제한"},
+          {item:"비치타올 + 일반타올", priority:"필수", note:"샤워 + 비치 이중 용도"},
+          {item:"방수 매트 / 그라운드 시트", priority:"권장", note:"하와이 갑작스런 소나기 대비"},
+          {item:"쿨러 + 얼음", priority:"권장", note:"현지 마트 구매. Foodland·Times"},
+          {item:"캠프 스토브 + 가스", priority:"선택", note:"⚠️ 가스는 비행기 휴대 불가 — 현지 구매"},
+          {item:"캠프 의자 (2개)", priority:"권장", note:"카운티 캠프장은 의자 비치 없음"},
+          {item:"스노쿨링 장비 (마스크·핀)", priority:"권장", note:"Hanauma Bay·Black Rock 적극 활용"},
+          {item:"멀티탭 / USB 충전기", priority:"권장", note:"Camp Olowalu·Malaekahana 캐빈에 콘센트 있음"},
+          {item:"퍼밋 출력본 (Honolulu 캠핑)", priority:"필수", note:"Waimānalo 입장 시 종이 출력 요구되는 경우 있음"}
+        ];
+
+        function renderCSchedule() {
+          const tb = document.querySelector("#c-camp-schedule-table tbody");
+          tb.innerHTML = "";
+          CAMPSCHEDULE.forEach((c) => {
+            const tr = document.createElement("tr");
+            tr.style.background = "#e8f5e9";
+            tr.innerHTML = `
+              <td><strong>${c.day}</strong></td>
+              <td><strong>${c.camp}</strong></td>
+              <td>${c.site}</td>
+              <td>${c.price}</td>
+              <td><code>${c.booking}</code></td>
+              <td>${c.open}</td>
+              <td class="muted">${c.note}</td>
+            `;
+            tb.appendChild(tr);
+          });
+        }
+
+        function renderCGear() {
+          const tb = document.querySelector("#c-gear-table tbody");
+          tb.innerHTML = "";
+          GEAR.forEach((g) => {
+            const tr = document.createElement("tr");
+            if (g.priority === "필수") tr.style.background = "#ffe5e5";
+            else if (g.priority === "권장") tr.style.background = "#fff5e0";
+            tr.innerHTML = `
+              <td><strong>${g.item}</strong></td>
+              <td>${g.priority}</td>
+              <td class="muted">${g.note}</td>
+            `;
+            tb.appendChild(tr);
+          });
+        }
+
+        renderCSchedule();
+        renderCGear();
       })();
     </script>
   </body>
