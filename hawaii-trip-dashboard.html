@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>하와이 신혼여행 · v1.7</title>
+    <title>하와이 신혼여행 · v2.0</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -11,27 +11,28 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
     <style>
       :root {
-        --bg: #fcfaf5;
-        --bg-2: #f5f1e6;
+        /* v2.0 SaaS palette — cool indigo + slate */
+        --bg: #f6f8fb;
+        --bg-2: #eef2f7;
         --surface: #ffffff;
-        --ink: #111111;
-        --ink-2: #2d2d2d;
-        --muted: #6b6b6b;
-        --line: #ebe6d8;
-        --line-strong: #d4cdb8;
-        --primary: #0e7c5a;
-        --primary-soft: #d3ebdf;
-        --primary-strong: #084d38;
-        --accent: #e26d3f;
-        --accent-soft: #fbe1d2;
-        --camp: #2d7a3d;
-        --camp-soft: #d8eedb;
-        --sleep: #6b4ba0;
-        --sleep-soft: #e3d9f0;
-        --warn: #c84641;
-        --warn-soft: #fbdedb;
-        --gold: #b18a22;
-        --gold-soft: #fbeec0;
+        --ink: #0f172a;
+        --ink-2: #334155;
+        --muted: #64748b;
+        --line: #e2e8f0;
+        --line-strong: #cbd5e1;
+        --primary: #6366f1;
+        --primary-soft: #e0e7ff;
+        --primary-strong: #4338ca;
+        --accent: #f97316;
+        --accent-soft: #ffedd5;
+        --camp: #10b981;
+        --camp-soft: #d1fae5;
+        --sleep: #8b5cf6;
+        --sleep-soft: #ede9fe;
+        --warn: #ef4444;
+        --warn-soft: #fee2e2;
+        --gold: #ca8a04;
+        --gold-soft: #fef9c3;
         --radius: 14px;
         --radius-lg: 18px;
       }
@@ -40,8 +41,8 @@
         margin: 0; min-height: 100vh; color: var(--ink);
         background: var(--bg);
         background-image:
-          radial-gradient(1000px 600px at 5% -10%, rgba(226,109,63,0.07), transparent 60%),
-          radial-gradient(900px 700px at 100% 0%, rgba(14,124,90,0.07), transparent 55%);
+          radial-gradient(1000px 600px at 5% -10%, rgba(99,102,241,0.06), transparent 60%),
+          radial-gradient(900px 700px at 100% 0%, rgba(249,115,22,0.05), transparent 55%);
         background-attachment: fixed;
         font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
         font-size: 15px; line-height: 1.6;
@@ -158,7 +159,7 @@
         color: var(--ink-2); font-weight: 500;
         transition: all 0.15s;
       }
-      .vtab-btn:hover { background: #fcfaf3; color: var(--ink); }
+      .vtab-btn:hover { background: #f8fafc; color: var(--ink); }
       .vtab-btn[aria-selected="true"] {
         background: var(--primary-soft);
         color: var(--primary-strong);
@@ -270,7 +271,7 @@
       .pill {
         display: inline-block; padding: 4px 10px;
         font-size: 11px; font-weight: 600; border-radius: 999px;
-        border: 1px solid var(--line); background: #fcfaf3;
+        border: 1px solid var(--line); background: #f8fafc;
         color: var(--ink-2); letter-spacing: 0.01em;
       }
       .pill.sea { background: var(--primary-soft); color: var(--primary-strong); border-color: transparent; }
@@ -286,7 +287,7 @@
         display: grid; grid-template-columns: 1fr auto 1fr; gap: 28px;
         align-items: center; padding: 26px 32px;
         border: 1px solid var(--line); border-radius: var(--radius);
-        background: #fcfaf3; margin-bottom: 10px;
+        background: #f8fafc; margin-bottom: 10px;
       }
       .flight-card.outbound { border-left: 4px solid var(--primary); }
       .flight-card.return { border-left: 4px solid var(--accent); }
@@ -311,7 +312,7 @@
         display: grid; grid-template-columns: 130px 170px 1fr;
         gap: 16px; padding: 14px 18px; align-items: center;
         border: 1px solid var(--line); border-radius: var(--radius);
-        background: #fcfaf3; font-size: 13.5px;
+        background: #f8fafc; font-size: 13.5px;
       }
       .action-row.urgent { background: var(--warn-soft); border-left: 4px solid var(--warn); }
       .action-row.late { background: var(--accent-soft); border-left: 4px solid var(--accent); }
@@ -329,7 +330,7 @@
       .day-block {
         border: 1px solid var(--line); border-left: 4px solid var(--primary);
         border-radius: var(--radius); padding: 22px 26px; margin-bottom: 16px;
-        background: #fcfaf3;
+        background: #f8fafc;
       }
       .day-block h3 {
         margin: 0 0 6px;
@@ -360,7 +361,7 @@
         font-size: 13px;
       }
       .table th, .errors-table th {
-        background: #f5f1e6; font-weight: 700; text-align: left;
+        background: #f1f5f9; font-weight: 700; text-align: left;
         padding: 12px 12px; border-bottom: 1px solid var(--line-strong);
         color: var(--ink-2); letter-spacing: 0.04em; font-size: 11.5px;
         text-transform: uppercase;
@@ -369,7 +370,7 @@
         padding: 11px 12px; border-bottom: 1px solid var(--line);
         vertical-align: top;
       }
-      .table tr:hover td, .errors-table tr:hover td { background: #fcfaf3; }
+      .table tr:hover td, .errors-table tr:hover td { background: #f8fafc; }
       .errors-table tr.severe td { background: var(--warn-soft); }
       .errors-table tr.severe:hover td { background: #fad9d4; }
       .table a, .errors-table a { color: var(--primary); text-decoration: none; }
@@ -417,7 +418,7 @@
       .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
       .tip-card {
         border: 1px solid var(--line); border-radius: var(--radius);
-        padding: 18px 20px; background: #fcfaf3;
+        padding: 18px 20px; background: #f8fafc;
       }
       .tip-card .tip-cat {
         font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
@@ -443,7 +444,7 @@
       .detail-day-header .date { color: var(--muted); font-size: 14px; font-weight: 600; }
       .detail-place {
         border: 1px solid var(--line); border-radius: var(--radius);
-        padding: 18px 22px; margin-bottom: 12px; background: #fcfaf3;
+        padding: 18px 22px; margin-bottom: 12px; background: #f8fafc;
       }
       .detail-place-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 10px; }
       .detail-place-time {
@@ -542,7 +543,7 @@
         position: relative;
         margin-bottom: 14px;
         padding: 14px 18px;
-        background: #fcfaf3;
+        background: #f8fafc;
         border: 1px solid var(--line);
         border-radius: var(--radius);
         transition: all 0.15s ease;
@@ -608,7 +609,7 @@
         border-top: 5px solid var(--primary);
         border-radius: var(--radius);
         padding: 16px 18px;
-        background: #fcfaf3;
+        background: #f8fafc;
         cursor: pointer;
         transition: all 0.18s ease;
         min-height: 180px;
@@ -712,7 +713,7 @@
       }
       .tech-item {
         border: 1px solid var(--line); border-radius: var(--radius);
-        padding: 16px 18px; background: #fcfaf3;
+        padding: 16px 18px; background: #f8fafc;
       }
       .tech-item .tech-cat {
         font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em;
@@ -740,6 +741,119 @@
         color: var(--primary); font-weight: 700;
       }
       .arch-flow .arch-arrow { color: var(--accent); }
+
+      /* 🔒 v2.0 — Lock(확정) 시스템 */
+      .lock-btn {
+        background: transparent;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 11px;
+        font-family: inherit;
+        font-weight: 600;
+        color: var(--muted);
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .lock-btn:hover { border-color: var(--primary); color: var(--primary); }
+      .lock-btn.locked {
+        background: var(--camp); color: #fff; border-color: var(--camp);
+      }
+      .lock-btn.locked:hover { background: var(--camp); }
+      .item.locked { background: linear-gradient(to right, rgba(16,185,129,0.05), transparent 30%); }
+      .item.locked .item-place::after {
+        content: " ✅";
+        font-size: 13px;
+      }
+
+      /* CSV / Sheet 버튼 */
+      .data-actions {
+        display: flex; gap: 8px; flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .data-action-btn {
+        padding: 8px 14px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--ink-2);
+        transition: all 0.15s;
+      }
+      .data-action-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
+      .data-action-btn.primary {
+        background: var(--primary); color: #fff; border-color: var(--primary);
+      }
+      .data-action-btn.primary:hover { background: var(--primary-strong); }
+
+      /* 📖 인라인 자세히 보기 (timeline) */
+      .expand-btn {
+        margin-top: 10px;
+        background: transparent;
+        border: 1px dashed var(--line-strong);
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 12px;
+        color: var(--primary);
+        cursor: pointer;
+        font-family: inherit;
+        font-weight: 600;
+        transition: all 0.15s;
+        display: inline-flex; align-items: center; gap: 6px;
+      }
+      .expand-btn:hover {
+        background: var(--primary-soft);
+        border-color: var(--primary);
+        border-style: solid;
+      }
+      .expand-btn .arrow { transition: transform 0.15s; display: inline-block; }
+      .expand-btn.expanded .arrow { transform: rotate(90deg); }
+      .item-detail {
+        margin-top: 12px;
+        padding: 14px 18px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--primary);
+        border-radius: 8px;
+        font-size: 13px;
+        color: var(--ink-2);
+        line-height: 1.7;
+        animation: slideDown 0.2s ease;
+      }
+      .item-detail strong { color: var(--ink); font-weight: 700; }
+      .item-detail.starred { border-left-color: var(--gold); background: linear-gradient(to right, var(--gold-soft) 0%, var(--surface) 30%); }
+      .item-detail.warn { border-left-color: var(--warn); }
+      .item-detail[hidden] { display: none; }
+      @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      .timeline-controls {
+        display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+      }
+      .timeline-ctrl-btn {
+        padding: 7px 14px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 12px;
+        font-family: inherit;
+        font-weight: 600;
+        color: var(--ink-2);
+        transition: all 0.15s;
+      }
+      .timeline-ctrl-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+      }
 
       /* 시간대 alt (KST ↔ HST) */
       .time-alt {
@@ -793,7 +907,7 @@
       .food-card, .hotel-card {
         position: relative;
         border: 1px solid var(--line); border-radius: var(--radius);
-        padding: 18px 20px; background: #fcfaf3;
+        padding: 18px 20px; background: #f8fafc;
         transition: transform 0.15s ease, box-shadow 0.15s ease;
       }
       .food-card:hover, .hotel-card:hover {
@@ -858,7 +972,7 @@
       /* Changelog */
       .changelog {
         margin-top: 16px; padding: 18px 22px;
-        background: #fcfaf3; border: 1px solid var(--line);
+        background: #f8fafc; border: 1px solid var(--line);
         border-radius: var(--radius);
       }
       .changelog h4 { margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--ink); }
@@ -868,7 +982,7 @@
       .cost-banner {
         margin-top: 14px;
         padding: 14px 18px;
-        background: linear-gradient(135deg, var(--primary-soft), #f5f1e6);
+        background: linear-gradient(135deg, var(--primary-soft), #f1f5f9);
         border: 1px solid var(--line); border-radius: var(--radius);
         display: flex; align-items: center; justify-content: space-between;
         gap: 12px; flex-wrap: wrap;
@@ -908,7 +1022,7 @@
     <div class="wrap">
       <header>
         <div class="header-left">
-          <p class="eyebrow"><span class="version">v1.7</span>검증 완료 · 2026.05 기준</p>
+          <p class="eyebrow"><span class="version">v2.0</span>검증 완료 · 2026.05 기준</p>
           <h1>하와이 신혼여행</h1>
           <p class="subtitle">KE053 · 8박 9일 · 2026.07.12 → 07.20 · 마우이 + 오아후</p>
         </div>
@@ -1135,8 +1249,12 @@
         <section class="grid">
           <article class="card full">
             <h2 class="section-title">📅 일자별 타임라인 — 8박 9일</h2>
+            <div class="timeline-controls">
+              <button class="timeline-ctrl-btn" id="c-expand-all">▼ 전체 펼치기</button>
+              <button class="timeline-ctrl-btn" id="c-collapse-all">▲ 전체 접기</button>
+            </div>
             <div id="c-timeline"></div>
-            <p class="claude-note">장소명 클릭 → Google Maps 검색 결과 새 창으로. 📍 아이콘이 클릭 가능한 장소.</p>
+            <p class="claude-note">장소명 📍 클릭 → Google Maps. 각 항목 <strong>▶ 자세히</strong> 클릭 → 풀 디테일 펼침.</p>
           </article>
         </section>
       </div>
@@ -1287,8 +1405,13 @@
               <strong>이 표가 핵심 데이터.</strong> 다른 모든 탭(한눈에·달력·일정·지도·상세 정보·숙박·먹거리·비용)은 여기서 파생된 view야.
               아래 표의 셀(<span class="edit-hint">시간·장소·메모·비용</span>)을 직접 편집하면 <strong>모든 탭이 즉시 반영</strong>됨. 변경사항은 브라우저에 자동 저장 (새로고침해도 유지).
             </p>
-            <button id="c-reset-overrides" class="reset-btn">🔄 모든 변경사항 초기화 (원본 복구)</button>
-            <span class="muted" id="c-override-status" style="margin-left:10px;font-size:12px"></span>
+            <div class="data-actions">
+              <button class="data-action-btn primary" id="c-sync-sheet">🔄 Google Sheet 동기화</button>
+              <button class="data-action-btn" id="c-export-csv">📤 CSV 내보내기 (Sheet 시드용)</button>
+              <a class="data-action-btn" href="https://docs.google.com/spreadsheets/d/17iA80c5rmGxYHtNJbDBq6P-iAAGfLXm1X-qQ_7FxH-o/edit" target="_blank" rel="noopener" style="text-decoration:none">📝 Sheet 직접 편집</a>
+              <button class="data-action-btn" id="c-reset-overrides">↺ 인라인 편집 초기화</button>
+            </div>
+            <span class="muted" id="c-override-status" style="display:block;margin-top:10px;font-size:12px"></span>
           </article>
           <article class="card filters">
             <div><label for="c-filter-island">섬</label><select id="c-filter-island"></select></div>
@@ -1303,7 +1426,7 @@
           <article class="card full">
             <h2 class="section-title">상세 목록 — <span class="accent">셀 클릭 → 인라인 편집</span></h2>
             <table class="table editable" id="c-table">
-              <thead><tr><th>Day</th><th>날짜</th><th>섬</th><th>그룹</th><th>시간 ✏️</th><th>장소 ✏️</th><th>카테고리</th><th>예약</th><th>비용 ✏️</th><th>★</th></tr></thead>
+              <thead><tr><th>Day</th><th>날짜</th><th>섬</th><th>그룹</th><th>시간 ✏️</th><th>장소 ✏️</th><th>카테고리</th><th>예약</th><th>비용 ✏️</th><th>★</th><th>🔒</th></tr></thead>
               <tbody></tbody>
             </table>
             <p class="muted" id="c-table-count"></p>
@@ -1315,6 +1438,21 @@
               <tbody></tbody>
             </table>
             <div class="changelog">
+              <h4>🚀 v2.0 (2026.05) — Major release</h4>
+              <ul>
+                <li>🎨 <strong>SaaS 팔레트 전면 적용</strong> — 매거진 톤 → cool indigo + slate (전체 통일)</li>
+                <li>🔒 <strong>확정 (Lock) 시스템</strong> — 항목별 ✅ 확정 토글, 잠그면 편집 불가·시각 표시·localStorage 저장</li>
+                <li>📤 <strong>CSV Export</strong> — DATA → CSV 다운로드 (Google Sheet 시드용)</li>
+                <li>📥 <strong>Google Sheet CSV Fetch</strong> — 페이지 로드 시 Sheet 자동 동기화 (Sheet ID: <code>17iA80c5...</code>)</li>
+                <li>📚 <strong>README + .gitignore</strong> — GitHub Pages·n8n 워크플로 가이드 포함</li>
+                <li>v1.8 백업 보존: <code>hawaii-trip-dashboard-v1.8.html</code></li>
+              </ul>
+              <h4>v1.8 (2026.05) — 변경 사항</h4>
+              <ul>
+                <li>📖 <strong>일정 탭 인라인 자세히 보기</strong> — 각 항목에 ▶ 토글, 클릭 시 그 자리에서 풀 디테일 펼침. 상세 정보 탭으로 안 옮겨도 됨</li>
+                <li>전체 펼치기 / 전체 접기 컨트롤 — 일정 탭 상단</li>
+                <li>v1.7 백업 파일 보존: <code>hawaii-trip-dashboard-v1.7.html</code></li>
+              </ul>
               <h4>v1.7 (2026.05) — 변경 사항</h4>
               <ul>
                 <li>🇰🇷 <strong>인천공항 출도착 스케줄 추가</strong> — Day 1 한국 출국 6단계 (집→ICN→체크인→보안→게이트→이륙) + Day 9 한국 입국 4단계 (도착→입국심사→귀가→집)</li>
@@ -1477,6 +1615,13 @@
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script>
+      // ===== v2.0 — Sheet DB 설정 =====
+      const SHEET_ID = "17iA80c5rmGxYHtNJbDBq6P-iAAGfLXm1X-qQ_7FxH-o";
+      const SHEET_GID = "0";
+      const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+      const SHEET_EDIT_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
+      const LOCK_KEY = "hawaii-trip-locks-v2";
+
       const gmaps = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
       let EXCHANGE_RATE = 1475;
       const fmt$ = (n) => `$${n.toLocaleString()}`;
@@ -1622,7 +1767,108 @@
       DATA.forEach((r) => {
         const meta = RATINGS[`${r.Day}|${r.시간}`];
         if (meta) Object.assign(r, meta);
+        r.locked = false; // 확정 상태
       });
+
+      // ===== v2.0 — Lock(확정) 시스템 =====
+      function loadLocks() {
+        try {
+          const raw = localStorage.getItem(LOCK_KEY);
+          if (!raw) return;
+          const lockMap = JSON.parse(raw);
+          DATA.forEach((r) => {
+            if (lockMap[r.__id]) r.locked = true;
+          });
+        } catch(e) {}
+      }
+      function saveLocks() {
+        const lockMap = {};
+        DATA.forEach((r) => { if (r.locked) lockMap[r.__id] = true; });
+        try { localStorage.setItem(LOCK_KEY, JSON.stringify(lockMap)); } catch(e) {}
+      }
+      function toggleLock(id) {
+        const row = DATA.find((r) => r.__id === id);
+        if (!row) return;
+        row.locked = !row.locked;
+        saveLocks();
+        rerenderAll();
+      }
+
+      // ===== v2.0 — CSV Export (Sheet 시드용) =====
+      function csvEscape(v) {
+        const s = String(v == null ? "" : v);
+        if (/[",\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+        return s;
+      }
+      function exportCSV() {
+        const cols = ["Day","날짜","요일","섬","시간","장소","카테고리","예약","메모","비용","숙박","fix","rating","alt","locked","lat","lng","url"];
+        const lines = [cols.join(",")];
+        DATA.forEach((r) => {
+          lines.push(cols.map((c) => csvEscape(r[c])).join(","));
+        });
+        const csv = "﻿" + lines.join("\r\n"); // BOM for Excel
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url; a.download = "hawaii-data.csv";
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      // ===== v2.0 — Google Sheet CSV Fetch =====
+      function parseCSV(text) {
+        // 간단 CSV parser (따옴표·콤마·줄바꿈 처리)
+        const rows = [];
+        let cur = [], field = "", inQ = false;
+        for (let i = 0; i < text.length; i++) {
+          const ch = text[i];
+          if (inQ) {
+            if (ch === '"' && text[i+1] === '"') { field += '"'; i++; }
+            else if (ch === '"') { inQ = false; }
+            else { field += ch; }
+          } else {
+            if (ch === '"') { inQ = true; }
+            else if (ch === ",") { cur.push(field); field = ""; }
+            else if (ch === "\n") { cur.push(field); rows.push(cur); cur = []; field = ""; }
+            else if (ch === "\r") { /* skip */ }
+            else { field += ch; }
+          }
+        }
+        if (field.length || cur.length) { cur.push(field); rows.push(cur); }
+        return rows.filter((r) => r.some((c) => c && c.trim()));
+      }
+      async function fetchFromSheet() {
+        try {
+          const res = await fetch(SHEET_CSV_URL);
+          if (!res.ok) return false;
+          const text = (await res.text()).replace(/^﻿/, "");
+          if (!text.trim()) return false;
+          const rows = parseCSV(text);
+          if (rows.length < 2) return false;
+          const headers = rows[0];
+          const newData = rows.slice(1).map((row) => {
+            const obj = {};
+            headers.forEach((h, i) => { obj[h.trim()] = (row[i] || "").trim(); });
+            // 타입 변환
+            obj.Day = parseInt(obj.Day, 10) || 0;
+            obj.fix = obj.fix === "true" || obj.fix === "TRUE";
+            obj.locked = obj.locked === "true" || obj.locked === "TRUE";
+            obj.rating = obj.rating ? parseInt(obj.rating, 10) : 0;
+            obj.lat = obj.lat ? parseFloat(obj.lat) : null;
+            obj.lng = obj.lng ? parseFloat(obj.lng) : null;
+            return obj;
+          }).filter((r) => r.Day > 0);
+          if (!newData.length) return false;
+          // DATA 교체
+          DATA.length = 0;
+          newData.forEach((r, i) => { r.__id = i; DATA.push(r); });
+          return true;
+        } catch(e) { console.warn("Sheet fetch failed:", e); return false; }
+      }
+      function showSyncStatus(msg) {
+        const el = document.getElementById("c-override-status");
+        if (el) { el.textContent = msg; setTimeout(() => { el.textContent = ""; }, 4000); }
+      }
 
       const FLIGHTS = [
         {type:"outbound",code:"KE053",label:"출국 · 프레스티지 (J · Flex)",aircraft:"B787-10",date:"2026-07-12 (일)",fromCode:"ICN",fromCity:"서울/인천 T2",fromTime:"21:05",toCode:"HNL",toCity:"호놀룰루 T2",toTime:"10:55",toOffset:"(같은 날 도착)",duration:"8h 50m",seat:"14F",extras:"전원 · 엔터테인먼트 · 기내식 · Wi-Fi"},
@@ -2152,8 +2398,10 @@
           `;
           items.forEach((r) => {
             const it = document.createElement("div");
-            it.className = "item";
+            it.className = "item" + (r.locked ? " locked" : "");
             const alt = altTime(r.시간, r.날짜);
+            const detail = PLACE_DETAILS.find((p) => p.Day === r.Day && p.time === r.시간);
+            const detailCls = detail ? (detail.starred ? "starred" : detail.warn ? "warn" : "") : "";
             it.innerHTML = `
               <div class="time">${r.시간}${alt ? `<span class="time-alt">${alt}</span>` : ""}</div>
               <div>
@@ -2164,9 +2412,14 @@
                   ${r.비용 && r.비용 !== "-" ? `<span class="pill">${r.비용}</span>` : ""}
                   ${r.fix ? `<span class="pill fix">FIX</span>` : ""}
                   ${starHTML(r.rating)}
+                  <button class="lock-btn ${r.locked ? "locked" : ""}" data-lock-id="${r.__id}" type="button">${r.locked ? "✅ 확정됨" : "🔓 미확정"}</button>
                 </div>
                 ${r.메모 ? `<div class="item-memo">${r.메모}</div>` : ""}
                 ${altHTML(r.alt)}
+                ${detail ? `
+                  <button class="expand-btn" type="button"><span class="arrow">▶</span> 자세히 보기</button>
+                  <div class="item-detail ${detailCls}" hidden>${detail.body}</div>
+                ` : ""}
               </div>
             `;
             block.appendChild(it);
@@ -2529,23 +2782,57 @@
         rows.forEach((r) => {
           const tr = document.createElement("tr");
           tr.dataset.id = r.__id;
+          if (r.locked) tr.classList.add("locked-row");
           const _alt = altTime(r.시간, r.날짜);
+          const editAttr = r.locked ? "" : 'contenteditable="true"';
           tr.innerHTML = `
             <td>${r.Day}</td>
             <td>${r.날짜} (${r.요일})</td>
             <td>${r.섬}</td>
             <td><span class="pill">${groupOf(r.카테고리)}</span></td>
-            <td><span contenteditable="true" data-field="시간">${r.시간}</span>${_alt ? `<div class="time-alt">${_alt}</div>` : ""}</td>
-            <td>${r.url ? `<a href="${r.url}" target="_blank" rel="noopener" title="Google Maps">📍</a> ` : ""}<span contenteditable="true" data-field="장소">${r.장소}</span>${r.fix ? ' <span class="pill fix">FIX</span>' : ""}</td>
+            <td><span ${editAttr} data-field="시간">${r.시간}</span>${_alt ? `<div class="time-alt">${_alt}</div>` : ""}</td>
+            <td>${r.url ? `<a href="${r.url}" target="_blank" rel="noopener" title="Google Maps">📍</a> ` : ""}<span ${editAttr} data-field="장소">${r.장소}</span>${r.fix ? ' <span class="pill fix">FIX</span>' : ""}</td>
             <td>${r.카테고리}</td>
             <td>${r.예약 || "-"}</td>
-            <td contenteditable="true" data-field="비용">${r.비용 || "-"}</td>
+            <td ${editAttr} data-field="비용">${r.비용 || "-"}</td>
             <td>${starHTML(r.rating)}</td>
+            <td><button class="lock-btn ${r.locked ? "locked" : ""}" data-lock-id="${r.__id}" type="button">${r.locked ? "✅" : "🔓"}</button></td>
           `;
           tableBody.appendChild(tr);
         });
         tableCount.textContent = `총 ${rows.length}개 / 전체 ${DATA.length}. ✏️ 셀 클릭 → 편집 → 다른 곳 클릭(blur)하면 저장.`;
       }
+
+      // 🔒 Lock 토글 — 데이터 테이블에서도
+      document.getElementById("c-table").addEventListener("click", (e) => {
+        const btn = e.target.closest(".lock-btn[data-lock-id]");
+        if (!btn) return;
+        const id = parseInt(btn.dataset.lockId, 10);
+        toggleLock(id);
+      });
+
+      // 📤 CSV Export 버튼
+      document.getElementById("c-export-csv").addEventListener("click", () => {
+        exportCSV();
+        showSyncStatus("✅ CSV 다운로드됨 — Google Sheet → File → Import → 업로드");
+      });
+
+      // 🔄 Sheet 동기화 버튼
+      document.getElementById("c-sync-sheet").addEventListener("click", async () => {
+        showSyncStatus("⏳ Sheet 가져오는 중...");
+        const ok = await fetchFromSheet();
+        if (ok) {
+          DATA.forEach((r) => {
+            const meta = RATINGS[`${r.Day}|${r.시간}`];
+            if (meta) Object.assign(r, meta);
+          });
+          loadLocks();
+          rerenderAll();
+          showSyncStatus("✅ Sheet에서 동기화 완료 (" + DATA.length + " entries)");
+        } else {
+          showSyncStatus("⚠️ Sheet가 비어있거나 접근 불가 — 하드코딩 DATA 유지");
+        }
+      });
 
       // 📝 인라인 편집 → DATA 갱신 → 모든 탭 재렌더 → localStorage 저장
       const tableEl = document.getElementById("c-table");
@@ -2723,6 +3010,55 @@
         });
       });
 
+      // 🔒 Lock 토글 (delegated)
+      document.getElementById("c-timeline").addEventListener("click", (e) => {
+        const lockBtn = e.target.closest(".lock-btn[data-lock-id]");
+        if (lockBtn) {
+          const id = parseInt(lockBtn.dataset.lockId, 10);
+          toggleLock(id);
+          return;
+        }
+      });
+
+      // 📖 일정 탭 자세히 보기 토글 (delegated)
+      document.getElementById("c-timeline").addEventListener("click", (e) => {
+        const btn = e.target.closest(".expand-btn");
+        if (!btn) return;
+        const detail = btn.nextElementSibling;
+        if (!detail || !detail.classList.contains("item-detail")) return;
+        const isHidden = detail.hasAttribute("hidden");
+        if (isHidden) {
+          detail.removeAttribute("hidden");
+          btn.classList.add("expanded");
+          btn.innerHTML = '<span class="arrow">▶</span> 접기';
+        } else {
+          detail.setAttribute("hidden", "");
+          btn.classList.remove("expanded");
+          btn.innerHTML = '<span class="arrow">▶</span> 자세히 보기';
+        }
+      });
+      // 전체 펼치기 / 전체 접기
+      document.getElementById("c-expand-all").addEventListener("click", () => {
+        document.querySelectorAll("#c-timeline .expand-btn").forEach((btn) => {
+          const detail = btn.nextElementSibling;
+          if (detail && detail.hasAttribute("hidden")) {
+            detail.removeAttribute("hidden");
+            btn.classList.add("expanded");
+            btn.innerHTML = '<span class="arrow">▶</span> 접기';
+          }
+        });
+      });
+      document.getElementById("c-collapse-all").addEventListener("click", () => {
+        document.querySelectorAll("#c-timeline .expand-btn").forEach((btn) => {
+          const detail = btn.nextElementSibling;
+          if (detail && !detail.hasAttribute("hidden")) {
+            detail.setAttribute("hidden", "");
+            btn.classList.remove("expanded");
+            btn.innerHTML = '<span class="arrow">▶</span> 자세히 보기';
+          }
+        });
+      });
+
       // 환율 입력
       document.getElementById("rate").addEventListener("input", (e) => {
         const v = parseInt(e.target.value, 10);
@@ -2737,8 +3073,23 @@
       fillSelect(groupSel, ALL_GROUPS);
       [islandSel, groupSel, resSel, searchInp].forEach((el) => el.addEventListener("input", renderTable));
 
-      // localStorage 변경사항 복원
+      // localStorage 변경사항 복원 + lock 복원
       if (loadOverrides()) showOverrideStatus("✅ 이전 편집 복원됨");
+      loadLocks();
+
+      // 🔄 페이지 로드 시 Sheet에서 자동 fetch (있으면 override)
+      (async () => {
+        const ok = await fetchFromSheet();
+        if (ok) {
+          DATA.forEach((r) => {
+            const meta = RATINGS[`${r.Day}|${r.시간}`];
+            if (meta) Object.assign(r, meta);
+          });
+          loadLocks();
+          rerenderAll();
+          showSyncStatus("✅ Sheet 데이터 로드됨 (" + DATA.length + " entries)");
+        }
+      })();
 
       renderKpis();
       renderFlights();
