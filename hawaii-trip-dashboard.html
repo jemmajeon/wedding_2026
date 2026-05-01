@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>하와이 신혼여행 · v1.3</title>
+    <title>하와이 신혼여행 · v1.7</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -110,7 +110,78 @@
       .tagline p { margin: 0; }
       .tagline strong { color: var(--ink-2); font-weight: 600; }
 
-      /* Subtabs */
+      /* 🔝 Main horizontal tabs */
+      .main-tabs {
+        display: flex; flex-wrap: wrap; gap: 4px;
+        margin-bottom: 0; padding-top: 4px;
+        border-bottom: 3px solid var(--primary);
+        position: relative;
+      }
+      .main-tab-btn {
+        padding: 14px 28px;
+        background: var(--surface);
+        border: 1.5px solid var(--line); border-bottom: none;
+        border-radius: 14px 14px 0 0;
+        font-family: inherit; font-weight: 700; font-size: 15px;
+        color: var(--muted);
+        cursor: pointer;
+        margin-bottom: -3px;
+        transition: all 0.15s;
+        white-space: nowrap;
+      }
+      .main-tab-btn:hover { color: var(--ink); border-color: var(--primary); }
+      .main-tab-btn[aria-selected="true"] {
+        background: var(--primary); color: #fff;
+        border-color: var(--primary);
+        box-shadow: 0 -2px 8px rgba(14,124,90,0.2);
+      }
+      .main-panel { display: none; padding-top: 28px; }
+      .main-panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+      .vlayout {
+        display: grid; grid-template-columns: 220px 1fr; gap: 28px;
+      }
+      .vtabs {
+        display: flex; flex-direction: column; gap: 4px;
+        position: sticky; top: 24px; align-self: start;
+        border: 1px solid var(--line); border-radius: var(--radius);
+        padding: 10px; background: var(--surface);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      }
+      .vtab-btn {
+        padding: 12px 14px;
+        background: transparent;
+        border: none; border-left: 3px solid transparent;
+        border-radius: 6px;
+        text-align: left; cursor: pointer;
+        font-family: inherit; font-size: 13.5px;
+        color: var(--ink-2); font-weight: 500;
+        transition: all 0.15s;
+      }
+      .vtab-btn:hover { background: #fcfaf3; color: var(--ink); }
+      .vtab-btn[aria-selected="true"] {
+        background: var(--primary-soft);
+        color: var(--primary-strong);
+        border-left-color: var(--primary);
+        font-weight: 700;
+      }
+      .vcontent { min-width: 0; }
+
+      @media (max-width: 880px) {
+        .vlayout { grid-template-columns: 1fr; }
+        .vtabs {
+          flex-direction: row; flex-wrap: wrap; position: static;
+          border: none; padding: 0; box-shadow: none; background: transparent;
+          border-bottom: 1px solid var(--line); padding-bottom: 8px; border-radius: 0;
+        }
+        .vtab-btn { border: 1px solid var(--line); border-left: 1px solid var(--line); }
+        .vtab-btn[aria-selected="true"] { border-color: var(--primary); }
+      }
+      @media (max-width: 600px) {
+        .main-tab-btn { padding: 11px 16px; font-size: 13.5px; }
+      }
+
+      /* Subtabs (legacy — 일부 컴포넌트 fallback) */
       .subtabs {
         display: flex; flex-wrap: nowrap;
         margin-bottom: 28px;
@@ -389,6 +460,401 @@
       .claude-note { margin: 16px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.7; }
       .claude-note strong { color: var(--ink-2); font-weight: 700; }
 
+      /* Must-have checklist (사용자 필수 요청) */
+      .must-have-card {
+        background: linear-gradient(135deg, #fff8e1 0%, #ffffff 60%);
+        border: 1.5px solid var(--gold);
+        position: relative;
+      }
+      .must-have-card .section-title { color: var(--gold); }
+      .must-have-card .section-title::before {
+        content: "📌 "; font-size: 16px;
+      }
+      .must-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 10px;
+        margin-top: 6px;
+      }
+      .must-item {
+        display: flex; align-items: flex-start; gap: 12px;
+        padding: 14px 16px;
+        background: rgba(255,255,255,0.75);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .must-item:hover {
+        background: var(--surface);
+        border-color: var(--gold);
+        transform: translateX(3px);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      }
+      .must-check {
+        color: var(--camp); font-size: 18px;
+        flex-shrink: 0; line-height: 1.2;
+      }
+      .must-item .must-body { flex: 1; min-width: 0; }
+      .must-item strong {
+        display: block; font-size: 14px;
+        color: var(--ink); margin-bottom: 3px;
+        font-weight: 700;
+      }
+      .must-item .must-loc {
+        display: block; font-size: 11.5px;
+        color: var(--muted); line-height: 1.4;
+      }
+      .must-item .must-arrow {
+        flex-shrink: 0; color: var(--muted);
+        font-size: 14px; align-self: center;
+        opacity: 0.4; transition: all 0.15s;
+      }
+      .must-item:hover .must-arrow {
+        color: var(--gold); opacity: 1; transform: translateX(2px);
+      }
+      .must-section { margin-bottom: 18px; }
+      .must-section:last-child { margin-bottom: 0; }
+      .must-section h4 {
+        margin: 0 0 10px; font-size: 11.5px; font-weight: 700;
+        color: var(--ink-2); letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed var(--line);
+      }
+      .must-item.must-critical {
+        border-left: 3px solid var(--accent);
+      }
+      .must-item.must-critical .must-check { color: var(--accent); }
+
+      /* 📆 달력 — Roadmap timeline */
+      .roadmap {
+        position: relative;
+        padding-left: 32px;
+        margin: 8px 0;
+      }
+      .roadmap::before {
+        content: ''; position: absolute;
+        left: 9px; top: 12px; bottom: 12px;
+        width: 2px; background: var(--line-strong);
+      }
+      .road-item {
+        position: relative;
+        margin-bottom: 14px;
+        padding: 14px 18px;
+        background: #fcfaf3;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        transition: all 0.15s ease;
+      }
+      .road-item:last-child { margin-bottom: 0; }
+      .road-item::before {
+        content: ''; position: absolute;
+        left: -29px; top: 18px;
+        width: 14px; height: 14px;
+        border-radius: 50%;
+        background: var(--surface);
+        border: 3px solid var(--primary);
+        box-sizing: border-box;
+      }
+      .road-item.urgent { background: var(--warn-soft); border-color: var(--warn); }
+      .road-item.urgent::before { background: var(--warn); border-color: var(--warn); }
+      .road-item.late { background: var(--accent-soft); border-color: var(--accent); }
+      .road-item.late::before { background: var(--accent); border-color: var(--accent); }
+      .road-item.now {
+        background: var(--gold-soft); border-color: var(--gold);
+        border-width: 2px;
+      }
+      .road-item.now::before {
+        background: var(--gold); border-color: var(--gold);
+        animation: roadpulse 2s infinite;
+      }
+      @keyframes roadpulse {
+        0%, 100% { box-shadow: 0 0 0 4px rgba(184,138,44,0.35); }
+        50% { box-shadow: 0 0 0 9px rgba(184,138,44,0.12); }
+      }
+      .road-item.depart::before { background: var(--primary); border-color: var(--primary); }
+      .road-item.trip::before { background: var(--camp); border-color: var(--camp); }
+      .road-date {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11.5px; font-weight: 700;
+        color: var(--accent); margin-bottom: 4px;
+        letter-spacing: 0.02em;
+      }
+      .road-item.now .road-date { color: var(--gold); }
+      .road-item.depart .road-date { color: var(--primary); }
+      .road-title {
+        font-size: 15px; font-weight: 700;
+        color: var(--ink); margin-bottom: 4px;
+        letter-spacing: -0.01em;
+      }
+      .road-desc {
+        font-size: 12.5px; color: var(--ink-2); line-height: 1.55;
+      }
+      .road-desc a {
+        color: var(--primary); text-decoration: none;
+        border-bottom: 1px dotted var(--primary);
+      }
+
+      /* 📆 달력 — Calendar grid */
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 6px;
+      }
+      .cal-cell {
+        border: 1px solid var(--line);
+        border-top: 5px solid var(--primary);
+        border-radius: var(--radius);
+        padding: 16px 18px;
+        background: #fcfaf3;
+        cursor: pointer;
+        transition: all 0.18s ease;
+        min-height: 180px;
+        display: flex; flex-direction: column;
+      }
+      .cal-cell:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+      }
+      .cal-day-num {
+        font-size: 24px; font-weight: 800;
+        letter-spacing: -0.02em; color: var(--ink);
+        line-height: 1;
+      }
+      .cal-date {
+        font-size: 12.5px; color: var(--muted);
+        font-weight: 600; margin-top: 4px;
+      }
+      .cal-island {
+        display: inline-block; margin-top: 8px;
+        font-size: 10.5px; color: var(--primary);
+        font-weight: 700; letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 3px 8px; background: var(--primary-soft);
+        border-radius: 999px;
+      }
+      .cal-highlights {
+        margin-top: 10px;
+        font-size: 12px; line-height: 1.45;
+        flex: 1;
+      }
+      .cal-hl-row {
+        display: flex; gap: 6px; align-items: flex-start;
+        margin-bottom: 5px;
+      }
+      .cal-hl-row .cal-hl-time {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10.5px; color: var(--accent);
+        font-weight: 700; flex-shrink: 0; padding-top: 1px;
+      }
+      .cal-hl-row .cal-hl-place {
+        color: var(--ink-2); flex: 1;
+      }
+      .cal-sleep {
+        margin-top: auto; padding-top: 10px;
+        border-top: 1px dashed var(--line);
+        font-size: 11.5px; color: var(--sleep); font-weight: 700;
+      }
+      @media (max-width: 980px) {
+        .calendar-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 600px) {
+        .calendar-grid { grid-template-columns: 1fr; }
+        .roadmap { padding-left: 26px; }
+        .road-item::before { left: -23px; }
+      }
+
+      /* 🔑 Master data tab */
+      .master-banner {
+        background: linear-gradient(135deg, var(--primary-soft) 0%, #ffffff 70%);
+        border: 1.5px solid var(--primary);
+      }
+      .master-banner .section-title { color: var(--primary-strong); }
+      .edit-hint {
+        display: inline-block;
+        padding: 1px 8px; background: var(--gold-soft); color: var(--gold);
+        border-radius: 4px; font-weight: 700; font-size: 11.5px;
+        font-family: "JetBrains Mono", monospace;
+      }
+      .reset-btn {
+        margin-top: 12px; padding: 8px 14px;
+        background: var(--surface); color: var(--ink-2);
+        border: 1px solid var(--line); border-radius: 6px;
+        font-family: inherit; font-size: 12.5px; font-weight: 600;
+        cursor: pointer;
+      }
+      .reset-btn:hover { border-color: var(--warn); color: var(--warn); }
+      .table.editable td[contenteditable="true"] {
+        background: rgba(184,138,44,0.04);
+        cursor: text; transition: background 0.15s;
+        border-left: 2px dashed var(--gold);
+      }
+      .table.editable td[contenteditable="true"]:hover {
+        background: rgba(184,138,44,0.12);
+      }
+      .table.editable td[contenteditable="true"]:focus {
+        background: var(--gold-soft); outline: 2px solid var(--gold);
+        outline-offset: -2px;
+      }
+      .table.editable td[contenteditable="true"]::after {
+        content: " ✏️"; opacity: 0.3; font-size: 10px;
+      }
+      .table.editable td[contenteditable="true"]:focus::after {
+        opacity: 0;
+      }
+
+      /* 🔧 기술 탭 */
+      .tech-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 12px;
+      }
+      .tech-item {
+        border: 1px solid var(--line); border-radius: var(--radius);
+        padding: 16px 18px; background: #fcfaf3;
+      }
+      .tech-item .tech-cat {
+        font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em;
+        text-transform: uppercase; color: var(--primary); margin-bottom: 6px;
+      }
+      .tech-item h4 {
+        margin: 0 0 6px; font-size: 14.5px; font-weight: 700; color: var(--ink);
+      }
+      .tech-item p {
+        margin: 0; font-size: 12.5px; color: var(--ink-2); line-height: 1.55;
+      }
+      .tech-item code {
+        font-size: 11.5px; background: var(--surface);
+        padding: 1px 6px; border-radius: 4px;
+        border: 1px solid var(--line);
+      }
+      .arch-flow {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12.5px; line-height: 1.8;
+        color: var(--ink-2); padding: 14px 18px;
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .arch-flow .arch-master {
+        color: var(--primary); font-weight: 700;
+      }
+      .arch-flow .arch-arrow { color: var(--accent); }
+
+      /* 시간대 alt (KST ↔ HST) */
+      .time-alt {
+        display: block;
+        font-size: 10px;
+        color: var(--muted);
+        font-weight: 500;
+        margin-top: 2px;
+        letter-spacing: 0.02em;
+        font-family: "JetBrains Mono", monospace;
+        opacity: 0.85;
+      }
+      .time-alt-inline {
+        font-size: 10.5px;
+        color: var(--muted);
+        font-weight: 500;
+        margin-left: 6px;
+        font-family: "JetBrains Mono", monospace;
+      }
+
+      /* Stars rating */
+      .stars {
+        display: inline-block; color: var(--gold);
+        font-size: 13px; letter-spacing: 1px;
+        font-family: "JetBrains Mono", monospace;
+      }
+      .stars .empty { color: rgba(0,0,0,0.16); }
+
+      /* Alt option */
+      .alt-option {
+        margin-top: 8px; font-size: 12.5px;
+        padding: 8px 12px; background: var(--accent-soft);
+        border-radius: 8px; color: var(--ink-2); line-height: 1.5;
+      }
+      .alt-option strong { color: var(--accent); margin-right: 6px; font-weight: 700; }
+
+      /* Hotel + Food card grids */
+      .area-group {
+        margin-bottom: 22px;
+      }
+      .area-group h4 {
+        margin: 0 0 10px; font-size: 12px; font-weight: 700;
+        color: var(--primary); letter-spacing: 0.1em;
+        text-transform: uppercase; padding-bottom: 6px;
+        border-bottom: 1px solid var(--line);
+      }
+      .food-grid, .hotel-grid {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+        gap: 14px;
+      }
+      .food-card, .hotel-card {
+        position: relative;
+        border: 1px solid var(--line); border-radius: var(--radius);
+        padding: 18px 20px; background: #fcfaf3;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .food-card:hover, .hotel-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+      }
+      .food-card.applied, .hotel-card.applied {
+        border-left: 4px solid var(--camp);
+        background: #f6fbf6;
+      }
+      .food-card.applied::before, .hotel-card.applied::before {
+        content: "✅ 적용";
+        position: absolute; top: 12px; right: 14px;
+        font-size: 10px; font-weight: 700;
+        color: var(--camp); background: var(--camp-soft);
+        padding: 3px 8px; border-radius: 999px;
+        letter-spacing: 0.05em;
+      }
+      .food-card .area, .hotel-card .area {
+        font-size: 11px; color: var(--muted); font-weight: 600;
+        letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;
+      }
+      .food-card .name, .hotel-card .name {
+        font-size: 16px; font-weight: 700; color: var(--ink);
+        line-height: 1.3; margin-bottom: 8px;
+      }
+      .food-card .name a, .hotel-card .name a {
+        color: var(--ink); text-decoration: none;
+        border-bottom: 1px dotted var(--muted);
+      }
+      .food-card .name a:hover, .hotel-card .name a:hover {
+        color: var(--primary); border-bottom-color: var(--primary);
+      }
+      .food-card .meta-row, .hotel-card .meta-row {
+        display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+        margin-bottom: 8px; font-size: 12px;
+      }
+      .food-card .price, .hotel-card .price {
+        font-weight: 700; color: var(--accent);
+      }
+      .food-card .dish {
+        margin-top: 6px; font-size: 13px;
+        color: var(--ink-2); font-weight: 500;
+      }
+      .food-card .dish strong { color: var(--accent); }
+      .food-card .hours, .hotel-card .hours {
+        font-size: 11.5px; color: var(--muted);
+        font-family: "JetBrains Mono", monospace;
+      }
+      .food-card .note, .hotel-card .note {
+        margin-top: 8px; font-size: 12.5px;
+        color: var(--ink-2); line-height: 1.55;
+      }
+      .food-card .carries {
+        margin-top: 6px; font-size: 12.5px; color: var(--ink-2);
+      }
+      .food-card .carries strong { color: var(--primary); }
+      .mart-section.korean .food-card {
+        border-left: 4px solid var(--accent);
+      }
+
       /* Changelog */
       .changelog {
         margin-top: 16px; padding: 18px 22px;
@@ -442,7 +908,7 @@
     <div class="wrap">
       <header>
         <div class="header-left">
-          <p class="eyebrow"><span class="version">v1.3</span>검증 완료 · 2026.05 기준</p>
+          <p class="eyebrow"><span class="version">v1.7</span>검증 완료 · 2026.05 기준</p>
           <h1>하와이 신혼여행</h1>
           <p class="subtitle">KE053 · 8박 9일 · 2026.07.12 → 07.20 · 마우이 + 오아후</p>
         </div>
@@ -460,19 +926,149 @@
         </div>
       </header>
 
-      <nav class="subtabs" role="tablist">
-        <button class="subtab-btn" role="tab" aria-selected="true"  data-subtab="overview">📊 한눈에</button>
-        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="schedule">📅 일정</button>
-        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="map">🗺️ 지도</button>
-        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="details">📖 상세 정보</button>
-        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="camping">🏕️ 캠핑</button>
-        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="budget">💰 비용</button>
-        <button class="subtab-btn" role="tab" aria-selected="false" data-subtab="data">🔍 데이터</button>
+      <nav class="main-tabs" role="tablist">
+        <button class="main-tab-btn" role="tab" aria-selected="true"  data-main="summary">📊 개요</button>
+        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="trip">🗺️ 트립</button>
+        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="prep">📋 준비</button>
+        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="system">⚙️ 시스템</button>
       </nav>
+
+      <!-- ════════ 📊 개요 ════════ -->
+      <div class="main-panel active" id="main-summary">
+        <div class="vlayout">
+          <nav class="vtabs">
+            <button class="vtab-btn" aria-selected="true"  data-subtab="overview">📍 한눈에</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="calendar">📆 달력</button>
+          </nav>
+          <div class="vcontent">
 
       <!-- 📊 한눈에 -->
       <div class="subtab-panel active" id="sub-overview">
         <section class="grid">
+          <article class="card full must-have-card">
+            <h2 class="section-title">주요 지침 — 사용자 요청 사항 (전체 적용 ✅)</h2>
+
+            <div class="must-section">
+              <h4>🔥 핵심 필수 (사용자 강조)</h4>
+              <div class="must-grid">
+                <div class="must-item must-critical" data-jump="schedule">
+                  <span class="must-check">⭐</span>
+                  <div class="must-body">
+                    <strong>Hanauma Bay 스노쿨링</strong>
+                    <span class="must-loc">"필수야!" · Day 7 09:30 → 일정 탭</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item must-critical" data-jump="stay">
+                  <span class="must-check">⭐</span>
+                  <div class="must-body">
+                    <strong>캠핑 4박 (중간 배치)</strong>
+                    <span class="must-loc">Day 3·4·5·6 → 숙박 탭</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item must-critical" data-jump="stay">
+                  <span class="must-check">⭐</span>
+                  <div class="must-body">
+                    <strong>전기·샤워 캠핑장 위주</strong>
+                    <span class="must-loc">🟢 Camp Olowalu + Malaekahana → 숙박 탭</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item must-critical" data-jump="stay">
+                  <span class="must-check">⭐</span>
+                  <div class="must-body">
+                    <strong>호텔 근처 대안</strong>
+                    <span class="must-loc">13곳 (Paia/Kahului 5 + Waikiki 8) → 숙박 탭</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="must-section">
+              <h4>📍 데이터 · UI 요구</h4>
+              <div class="must-grid">
+                <div class="must-item" data-jump="schedule">
+                  <span class="must-check">✅</span>
+                  <div class="must-body">
+                    <strong>별점 ★/5 + 대체 옵션</strong>
+                    <span class="must-loc">전체 일정 적용 → 일정·상세 탭</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="budget">
+                  <span class="must-check">✅</span>
+                  <div class="must-body">
+                    <strong>환율 자동 변환 (1USD = ₩1,475 기본)</strong>
+                    <span class="must-loc">헤더 입력 → 비용 탭 즉시 갱신</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="map">
+                  <span class="must-check">✅</span>
+                  <div class="must-body">
+                    <strong>URL 클릭 + 지도 좌표</strong>
+                    <span class="must-loc">전 항목 Google Maps 좌표 → 지도 탭</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="must-section">
+              <h4>📂 정보 카테고리</h4>
+              <div class="must-grid">
+                <div class="must-item" data-jump="food">
+                  <span class="must-check">✅</span>
+                  <div class="must-body">
+                    <strong>음식점 · 디저트 · 마트</strong>
+                    <span class="must-loc">46곳 + H Mart 한식 자재 → 먹거리 탭</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="details">
+                  <span class="must-check">✅</span>
+                  <div class="must-body">
+                    <strong>첫 하와이 가이드 (상세 정보)</strong>
+                    <span class="must-loc">12 팁 + 47 장소 디테일 → 상세 정보 탭</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="overview">
+                  <span class="must-check">✅</span>
+                  <div class="must-body">
+                    <strong>2026.05 기준 예약 데드라인</strong>
+                    <span class="must-loc">🚨 늦음 / 🟠 5/13 / 🟢 6~7월 → 한눈에 하단</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="must-section">
+              <h4>🔧 운영 / 검증</h4>
+              <div class="must-grid">
+                <div class="must-item" data-jump="overview">
+                  <span class="must-check">✅</span>
+                  <div class="must-body">
+                    <strong>8박 9일 (e-티켓 KE053/054 기준)</strong>
+                    <span class="must-loc">7/12 ICN 21:05 → 7/20 HNL 13:05 → 한눈에 항공</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="data">
+                  <span class="must-check">✅</span>
+                  <div class="must-body">
+                    <strong>사실관계 검증 + 정정 17건</strong>
+                    <span class="must-loc">Diamond Head 휴무 거짓·Star Noodle 새 주소 등 → 데이터 탭</span>
+                  </div>
+                  <span class="must-arrow">→</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
           <article class="card hero">
             <h2 class="section-title">여행 요약</h2>
             <div class="kpis" id="c-kpi-grid"></div>
@@ -501,6 +1097,38 @@
           </article>
         </section>
       </div>
+
+      <!-- 📆 달력 -->
+      <div class="subtab-panel" id="sub-calendar">
+        <section class="grid">
+          <article class="card full">
+            <h2 class="section-title">🗺️ 출발 전 로드맵 <span class="accent">— 오늘 (2026-05-01) → 출발 (7/12)</span></h2>
+            <div id="c-roadmap"></div>
+            <p class="claude-note">
+              출발까지 약 <strong>10주 (D-72)</strong>. 시간 순으로 마일스톤 12개. <span style="color:var(--warn)">●</span> 즉시/늦음 / <span style="color:var(--accent)">●</span> 정확한 시점 / <span style="color:var(--gold)">●</span> 오늘 / <span style="color:var(--primary)">●</span> 출국·귀국 / <span style="color:var(--camp)">●</span> 트립 진행.
+            </p>
+          </article>
+          <article class="card full">
+            <h2 class="section-title">📆 트립 캘린더 <span class="accent">— 8박 9일 (7/12 → 7/20)</span></h2>
+            <div id="c-calendar"></div>
+            <p class="claude-note">각 셀 클릭 → 일정 탭으로 이동 (전체 시간순 디테일). Day별 색상 = 지도 탭과 동일.</p>
+          </article>
+        </section>
+      </div>
+
+          </div><!-- /.vcontent -->
+        </div><!-- /.vlayout -->
+      </div><!-- /main-summary -->
+
+      <!-- ════════ 🗺️ 트립 ════════ -->
+      <div class="main-panel" id="main-trip">
+        <div class="vlayout">
+          <nav class="vtabs">
+            <button class="vtab-btn" aria-selected="true"  data-subtab="schedule">📅 일정</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="map">🗺️ 지도</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="details">📖 상세 정보</button>
+          </nav>
+          <div class="vcontent">
 
       <!-- 📅 일정 -->
       <div class="subtab-panel" id="sub-schedule">
@@ -546,9 +1174,30 @@
         </section>
       </div>
 
-      <!-- 🏕️ 캠핑 -->
-      <div class="subtab-panel" id="sub-camping">
+          </div><!-- /.vcontent -->
+        </div><!-- /.vlayout -->
+      </div><!-- /main-trip -->
+
+      <!-- ════════ 📋 준비 ════════ -->
+      <div class="main-panel" id="main-prep">
+        <div class="vlayout">
+          <nav class="vtabs">
+            <button class="vtab-btn" aria-selected="true"  data-subtab="stay">🛏️ 숙박</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="food">🍴 먹거리</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="budget">💰 비용</button>
+          </nav>
+          <div class="vcontent">
+
+      <!-- 🛏️ 숙박 -->
+      <div class="subtab-panel" id="sub-stay">
         <section class="grid">
+          <article class="card full">
+            <h2 class="section-title">🏨 호텔 옵션 — Paia/Kahului · Waikiki <span class="accent">(적용 ✅ + 근처 대안)</span></h2>
+            <div id="c-hotels"></div>
+            <p class="claude-note">
+              ✅ 적용 = 현재 일정에 들어간 호텔. 매진/리뉴얼 시 권역 내 대안 참고. <strong>Halekulani</strong>는 2024~ 리노베이션 운영 상태 본인 확인 필요.
+            </p>
+          </article>
           <article class="card full">
             <h2 class="section-title">📅 캠핑 예약 스케줄 — 4박 적용 (Day 3~6)</h2>
             <table class="errors-table" id="c-camp-schedule-table">
@@ -576,6 +1225,30 @@
         </section>
       </div>
 
+      <!-- 🍴 먹거리 -->
+      <div class="subtab-panel" id="sub-food">
+        <section class="grid">
+          <article class="card full">
+            <h2 class="section-title">🍽️ 음식점 <span class="accent">— 마우이 + 오아후</span></h2>
+            <div id="c-restaurants"></div>
+            <p class="claude-note">
+              ✅ 적용 = 현재 일정에 들어간 식당. 별점 + 대표 메뉴 + 영업 시간. 카드 이름 클릭 → Google Maps.
+            </p>
+          </article>
+          <article class="card full">
+            <h2 class="section-title">🍩 디저트 & 스낵</h2>
+            <div id="c-desserts"></div>
+          </article>
+          <article class="card full">
+            <h2 class="section-title">🛒 마트 & 편의점 <span class="accent">— H Mart 한식 자재 별도 강조</span></h2>
+            <div id="c-marts"></div>
+            <p class="claude-note">
+              <strong>한국 식자재</strong> = H Mart / Don Quijote / Palama (코랄 라인). 일반 그로서리는 캠핑 식수·과일·도시락. <strong>Costco</strong> 멤버십은 한국 카드 OK.
+            </p>
+          </article>
+        </section>
+      </div>
+
       <!-- 💰 비용 -->
       <div class="subtab-panel" id="sub-budget">
         <section class="grid">
@@ -592,12 +1265,34 @@
         </section>
       </div>
 
-      <!-- 🔍 데이터 -->
+          </div><!-- /.vcontent -->
+        </div><!-- /.vlayout -->
+      </div><!-- /main-prep -->
+
+      <!-- ════════ ⚙️ 시스템 ════════ -->
+      <div class="main-panel" id="main-system">
+        <div class="vlayout">
+          <nav class="vtabs">
+            <button class="vtab-btn" aria-selected="true"  data-subtab="data">🔑 데이터</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="tech">🔧 기술</button>
+          </nav>
+          <div class="vcontent">
+
+      <!-- 🔑 데이터 -->
       <div class="subtab-panel" id="sub-data">
         <section class="grid">
+          <article class="card full master-banner">
+            <h2 class="section-title">🔑 마스터 데이터 — Source of Truth</h2>
+            <p class="claude-note" style="font-size: 13px; margin-top: 0;">
+              <strong>이 표가 핵심 데이터.</strong> 다른 모든 탭(한눈에·달력·일정·지도·상세 정보·숙박·먹거리·비용)은 여기서 파생된 view야.
+              아래 표의 셀(<span class="edit-hint">시간·장소·메모·비용</span>)을 직접 편집하면 <strong>모든 탭이 즉시 반영</strong>됨. 변경사항은 브라우저에 자동 저장 (새로고침해도 유지).
+            </p>
+            <button id="c-reset-overrides" class="reset-btn">🔄 모든 변경사항 초기화 (원본 복구)</button>
+            <span class="muted" id="c-override-status" style="margin-left:10px;font-size:12px"></span>
+          </article>
           <article class="card filters">
             <div><label for="c-filter-island">섬</label><select id="c-filter-island"></select></div>
-            <div><label for="c-filter-category">카테고리</label><select id="c-filter-category"></select></div>
+            <div><label for="c-filter-group">카테고리 그룹 <span class="accent">(5그룹)</span></label><select id="c-filter-group"></select></div>
             <div><label for="c-filter-reservation">예약</label>
               <select id="c-filter-reservation">
                 <option value="all">전체</option><option value="yes">필요</option><option value="no">불필요</option>
@@ -606,9 +1301,9 @@
             <div><label for="c-search">검색</label><input id="c-search" type="text" placeholder="장소/메모 검색" /></div>
           </article>
           <article class="card full">
-            <h2 class="section-title">상세 목록 — 장소명 클릭 → Google Maps</h2>
-            <table class="table" id="c-table">
-              <thead><tr><th>Day</th><th>날짜</th><th>섬</th><th>시간</th><th>장소</th><th>카테고리</th><th>예약</th><th>비용</th></tr></thead>
+            <h2 class="section-title">상세 목록 — <span class="accent">셀 클릭 → 인라인 편집</span></h2>
+            <table class="table editable" id="c-table">
+              <thead><tr><th>Day</th><th>날짜</th><th>섬</th><th>그룹</th><th>시간 ✏️</th><th>장소 ✏️</th><th>카테고리</th><th>예약</th><th>비용 ✏️</th><th>★</th></tr></thead>
               <tbody></tbody>
             </table>
             <p class="muted" id="c-table-count"></p>
@@ -620,6 +1315,38 @@
               <tbody></tbody>
             </table>
             <div class="changelog">
+              <h4>v1.7 (2026.05) — 변경 사항</h4>
+              <ul>
+                <li>🇰🇷 <strong>인천공항 출도착 스케줄 추가</strong> — Day 1 한국 출국 6단계 (집→ICN→체크인→보안→게이트→이륙) + Day 9 한국 입국 4단계 (도착→입국심사→귀가→집)</li>
+                <li>🕐 <strong>한국·하와이 시간 동시 표기</strong> — altTime() 헬퍼로 KST↔HST 자동 변환, 모든 시간 cell에 양쪽 시각 표시</li>
+                <li>🚗 <strong>렌트카 디테일 강화</strong> — OGG Rental Car Center / HNL CONRAC + Wiki Wiki 셔틀 / 풀탱크 반납 절차 / 보험 가이드 / Costco vs Discount Hawaii 비교</li>
+                <li>📖 상세 정보 탭 ICN 측 5건 신규 (집→ICN, 체크인, 보안·면세·라운지, ICN 도착, 귀가 옵션)</li>
+                <li>renderTimeline 정렬 제거 — DATA 입력 순서 그대로 표시 (KST/HST mix 정렬 깨짐 수정)</li>
+                <li>v1.6 백업 파일 보존: <code>hawaii-trip-dashboard-v1.6.html</code></li>
+              </ul>
+              <h4>v1.6 (2026.05) — 변경 사항</h4>
+              <ul>
+                <li>🗂️ <strong>탭 구조 hierarchical 재배치</strong> — 호라이즌 메인탭 4개 (개요·트립·준비·시스템) × 버티컬 서브탭 2~3개. 단계별 흐름</li>
+                <li>🔑 <strong>데이터 탭 = 마스터 source of truth</strong> — 인라인 편집 시 다른 탭들 즉시 반영. localStorage 자동 저장</li>
+                <li>📂 <strong>카테고리 5그룹화</strong> — 🚗 이동 / 🍽️ 식사 / 🌿 자연·체험 / 🛍️ 마을·문화 / 🛏️ 숙박</li>
+                <li>🔧 <strong>기술 탭 신설</strong> — 기술 요구사항·아키텍처·구현 사항 별도 관리</li>
+                <li>v1.5 백업 파일 보존: <code>hawaii-trip-dashboard-v1.5.html</code> (이번 버전부터 백업 보존)</li>
+              </ul>
+              <h4>v1.5 (2026.05) — 변경 사항</h4>
+              <ul>
+                <li>📆 <strong>달력 탭 신설</strong> — 출발 전 로드맵 타임라인 + 9일 캘린더 그리드 (시각적 흐름 추적)</li>
+                <li>로드맵: 오늘(D-72) → 5/13 Haleakalā → 6월 30일 전 → 7월 14일/2일/1일 전 → 출발 → 트립 → 귀국 12개 마일스톤</li>
+                <li>캘린더 그리드: Day 1~9, 각 셀에 날짜·섬·핵심 ★ 활동 + 숙박 표시. 클릭 시 일정 탭 점프</li>
+                <li>📌 한눈에 탭 최상단 <strong>주요 지침 카드</strong> 추가 (사용자 명시 요청 12건 체크리스트)</li>
+              </ul>
+              <h4>v1.4 (2026.05) — 변경 사항</h4>
+              <ul>
+                <li>⭐ <strong>별점 시스템 ★/5</strong> — 평가 가능 항목에 별점 (logistics 제외). 일정·상세 정보 탭 표시</li>
+                <li>🔁 <strong>대체 옵션</strong> — 매진/휴무 위험 항목에 백업 (Tin Roof·Star Noodle·Camp Olowalu·Hanauma·신혼 디너·Malaekahana 등)</li>
+                <li>🍴 <strong>먹거리 탭 신설</strong> — 음식점 25곳 + 디저트 10곳 + 마트 11곳 (H Mart·Don Quijote·Palama 등 한국 식자재 별도 강조)</li>
+                <li>🛏️ <strong>숙박 탭</strong> — 구 캠핑 탭 → 호텔 13개 옵션 추가 (Paia/Kahului 5 + Waikiki 8, 적용 호텔 ✅)</li>
+                <li>한국·아시안 마트 코랄 라인으로 시각 구분</li>
+              </ul>
               <h4>v1.3 (2026.05) — 변경 사항</h4>
               <ul>
                 <li>KPI 카드 SaaS 스타일 전환 — 블루/핑크/옐로우/그린 컬러 블록 (참조 이미지 기반 옵션 3 하이브리드)</li>
@@ -645,6 +1372,107 @@
           </article>
         </section>
       </div>
+
+      <!-- 🔧 기술 -->
+      <div class="subtab-panel" id="sub-tech">
+        <section class="grid">
+          <article class="card full">
+            <h2 class="section-title">📐 데이터 아키텍처 — 단일 source of truth</h2>
+            <div class="arch-flow">
+              <span class="arch-master">DATA[]</span> (50+ rows · localStorage 동기화)<br>
+              <span class="arch-arrow">↓</span> 변경 시 자동 전파<br>
+              ┌─ 한눈에 (KPI · 비용 배너) ─ 달력 (로드맵 · 캘린더)<br>
+              ├─ 일정 (Day-by-Day) ─ 지도 (마커 · 폴리라인)<br>
+              ├─ 상세 정보 (별점 · 대체 옵션) ─ 숙박 / 먹거리 / 비용<br>
+              └─ 데이터 (마스터 표 + 인라인 편집)
+            </div>
+            <p class="claude-note">
+              모든 화면은 <code>DATA[]</code>의 read-only view. <strong>편집은 데이터 탭에서만</strong> → 변경 즉시 모든 탭 재렌더 → localStorage 저장 (브라우저 닫아도 유지).
+            </p>
+          </article>
+
+          <article class="card full">
+            <h2 class="section-title">🔧 기술 요구사항 — 사용자 명시 사항</h2>
+            <div class="tech-grid">
+              <div class="tech-item">
+                <div class="tech-cat">데이터 구조</div>
+                <h4>마스터 데이터 + 인라인 편집</h4>
+                <p>"데이터 탭이 핵심, 거기가 바뀌면 다른 탭도 바뀌는 구조" — <code>contenteditable</code> + <code>localStorage</code> + <code>rerenderAll()</code>.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">검색·필터</div>
+                <h4>카테고리 5그룹</h4>
+                <p>"카테고리를 좀 더 크게 묶어봐" — 27개 세분 카테고리 → 5 그룹 (이동·식사·자연체험·마을문화·숙박).</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">통화</div>
+                <h4>환율 자동 변환</h4>
+                <p>"위에 환율 넣으면 자동으로 전체 원화" — 헤더 input → <code>EXCHANGE_RATE</code> 갱신 → BUDGET 즉시 재렌더.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">평가</div>
+                <h4>별점 시스템 ★/5</h4>
+                <p>"추천지수도 별 5개로" — <code>RATINGS[Day|시간]</code> 매핑, <code>starHTML()</code> 함수 렌더.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">대체 옵션</div>
+                <h4>Alt fallback</h4>
+                <p>"거기 아니면 대체해서 갈만한데도" — DATA row의 <code>alt</code> 필드, <code>altHTML()</code> 박스 렌더.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">지도</div>
+                <h4>Leaflet + OpenStreetMap</h4>
+                <p>"실제 지도 내에서 어떻게 흘러가는지(좌표들도 구글맵 기준)" — Leaflet 라이브러리 + OSM 타일 (API 키 불필요) + Day별 색상 폴리라인.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">URL</div>
+                <h4>Google Maps 딥링크</h4>
+                <p>"url 들 다 다시 들어갈 수 있게, 클릭하면 타고 갈 수 있게" — <code>gmaps(query)</code> 헬퍼로 모든 장소·예약처·호텔에 GMaps 검색 URL 부여.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">디자인</div>
+                <h4>매거진 + SaaS KPI 하이브리드</h4>
+                <p>v1.2 매거진 베이스 (Pretendard + 화이트 카드) + v1.3 SaaS 컬러 KPI (블루·핑크·옐로우·그린 그라디언트).</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">탭 구조</div>
+                <h4>11개 서브탭</h4>
+                <p>한눈에·달력·일정·지도·상세 정보·숙박·먹거리·비용·데이터·기술. 모바일은 가로 스크롤 (<code>overflow-x:auto</code>).</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">접근</div>
+                <h4>탭 점프 (Click-to-jump)</h4>
+                <p>주요 지침 카드 + 캘린더 셀 클릭 → 해당 탭 자동 활성화 + 페이지 상단 스크롤.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">검증</div>
+                <h4>2026.05 기준 데드라인</h4>
+                <p>"오늘은 2026년 05월이고 타당성 검증" — 실제 시점 기준 D-72일 환산, 매진 위험 항목 🚨 표시.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat">백업</div>
+                <h4>버전 스냅샷</h4>
+                <p>v1.6부터 버전 변경 시 이전 버전 백업 보존 (<code>hawaii-trip-dashboard-vX.X.html</code>).</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card full">
+            <h2 class="section-title">📚 라이브러리 / 외부 의존</h2>
+            <ul style="font-size: 13px; line-height: 1.9; color: var(--ink-2);">
+              <li><code>Pretendard Variable</code> — jsdelivr CDN, 본문·헤딩</li>
+              <li><code>JetBrains Mono</code> — Google Fonts, 시간·코드·숫자</li>
+              <li><code>Leaflet 1.9.4</code> — unpkg CDN, 지도 라이브러리</li>
+              <li><code>OpenStreetMap tiles</code> — 무료, API 키 불필요</li>
+              <li>Google Maps URL 패턴: <code>https://www.google.com/maps/search/?api=1&query=&lt;encoded&gt;</code></li>
+            </ul>
+          </article>
+        </section>
+      </div>
+
+          </div><!-- /.vcontent -->
+        </div><!-- /.vlayout -->
+      </div><!-- /main-system -->
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -656,10 +1484,17 @@
       const dual = (usd, total) => `<div class="money${total ? ' total' : ''}"><div class="usd">${fmt$(usd)}</div><div class="krw">${krw(usd)}</div></div>`;
 
       const DATA = [
-        // Day 1
+        // Day 1 — 한국 출국 (KST)
+        {Day:1,날짜:"7/12",요일:"일",섬:"한국",시간:"15:00 KST",장소:"집 → 인천공항",카테고리:"🚗 이동",예약:"",메모:"여권·ESTA 승인서·KE e-티켓·트래블카드(트래블월렛/하나비바X)·미국 달러 소액(팁용 $50) 확인. ⚠️ ESTA 출발 72h 전 신청 필수. 캠핑 장비 위탁 가능 (텐트·침낭 OK)",비용:"₩",숙박:"-",fix:false,lat:null,lng:null,url:gmaps("인천공항 가는 길")},
+        {Day:1,날짜:"7/12",요일:"일",섬:"한국",시간:"17:00 KST",장소:"ICN 인천공항 T2 도착",카테고리:"✈️ 이동",예약:"",메모:"국제선 3시간 전 도착 권장. 공항철도 종착역 = T1, T2까지 무료 셔틀 5분 간격(약 5분). 자가용 시 T2 장기주차장",비용:"-",숙박:"-",fix:false,lat:null,lng:null,url:gmaps("Incheon Airport Terminal 2")},
+        {Day:1,날짜:"7/12",요일:"일",섬:"한국",시간:"18:00 KST",장소:"KE 프레스티지 체크인 (H/J/K 카운터)",카테고리:"✈️ 이동",예약:"",메모:"3F 체크인 카운터. KE앱 web check-in (24h 전) 시 우대 줄. 짐 위탁: 프레스티지 32kg×2 무료 + 핸드캐리 12kg. 좌석 14F 사전 배정됨",비용:"-",숙박:"-",fix:false,lat:null,lng:null,url:gmaps("Incheon T2 Korean Air Check-in")},
+        {Day:1,날짜:"7/12",요일:"일",섬:"한국",시간:"19:00 KST",장소:"보안검사 → 출국심사 → 면세점 → KAL 라운지",카테고리:"🛍️ 마을",예약:"",메모:"자동출입국심사 사전등록자 빠름. ⚠️ 면세점 선크림 X — 액체 100ml 제한 + 하와이 옥시벤존 판매 금지법 (압수 가능). 라운지 = T2 KAL Lounge (East/West 두 곳, 프레스티지 무료)",비용:"$",숙박:"-",fix:false,lat:null,lng:null,url:gmaps("Incheon T2 KAL Lounge")},
+        {Day:1,날짜:"7/12",요일:"일",섬:"한국",시간:"20:30 KST",장소:"게이트 250번대 도착",카테고리:"✈️ 이동",예약:"",메모:"보딩 약 20:25 시작 (이륙 40분 전). KE053 B787-10. 좌석 14F (프레스티지 1-2-1 좌석 배치). 안대·귀마개·물병 준비",비용:"-",숙박:"-",fix:false,lat:null,lng:null,url:gmaps("Incheon T2 Gate 250")},
+        {Day:1,날짜:"7/12",요일:"일",섬:"한국",시간:"21:05 KST",장소:"KE053 ICN 출발 ✈️",카테고리:"✈️ 이동",예약:"",메모:"비행 8h 50m. 식사 → 영화 1편 → 수면 권장. 도착 1시간 전 식사 제공. 시차 적응 위해 한국 시간 새벽 (하와이 오전)에는 자기. 기내 Wi-Fi 유료 ($14~)",비용:"-",숙박:"기내",fix:false,lat:null,lng:null,url:gmaps("Incheon Airport ICN")},
+        // Day 1 — 하와이 도착 (HST)
         {Day:1,날짜:"7/12",요일:"일",섬:"마우이",시간:"10:55",장소:"HNL 도착 (KE053 · 프레스티지)",카테고리:"✈️ 이동",예약:"",메모:"e-티켓 ICN 21:05 → HNL 10:55 (8h 50m). 입국·짐찾기 60~90분",비용:"-",숙박:"Paia Inn",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("Daniel K Inouye International Airport HNL")},
         {Day:1,날짜:"7/12",요일:"일",섬:"마우이",시간:"13:30",장소:"HNL → OGG 국내선",카테고리:"✈️ 이동",예약:"⚠️ Hawaiian Air",메모:"35분 비행. 미예약이면 즉시 발권",비용:"$$",숙박:"Paia Inn",fix:false,lat:20.8987,lng:-156.4305,url:gmaps("Kahului Airport OGG Maui")},
-        {Day:1,날짜:"7/12",요일:"일",섬:"마우이",시간:"14:30",장소:"OGG 렌트카 픽업",카테고리:"🚗 이동",예약:"⚠️ 사전 예약",메모:"Costco Travel·Discount Hawaii 비교",비용:"$$$",숙박:"Paia Inn",fix:false,lat:20.8987,lng:-156.4305,url:gmaps("OGG Rental Car Center")},
+        {Day:1,날짜:"7/12",요일:"일",섬:"마우이",시간:"14:30",장소:"OGG 렌트카 픽업 (Rental Car Center)",카테고리:"🚗 이동",예약:"⚠️ 사전 예약",메모:"공항 옆 렌트카 센터 (육교 도보 5분, 무빙워크). 업체 8개: Alamo·Avis·Budget·Dollar·Enterprise·Hertz·National·Thrifty. <strong>Costco Travel</strong> 회원이면 가장 저렴 (Alamo/Enterprise). <strong>SUV 권장</strong> (Hana Hwy 굴곡·캠프장 비포장). 보험: 카드사 자동 LDW 우선 확인 (Visa Plat·Amex Gold↑) → 추가 LDW 거절 가능. <strong>풀탱크 반납</strong> 약속, 안 하면 갤런 ~$10",비용:"$$$",숙박:"Paia Inn",fix:false,lat:20.8987,lng:-156.4305,url:gmaps("OGG Rental Car Center")},
         {Day:1,날짜:"7/12",요일:"일",섬:"마우이",시간:"16:00",장소:"Paia Fish Market",카테고리:"🍽️ 식사",예약:"",메모:"마히마히 추천. 일요일 영업",비용:"$$",숙박:"Paia Inn",fix:true,lat:20.9024,lng:-156.3711,url:gmaps("Paia Fish Market Maui")},
         {Day:1,날짜:"7/12",요일:"일",섬:"마우이",시간:"18:00",장소:"Paia Inn 체크인",카테고리:"🛏️ 숙박",예약:"⚠️ 사전 예약",메모:"Hosmer Grove 캠핑 폐기 — 도착당일 해발 2073m 위험",비용:"$$$",숙박:"Paia Inn",fix:true,lat:20.9028,lng:-156.3690,url:gmaps("Paia Inn Maui")},
         // Day 2
@@ -689,7 +1524,7 @@
         // Day 5
         {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"09:30",장소:"Olowalu → OGG",카테고리:"🚗 이동",예약:"",메모:"Camp Olowalu 정리·약 40분",비용:"-",숙박:"Waimānalo Camp",fix:true,lat:20.8089,lng:-156.6242,url:gmaps("Camp Olowalu Maui")},
         {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"12:30",장소:"OGG → HNL 국내선",카테고리:"✈️ 이동",예약:"⚠️ 사전 예약 시급",메모:"35분 비행",비용:"$$",숙박:"Waimānalo Camp",fix:false,lat:20.8987,lng:-156.4305,url:gmaps("Kahului Airport OGG")},
-        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"13:30",장소:"HNL 렌트카 픽업",카테고리:"🚗 이동",예약:"⚠️ 사전 예약",메모:"오아후 별도 렌트카 계약",비용:"$$$",숙박:"Waimānalo Camp",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL Airport Rental Car")},
+        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"13:30",장소:"HNL 렌트카 픽업 (CONRAC)",카테고리:"🚗 이동",예약:"⚠️ 사전 예약",메모:"공항에서 <strong>CONRAC</strong>(Consolidated Rental Car Facility)까지 약 1km. <strong>Wiki Wiki 셔틀 무료</strong> (5분 간격, 5분 이동) 또는 도보 15~20분. 같은 업체들 (Alamo·Avis·Hertz·National 등). ⚠️ <strong>마우이 렌트카와 별도 계약</strong> — 각 섬마다 다른 업체일 수 있음. 오아후는 작은 차도 OK (비포장 거의 없음)",비용:"$$$",숙박:"Waimānalo Camp",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL Consolidated Rental Car Facility")},
         {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"15:30",장소:"Kailua Beach",카테고리:"🏖️ 해변",예약:"",메모:"오아후 최고 비치",비용:"무료",숙박:"Waimānalo Camp",fix:true,lat:21.3925,lng:-157.7344,url:gmaps("Kailua Beach Park Oahu")},
         {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"18:00",장소:"Buzz's Original Steakhouse",카테고리:"🍽️ 저녁",예약:"⚠️ 권장",메모:"오바마 단골",비용:"$$$",숙박:"Waimānalo Camp",fix:false,lat:21.3953,lng:-157.7378,url:gmaps("Buzzs Original Steakhouse Kailua")},
         {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"20:00",장소:"Waimānalo Beach 캠핑 체크인 🏕️",카테고리:"🏕️ 캠핑",예약:"⚠️ honolulu.gov (14일 전 12 PM)",메모:"오아후 4박 1일차. ⚠️ Bellows는 금~일만",비용:"$32",숙박:"Waimānalo Camp",fix:true,lat:21.3325,lng:-157.7022,url:gmaps("Waimanalo Beach Park Oahu")},
@@ -724,10 +1559,70 @@
         // Day 9
         {Day:9,날짜:"7/20",요일:"월",섬:"오아후",시간:"07:30",장소:"Leonard's Bakery 말라사다",카테고리:"🍩 아침",예약:"",메모:"05:30부터 영업",비용:"$",숙박:"-",fix:false,lat:21.2867,lng:-157.8375,url:gmaps("Leonards Bakery Honolulu")},
         {Day:9,날짜:"7/20",요일:"월",섬:"오아후",시간:"09:00",장소:"호텔 체크아웃",카테고리:"🚗 이동",예약:"",메모:"",비용:"-",숙박:"-",fix:false,lat:21.2780,lng:-157.8333,url:gmaps("Waikiki Hotel")},
-        {Day:9,날짜:"7/20",요일:"월",섬:"오아후",시간:"10:00",장소:"HNL 렌트카 반납",카테고리:"🚗 이동",예약:"",메모:"국제선 3시간 전 도착",비용:"-",숙박:"-",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL Airport Rental Car Return")},
-        {Day:9,날짜:"7/20",요일:"월",섬:"오아후",시간:"10:30",장소:"HNL 국제선 체크인",카테고리:"✈️ 이동",예약:"",메모:"수하물·면세점·라운지",비용:"-",숙박:"-",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL International Terminal")},
-        {Day:9,날짜:"7/20",요일:"월",섬:"오아후",시간:"13:05",장소:"KE054 출발 (일반석 Q)",카테고리:"✈️ 이동",예약:"",메모:"HNL 13:05 → ICN 7/21(화) 17:40 (9h 35m)",비용:"-",숙박:"-",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL Airport Departures")}
+        {Day:9,날짜:"7/20",요일:"월",섬:"오아후",시간:"10:00",장소:"HNL 렌트카 반납 (CONRAC)",카테고리:"🚗 이동",예약:"",메모:"<strong>CONRAC 반납 게이트</strong> → 직원 차량 점검 (주유 게이지·외관) → 영수증 → <strong>Wiki Wiki 셔틀</strong>로 터미널 (5분). ⚠️ 풀탱크 안 했으면 갤런당 ~$10 패널티. 공항 주변 셸/76 주유소에서 선반납 권장 (시세 +$0.30~0.50/갤런). 반납 시간 = 픽업시간 기준 (15분 그레이스)",비용:"-",숙박:"-",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL Airport Rental Car Return")},
+        {Day:9,날짜:"7/20",요일:"월",섬:"오아후",시간:"10:30",장소:"HNL 국제선 체크인",카테고리:"✈️ 이동",예약:"",메모:"<strong>KE 카운터 J Lobby 7~9</strong>. 짐 위탁 일반석 23kg×2 무료 / 추가 $100. 면세점 추천: 마카다미아 박스·코나 커피·하와이안 호스트 초콜릿. ⚠️ 한국 도착 시 면세 한도 1인 $800 안에서. 농산물(과일·생화·생고기) X",비용:"-",숙박:"-",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL International Terminal")},
+        {Day:9,날짜:"7/20",요일:"월",섬:"오아후",시간:"13:05",장소:"KE054 출발 (일반석 Q)",카테고리:"✈️ 이동",예약:"",메모:"HNL 13:05 → ICN 7/21(화) 17:40 (9h 35m)",비용:"-",숙박:"-",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL Airport Departures")},
+        // Day 9 — 한국 입국 (KST, +1일)
+        {Day:9,날짜:"7/21",요일:"화",섬:"한국",시간:"17:40 KST",장소:"ICN T2 도착 (+1일)",카테고리:"✈️ 이동",예약:"",메모:"9h 35m 비행 종료. 자동출입국심사 사전등록자 빠름 (한국인 + 만 7세 이상). 미등록자는 외국인 줄 외 한국인 줄. 짐 찾기 약 30분",비용:"-",숙박:"-",fix:false,lat:null,lng:null,url:gmaps("Incheon Airport Terminal 2 Arrivals")},
+        {Day:9,날짜:"7/21",요일:"화",섬:"한국",시간:"18:30 KST",장소:"입국심사 → 짐 찾기 → 세관",카테고리:"✈️ 이동",예약:"",메모:"세관 면세 한도 1인 $800 (US 달러 기준). 마카다미아·코나 커피·하와이안 호스트 초콜릿 OK. 면세 초과 시 신고 → 관세. 농산물(과일·생화·생고기) X",비용:"-",숙박:"-",fix:false,lat:null,lng:null,url:gmaps("Incheon Airport Customs")},
+        {Day:9,날짜:"7/21",요일:"화",섬:"한국",시간:"19:30 KST",장소:"ICN → 집 (공항철도/리무진/택시)",카테고리:"🚗 이동",예약:"",메모:"AREX 직통 ₩9,500 (서울역 43분, T2→T1→서울) / 일반 ₩4,750 (각 역 정차) / 공항버스 지역별 ₩15,000~ / 카카오택시 야간 ₩70,000~150,000 (지역별)",비용:"₩",숙박:"-",fix:false,lat:null,lng:null,url:gmaps("Incheon Airport Express AREX")},
+        {Day:9,날짜:"7/21",요일:"화",섬:"한국",시간:"21:00 KST",장소:"집 도착 (예상) 🏠",카테고리:"🏛️ 역사",예약:"",메모:"시차 회복 — 한국 시간 기준 자기. 다음날 오후까지 잠 권장. 짐 정리는 다음날. 사진·영상 정리는 시차 적응 후",비용:"-",숙박:"집",fix:false,lat:null,lng:null,url:""}
       ];
+
+      // ===== 별점 + 대체 옵션 매핑 (Day|시간 키) =====
+      // logistics(이동·체크인·렌트카·국내선)는 매핑 안 함 → 별 표시 X
+      const RATINGS = {
+        "1|16:00": {rating:4},
+        "2|05:50": {rating:5, alt:"흐림 시 환불 X — 일출 못 봐도 정상 풍경 자체는 가치 있음"},
+        "2|07:30": {rating:3},
+        "2|11:00": {rating:3},
+        "2|13:00": {rating:4, alt:"일 휴무 시 Tasty Crust / 808 Grindz Cafe"},
+        "2|15:00": {rating:4},
+        "2|18:30": {rating:3},
+        "3|06:30": {rating:5, alt:"Shaka Guide / GyPSy Guide 앱 ($15) 강력 추천"},
+        "3|07:00": {rating:3},
+        "3|10:00": {rating:4, alt:"Sold Out 시 Halfway to Hana Stand 정차"},
+        "3|11:30": {rating:3},
+        "3|12:30": {rating:5},
+        "3|14:00": {rating:4, alt:"화·수 휴무 시 Pranee's Thai Food / Hana Ranch Restaurant"},
+        "3|15:30": {rating:5},
+        "3|17:30": {rating:4, alt:"케이빈 매진 시 텐트 사이트 (12개 한정)"},
+        "4|12:30": {rating:4},
+        "4|14:30": {rating:4, alt:"캐빈 매진 시 텐탈로 ($130~180) / RV / 텐트 사이트 ($40~60)"},
+        "4|15:30": {rating:4},
+        "4|17:30": {rating:4},
+        "4|19:00": {rating:5, alt:"예약 못 잡으면 Honu Seafood / Roy's Ka'anapali"},
+        "5|15:30": {rating:5},
+        "5|18:00": {rating:4, alt:"Cinnamon's 저녁 / Kalapawai Cafe & Deli"},
+        "5|20:00": {rating:3, alt:"Bellows Beach (금~일만 운영) / Kualoa Regional Park"},
+        "6|05:00": {rating:5},
+        "6|05:50": {rating:5},
+        "6|07:30": {rating:4},
+        "6|11:00": {rating:4},
+        "6|12:30": {rating:4, alt:"Romy's Kahuku Prawns (신선도 ↑) / Fumi's Shrimp Truck"},
+        "6|14:00": {rating:4},
+        "6|17:30": {rating:5},
+        "6|21:30": {rating:4, alt:"유르트 매진 시 캐빈 ($150~250) / 텐트 ($25~35) / Camp Mokulēʻia"},
+        "7|06:00": {rating:4, alt:"예약 매진 시 Koko Crater Trail (오아후 동쪽) / Manoa Falls (Day 8)"},
+        "7|08:00": {rating:4},
+        "7|09:30": {rating:5, alt:"⚠️ 매진 매우 빠름 — 대안: Shark's Cove (노스쇼어) / Electric Beach (West Oahu) / Three Tables"},
+        "7|13:00": {rating:3, alt:"Hawaiian BBQ / Aloha Sushi (Koko Marina 내)"},
+        "7|14:30": {rating:5},
+        "7|19:30": {rating:5, alt:"Senia (미슐랭 1스타, Chinatown) / Mariposa (Neiman Marcus) / Mar Mar Beach Side / Roy's Waikiki"},
+        "8|08:00": {rating:4},
+        "8|09:30": {rating:4, alt:"Bogart's Cafe (Diamond Head 근처) / Goofy Cafe & Dine"},
+        "8|11:00": {rating:4, alt:"비 오면 Lyon Arboretum (실내 정글)"},
+        "8|14:00": {rating:4, alt:"Helena's Hawaiian Food (화~금만) / Side Street Inn / Ono Hawaiian Foods"},
+        "8|16:00": {rating:3},
+        "8|17:30": {rating:5, alt:"Atlantis Submarine (잠수함 투어) / Diamond Head Luau (디너+쇼)"},
+        "8|19:30": {rating:4, alt:"Roy's / Marukame Udon / Tonkatsu Tamafuji (한식 그리울 때 X 일식)"},
+        "9|07:30": {rating:5}
+      };
+
+      DATA.forEach((r) => {
+        const meta = RATINGS[`${r.Day}|${r.시간}`];
+        if (meta) Object.assign(r, meta);
+      });
 
       const FLIGHTS = [
         {type:"outbound",code:"KE053",label:"출국 · 프레스티지 (J · Flex)",aircraft:"B787-10",date:"2026-07-12 (일)",fromCode:"ICN",fromCity:"서울/인천 T2",fromTime:"21:05",toCode:"HNL",toCity:"호놀룰루 T2",toTime:"10:55",toOffset:"(같은 날 도착)",duration:"8h 50m",seat:"14F",extras:"전원 · 엔터테인먼트 · 기내식 · Wi-Fi"},
@@ -835,10 +1730,141 @@
         {cat:"날씨 / 옷",title:"7월 평균 25~30°C · 산은 추움",body:"해변·낮은 곳은 반팔·반바지. Haleakalā 정상은 5~10°C로 영하 가능 — 패딩·털모자·장갑 필수. 비는 짧게 자주 옴 (몇 분 내 그침). 캠핑은 가벼운 긴팔 추가."}
       ];
 
+      const HOTELS = [
+        // Paia/Kahului 권역
+        {area:"Paia/Kahului", name:"Paia Inn", rating:4, price:"$300~450", type:"부티크", applied:true,
+         url:gmaps("Paia Inn Maui"),
+         note:"마을 중심·Hana Hwy 출발지 최적. 객실 200ft²로 작음. 식당·서핑샵 도보권"},
+        {area:"Paia/Kahului", name:"Inn at Mama's Fish House", rating:5, price:"$700~1200", type:"럭셔리 B&B",
+         url:gmaps("Inn at Mamas Fish House Paia"),
+         note:"Mama's Fish House 옆. 12개 객실 한정 — 매진 매우 빠름"},
+        {area:"Paia/Kahului", name:"Maui Seaside Hotel", rating:3, price:"$180~280", type:"미드레인지 가성비",
+         url:gmaps("Maui Seaside Hotel Kahului"),
+         note:"Kahului 공항 근처. 비치 X. 가성비 베스트"},
+        {area:"Paia/Kahului", name:"Maui Coast Hotel (Kihei)", rating:4, price:"$280~400", type:"미드레인지",
+         url:gmaps("Maui Coast Hotel Kihei"),
+         note:"Kihei 위치 — Big Beach 가까움. 풀장 있음"},
+        {area:"Paia/Kahului", name:"Andaz Maui at Wailea", rating:5, price:"$700~1500", type:"럭셔리 리조트",
+         url:gmaps("Andaz Maui at Wailea Resort"),
+         note:"Wailea. 럭셔리 풀장·해변. 신혼 컨셉 ↑"},
+        // Waikiki 권역
+        {area:"Waikiki", name:"Halekulani", rating:5, price:"$600~1500", type:"럭셔리", applied:true,
+         url:gmaps("Halekulani Waikiki"),
+         note:"⚠️ 2024~ 리노베이션 운영 상태 본인 확인. 재오픈 시 와이키키 No.1"},
+        {area:"Waikiki", name:"Royal Hawaiian (Pink Palace)", rating:5, price:"$500~1000", type:"아이코닉 럭셔리",
+         url:gmaps("Royal Hawaiian Hotel Waikiki"),
+         note:"1927년 분홍색 랜드마크. 비치 직결"},
+        {area:"Waikiki", name:"Sheraton Princess Kaiulani", rating:4, price:"$280~450", type:"미드레인지",
+         url:gmaps("Sheraton Princess Kaiulani Waikiki"),
+         note:"와이키키 중심. 비치 도보 1분. 가성비"},
+        {area:"Waikiki", name:"Hyatt Regency Waikiki", rating:4, price:"$350~550", type:"비치프론트",
+         url:gmaps("Hyatt Regency Waikiki Beach Resort"),
+         note:"비치 직결. Hyatt 멤버 포인트 사용 가능"},
+        {area:"Waikiki", name:"Outrigger Reef Waikiki", rating:4, price:"$400~650", type:"비치프론트",
+         url:gmaps("Outrigger Reef Waikiki Beach Resort"),
+         note:"비치 직결. 풀장. 패밀리·신혼 다 OK"},
+        {area:"Waikiki", name:"Hyatt Centric Waikiki", rating:4, price:"$300~500", type:"모던 부티크",
+         url:gmaps("Hyatt Centric Waikiki Beach"),
+         note:"2018 신축. 모던 디자인. 옥상 풀"},
+        {area:"Waikiki", name:"The Modern Honolulu", rating:4, price:"$280~450", type:"디자인 호텔",
+         url:gmaps("The Modern Honolulu"),
+         note:"디자인 호텔 무드. 풀장 2개. 야경 ↑"},
+        {area:"Waikiki", name:"Hilton Hawaiian Village", rating:4, price:"$350~600", type:"대형 리조트",
+         url:gmaps("Hilton Hawaiian Village Waikiki"),
+         note:"5개 타워·6개 풀장·라군. 신혼은 호불호"}
+      ];
+
+      const RESTAURANTS = [
+        // 마우이
+        {island:"마우이",area:"Paia",name:"Mama's Fish House",rating:5,price:"$$$$$",dish:"마카다미아 크러스티드 마히마히, 파인애플 케이크",hours:"11:00~21:00",note:"⚠️ 1~3개월 전 예약 필수. 마우이 No.1 시푸드",url:gmaps("Mamas Fish House Paia")},
+        {island:"마우이",area:"Paia",name:"Paia Fish Market",rating:4,price:"$$",dish:"마히마히 버거, 피쉬 타코",hours:"10:30~21:30",note:"워크인 캐주얼",applied:true,url:gmaps("Paia Fish Market Maui")},
+        {island:"마우이",area:"Kahului",name:"Tin Roof Maui",rating:4,price:"$$",dish:"모치코 치킨, 갈릭 누들",hours:"11:00~16:00",note:"⚠️ 일 휴무 가능. 워크인 only",applied:true,url:gmaps("Tin Roof Maui Kahului")},
+        {island:"마우이",area:"Kahului",name:"Tasty Crust",rating:3,price:"$",dish:"팬케이크, 사이민",hours:"06:00~14:00",note:"Tin Roof 일요일 대안. 1944년 로컬 카페",url:gmaps("Tasty Crust Wailuku")},
+        {island:"마우이",area:"Wailuku",name:"Sam Sato's",rating:4,price:"$",dish:"드라이 누들, 마나푸아",hours:"07:00~14:00 (평일)",note:"1933년 일본계 로컬",applied:true,url:gmaps("Sam Satos Wailuku")},
+        {island:"마우이",area:"Lahaina",name:"Star Noodle (1287 Front St)",rating:5,price:"$$$",dish:"갈릭 누들, 마우이 오니언 튀김",hours:"16:30~21:00",note:"2023 화재 후 새 주소 재오픈",applied:true,url:gmaps("Star Noodle 1287 Front Street Lahaina")},
+        {island:"마우이",area:"Lahaina",name:"Honu Seafood",rating:4,price:"$$$",dish:"오션프론트 시푸드",hours:"11:00~21:00",note:"Star Noodle 대안. Mark Ellman",url:gmaps("Honu Seafood Pizza Lahaina")},
+        {island:"마우이",area:"Kaanapali",name:"Roy's Ka'anapali",rating:4,price:"$$$",dish:"미소 버터피쉬, 초콜릿 수플레",hours:"17:00~21:30",note:"Roy Yamaguchi. 신혼 디너 후보",url:gmaps("Roys Kaanapali Maui")},
+        {island:"마우이",area:"Wailea",name:"Monkeypod Kitchen",rating:4,price:"$$$",dish:"파머스 마티니, 피자",hours:"11:00~22:00",note:"활기찬 분위기. 라이브 음악",url:gmaps("Monkeypod Kitchen Wailea")},
+        {island:"마우이",area:"Hana",name:"Hana Farms",rating:4,price:"$$",dish:"피자, 트로피컬 농산물",hours:"10:00~17:00",note:"Hana 마을 농산물 마켓+식당",applied:true,url:gmaps("Hana Farms Maui")},
+        {island:"마우이",area:"Kihei",name:"Coconut's Fish Cafe",rating:3,price:"$$",dish:"피쉬 타코, 코코넛 슈림프",hours:"11:00~21:00",note:"Kihei 캐주얼 시푸드",applied:true,url:gmaps("Coconuts Fish Cafe Kihei")},
+        // 오아후
+        {island:"오아후",area:"Kailua",name:"Buzz's Original Steakhouse",rating:4,price:"$$$",dish:"코나 커피 글레이즈드 립",hours:"11:00~21:00",note:"오바마 가족 단골. 1962년",applied:true,url:gmaps("Buzzs Original Steakhouse Kailua")},
+        {island:"오아후",area:"Kailua",name:"Cinnamon's Restaurant",rating:4,price:"$$",dish:"구아바 시폰 팬케이크",hours:"07:00~14:00",note:"30분 대기 흔함",applied:true,url:gmaps("Cinnamons Restaurant Kailua")},
+        {island:"오아후",area:"Waikiki",name:"Eggs 'n Things",rating:4,price:"$$",dish:"마카다미아 팬케이크, 휘핑크림",hours:"06:00~14:00",note:"1974년 본점. Saratoga Rd",applied:true,url:gmaps("Eggs n Things Waikiki Saratoga")},
+        {island:"오아후",area:"Waikiki",name:"Roy's Waikiki",rating:4,price:"$$$",dish:"미소 버터피쉬, 초콜릿 수플레",hours:"17:00~22:00",note:"Roy Yamaguchi 대표작. 일몰 뷰",url:gmaps("Roys Waikiki")},
+        {island:"오아후",area:"Chinatown",name:"Senia",rating:5,price:"$$$$",dish:"테이스팅 메뉴, 모던 하와이안",hours:"17:00~21:30 (화~토)",note:"⭐ 미슐랭 1스타. La Mer 대안",url:gmaps("Senia Restaurant Honolulu")},
+        {island:"오아후",area:"Ala Moana",name:"Mariposa (Neiman Marcus)",rating:4,price:"$$$",dish:"오션뷰 점심·저녁",hours:"11:00~20:00",note:"신혼 대안. Ala Moana Center",url:gmaps("Mariposa Neiman Marcus Honolulu")},
+        {island:"오아후",area:"Waikiki",name:"Mar Mar Beach Side",rating:4,price:"$$$$",dish:"오션프론트 디너",hours:"17:00~22:00",note:"Royal Hawaiian. 신혼 대안",url:gmaps("Mar Mar Beach Side Royal Hawaiian")},
+        {island:"오아후",area:"Kalihi",name:"Helena's Hawaiian Food",rating:5,price:"$$",dish:"라우라우, 칼루아 피그, 핍이카",hours:"10:30~19:30 (화~금)",note:"⚠️ 토·일·월 휴무. 제임스 비어드상",url:gmaps("Helenas Hawaiian Food Kalihi")},
+        {island:"오아후",area:"Kakaako",name:"Highway Inn",rating:4,price:"$$",dish:"하와이안 플레이트 런치",hours:"10:00~20:00",note:"Helena's 일요일 대안",applied:true,url:gmaps("Highway Inn Kakaako")},
+        {island:"오아후",area:"Hale'iwa",name:"Giovanni's Shrimp Truck",rating:4,price:"$$",dish:"갈릭 슈림프 12마리",hours:"10:30~17:00",note:"노스쇼어 전설. 카드 OK",applied:true,url:gmaps("Giovannis Shrimp Truck Haleiwa")},
+        {island:"오아후",area:"Hale'iwa",name:"Romy's Kahuku Prawns",rating:4,price:"$$",dish:"버터·갈릭 새우",hours:"10:30~17:30",note:"Giovanni's 대안. 신선도 ↑",url:gmaps("Romys Kahuku Prawns")},
+        {island:"오아후",area:"Waikiki",name:"Marukame Udon",rating:3,price:"$",dish:"우동, 텐푸라",hours:"07:00~22:00",note:"줄 길지만 빠름. 셀프서비스",applied:true,url:gmaps("Marukame Udon Waikiki")},
+        {island:"오아후",area:"Chinatown",name:"The Pig and the Lady",rating:5,price:"$$$",dish:"모던 베트남",hours:"17:00~21:30",note:"미슐랭 빕그루망",url:gmaps("Pig and the Lady Chinatown Honolulu")},
+        {island:"오아후",area:"Kapahulu",name:"Side Street Inn",rating:4,price:"$$",dish:"포크찹, 가지볶음",hours:"16:00~22:00",note:"로컬 단골. 셰어 메뉴",url:gmaps("Side Street Inn Kapahulu")}
+      ];
+
+      const DESSERTS = [
+        {island:"오아후",area:"Kapahulu",name:"Leonard's Bakery",rating:5,price:"$",item:"말라사다 (오리지널·구아바·마카다미아·커스터드)",hours:"05:30~21:00",note:"1952년 원조",applied:true,url:gmaps("Leonards Bakery Honolulu")},
+        {island:"오아후",area:"Hale'iwa",name:"Matsumoto Shave Ice",rating:4,price:"$",item:"무지개 쉐이브 아이스 + 아즈키 + 모치",hours:"09:00~18:00",note:"노스쇼어 50년+. 줄 김",applied:true,url:gmaps("Matsumoto Shave Ice Haleiwa")},
+        {island:"오아후",area:"Hale'iwa",name:"Aoki's Shave Ice",rating:4,price:"$",item:"쉐이브 아이스",hours:"11:00~18:30",note:"Matsumoto 대안 — 줄 짧음",url:gmaps("Aokis Shave Ice Haleiwa")},
+        {island:"오아후",area:"Manoa·Ward",name:"Bubbies Ice Cream",rating:4,price:"$",item:"모치 아이스크림 (12+ 맛)",hours:"11:00~22:00",note:"오리지널 모치 아이스",url:gmaps("Bubbies Ice Cream Honolulu")},
+        {island:"오아후",area:"Liliha",name:"Liliha Bakery",rating:4,price:"$",item:"코코퍼프, 일본식 베이커리",hours:"24h (Liliha 본점)",note:"코코퍼프 머스트",url:gmaps("Liliha Bakery Honolulu")},
+        {island:"오아후",area:"Sunset Beach",name:"Ted's Bakery",rating:4,price:"$",item:"초콜릿 하우피아 파이",hours:"07:00~20:00",note:"노스쇼어 명물. Day 6 동선상",url:gmaps("Teds Bakery Sunset Beach")},
+        {island:"오아후",area:"Waikiki",name:"Honolulu Cookie Company",rating:4,price:"$$",item:"파인애플 모양 쇼트브레드",hours:"09:00~22:00",note:"기념품. Royal Hawaiian Center 매장",applied:true,url:gmaps("Honolulu Cookie Company Royal Hawaiian Center")},
+        {island:"마우이",area:"Lahaina·Kihei",name:"Ululani's Hawaiian Shave Ice",rating:5,price:"$",item:"코코넛+망고+패션프루트",hours:"10:30~21:00",note:"마우이 No.1 쉐이브 아이스",url:gmaps("Ululanis Hawaiian Shave Ice")},
+        {island:"마우이",area:"Keʻanae",name:"Aunty Sandy's 바나나빵",rating:4,price:"$",item:"코코넛 바나나빵",hours:"08:30~14:30",note:"Hana Hwy Mile Marker 16~17",applied:true,url:gmaps("Aunty Sandys Banana Bread Keanae")},
+        {island:"마우이",area:"Hana road",name:"Coconut Glen's",rating:4,price:"$",item:"비건 코코넛 아이스크림",hours:"10:00~17:00",note:"Hana Hwy Mile Marker 27 정차",url:gmaps("Coconut Glens Hana")}
+      ];
+
+      const MARTS = [
+        // 한국·아시안 — accent 강조
+        {korean:true,island:"오아후",area:"Honolulu",name:"H Mart Honolulu",rating:5,type:"한국 마트 ⭐",
+         carries:"한국 식료품 전반·김치·라면·즉석밥·고추장·반찬·한국 화장품",
+         hours:"09:00~21:00",note:"한식 그리울 때 필수. King St 위치",url:gmaps("H Mart Honolulu King Street")},
+        {korean:true,island:"오아후",area:"Honolulu (Kaheka)",name:"Don Quijote",rating:4,type:"일본계 종합 + 한식 코너",
+         carries:"일본 식품·간단한 한식·생활용품·기념품",
+         hours:"24h",note:"24시간 영업. Walmart급 종합",url:gmaps("Don Quijote Kaheka Honolulu")},
+        {korean:true,island:"오아후",area:"Liliha",name:"Palama Supermarket",rating:4,type:"한·일 마트",
+         carries:"김치·반찬·한국 양념·라면",
+         hours:"08:00~21:00",note:"Liliha·Aiea 매장",url:gmaps("Palama Supermarket Liliha")},
+        // 일반 그로서리
+        {island:"마우이",area:"Lahaina",name:"Foodland (Kaanapali)",rating:4,type:"하와이 로컬 체인",
+         carries:"식수·과일·맥주·로코모코 도시락·포케",
+         hours:"06:00~22:00",note:"Camp Olowalu 가는 길에",url:gmaps("Foodland Kaanapali")},
+        {island:"마우이",area:"Paia",name:"Mana Foods",rating:5,type:"유기농 / 자연식품",
+         carries:"유기농·비건·로컬 농산물",
+         hours:"08:00~20:30",note:"Paia 마을. Hana Hwy 출발 전 식수·간식 픽업 최적",url:gmaps("Mana Foods Paia Maui")},
+        {island:"오아후",area:"Ala Moana",name:"Foodland Farms",rating:4,type:"하와이 로컬 (프리미엄)",
+         carries:"고급 그로서리·포케 바·델리·와인",
+         hours:"05:00~22:00",note:"포케 줄 서서 사 먹어볼 만함",url:gmaps("Foodland Farms Ala Moana")},
+        {island:"오아후·마우이",area:"Honolulu·Kahului",name:"Whole Foods Market",rating:4,type:"미국 프리미엄",
+         carries:"유기농·델리·핫바",
+         hours:"07:00~22:00",note:"가격 ↑. 신선도 ↑",url:gmaps("Whole Foods Market Honolulu Kahului")},
+        {island:"오아후·마우이",area:"Iwilei·Kahului",name:"Costco",rating:5,type:"창고형",
+         carries:"대용량 식수·기내식품·기름값 ↓",
+         hours:"10:00~20:30",note:"⚠️ 멤버십 필수 (한국 회원증 OK). 렌트카 주유 추천",url:gmaps("Costco Iwilei Honolulu")},
+        {island:"오아후",area:"Waikiki 곳곳",name:"ABC Store",rating:3,type:"편의점 (관광객)",
+         carries:"리프 세이프 선크림·생수·기념품·즉석식·맥주",
+         hours:"06:00~01:00 (점포별)",note:"와이키키 거의 100m마다",url:gmaps("ABC Store Waikiki")},
+        {island:"오아후",area:"Honolulu",name:"Walmart",rating:3,type:"대형 마트",
+         carries:"기내 용품·캠핑 장비·일반 식료품",
+         hours:"06:00~23:00",note:"대량 쇼핑·캠핑 장비 보충",url:gmaps("Walmart Honolulu Keeaumoku")},
+        {island:"오아후",area:"Diamond Head",name:"KCC Farmers Market",rating:5,type:"파머스 마켓 ⭐",
+         carries:"로컬 농산물·푸드트럭·하와이안 음식",
+         hours:"⚠️ 토 07:30~11:00만",note:"Day 7(토) 동선 어렵 — 시간 조정 시 가능",url:gmaps("KCC Farmers Market Saturday")}
+      ];
+
       const PLACE_DETAILS = [
+        {Day:1,time:"15:00 KST",name:"집 → 인천공항",body:"⭐ <strong>출발 전 체크리스트</strong>: 여권 (잔여 6개월+) · ESTA 승인서 (출발 <strong>72h 전</strong> 필수, esta.cbp.dhs.gov $21) · KE e-티켓 · 트래블카드 (트래블월렛·하나비바X 권장) · 미국 달러 소액 ($50, 팁용) · 캠핑 장비 위탁 (텐트·침낭 OK).<br><br><strong>공항 가는 법 비교</strong>:<br>• 공항철도 직통: 서울역→T1 43분 ₩9,500 · T2까지 무료 셔틀 +5분 · 가성비 1위<br>• 공항리무진: 지역별 ₩15,000~20,000 · 짐 많을 때 편함<br>• KTX: 광명역 환승 가능<br>• 카카오 택시: ₩70,000~150,000 · 시간 단축",starred:true,warn:false},
+        {Day:1,time:"17:00 KST",name:"ICN T2 도착",body:"인천공항 <strong>제2여객터미널</strong> = 대한항공·델타·에어프랑스·KLM. 공항철도 종착역은 T1, T2까지 <strong>무료 셔틀</strong> (5분 간격, 5분 이동). 자가용은 T2 장기주차장 (단기 ₩2,000/h, 장기 ₩9,000/일). 국제선 3시간 전 도착 권장.",starred:false,warn:false},
+        {Day:1,time:"18:00 KST",name:"KE 프레스티지 체크인",body:"<strong>3F 체크인 카운터 H/J/K</strong> (대한항공 프레스티지 전용). KE앱 web check-in (24h 전) 시 우대 줄 — 빠름. <strong>짐 위탁</strong>: 프레스티지 32kg×2 무료 + 핸드캐리 12kg + 노트북 가방. 좌석 14F 사전 배정됨. 보딩패스는 KE앱 또는 종이 둘 다 OK. 캠핑 장비 (텐트·침낭) 위탁 가능, 가스/라이터는 X.",starred:false,warn:true},
+        {Day:1,time:"19:00 KST",name:"보안검사 → 출국심사 → 면세점 → KAL 라운지",body:"<strong>자동출입국심사</strong> 사전등록자 빠름 (만 7세+ 한국인). 미등록자는 직원 줄.<br><br>⚠️ <strong>면세점 주의</strong>: 선크림 X (액체 100ml 제한 + 하와이 옥시벤존 함유 제품 압수 가능). 마카다미아·홍삼·화장품·주류 OK.<br><br><strong>KAL 라운지</strong> (T2 East/West 두 곳, 프레스티지 무료): 식사·샤워·와인·간단 마사지. 동쪽 라운지가 더 큼. 출발 1.5h 전 도착 시 충분히 즐길 수 있음.",starred:true,warn:true},
+        {Day:1,time:"20:30 KST",name:"게이트 250번대",body:"보딩 약 <strong>20:25 시작</strong> (이륙 40분 전). 우선탑승 = 프레스티지·SkyTeam Elite Plus. <strong>좌석 14F</strong> = 프레스티지 1-2-1 좌석 배치 (창가). 안대·귀마개·물병·립밤·마스크 준비. 기내 와이파이 유료 ($14~).",starred:false,warn:false},
+        {Day:1,time:"21:05 KST",name:"KE053 ICN 출발 ✈️",body:"비행 <strong>8h 50m</strong>. 추천 루틴: 이륙 후 환영 음료 → 식사 (한식·양식·일식 선택, 프레스티지는 코스) → 영화 1편 → <strong>수면</strong> (한국 새벽 = 하와이 오전이라 자둬야 함) → 도착 1시간 전 식사. 탈수 주의 → 물 자주.",starred:false,warn:false},
         {Day:1,time:"10:55",name:"HNL 도착 (KE053)",body:"호놀룰루 국제공항 T2 도착. ESTA 미리 신청 필수 (출발 72시간 전). 입국 심사 + 짐 찾기 60~90분. 국내선 환승은 같은 공항 — Wiki Wiki 무료 셔틀로 국내선 터미널 이동.",starred:false,warn:false},
         {Day:1,time:"13:30",name:"HNL → OGG 국내선",body:"Hawaiian Air HA 247(11:11)·HA 275(12:25)·HA 309(13:34) 등 30분 간격. ~$80/인. 35분 비행. 짐 1개 무료 / 추가 $35. Southwest는 짐 2개 무료.",starred:false,warn:false},
-        {Day:1,time:"14:30",name:"OGG 렌트카 픽업",body:"공항 옆 렌트카 센터 (도보 5분). Avis/Hertz/Budget 등. Costco Travel 회원이면 가장 저렴. SUV 권장 (Hana Hwy·캠프장 비포장 대비). 풀탱크 반납. 보험은 카드사 자동 보장 vs 추가 LDW 비교.",starred:false,warn:false},
+        {Day:1,time:"14:30",name:"OGG 렌트카 픽업 (Rental Car Center)",body:"⭐ 공항 옆 <strong>Rental Car Center</strong> — 육교 도보 5분 (무빙워크).<br><br><strong>업체 8개</strong>: Alamo · Avis · Budget · Dollar · Enterprise · Hertz · National · Thrifty.<br><br><strong>가격 비교</strong>:<br>• <strong>Costco Travel</strong> (회원만) → Alamo·Enterprise·Budget — 보통 가장 저렴, 추가 운전자 무료<br>• <strong>Discount Hawaii Car Rental</strong> — 종합 비교 사이트, 캔슬 자유<br>• AutoSlash·Costco vs 직접 예약 가격 비교 추천<br><br><strong>차종</strong>: SUV 권장 (Hana Hwy 굴곡·캠프장 비포장·짐 4인 분량). Compact는 Hana Hwy 어렵.<br><br><strong>보험</strong>: ① 카드사 자동 LDW 우선 확인 (Visa Plat·Amex Gold↑ 일부) → 추가 LDW $25~30/일 거절 ② 한국 자동차보험 해외 특약 확인 ③ 의심되면 LDW 가입 (안전).<br><br><strong>풀탱크 반납</strong> 약속 → 안 하면 갤런 ~$10. \"Pay at Pump\" 옵션은 비싸므로 X.",starred:true,warn:false},
         {Day:1,time:"16:00",name:"Paia Fish Market",body:"Paia 마을 중심 캐주얼 시푸드. 마히마히 버거·피쉬 타코 명물. 워크인 only, 평균 대기 15분. 야외 좌석. 일요일 영업 (10:30~21:30). $15~25/접시.",starred:false,warn:false},
         {Day:1,time:"18:00",name:"Paia Inn 체크인",body:"Paia 마을 부티크 호텔. 식당·서핑샵·갤러리 도보권. 객실 200ft²로 작은 편이지만 Hana Hwy 출발지로 최적. ~$300~450/박. 체크인 16:00.",starred:false,warn:false},
         {Day:2,time:"05:50",name:"Haleakalā 일출",body:"⭐ 정상 해발 3,055m. 7월 일출 05:50. 정상 5~10°C — 패딩·장갑·털모자 필수. 일출 자체 30~40분. 정상 도착 04:30 권장 (게이트는 03:00~07:00 사이 일출 예약자만 통과). 주차장 매우 작음. 입장 $30/차량 (3일 패스) + $1 일출 예약 (60일 전 7AM HST).",starred:true,warn:false},
@@ -862,6 +1888,7 @@
         {Day:4,time:"17:30",name:"Black Rock 절벽 다이빙 의식",body:"Sheraton Maui 매일 일몰 직전 (~17:30). 하와이안 워리어가 호롱불 켜고 절벽 다이빙. 외부 비치에서 무료 관람. 약 15분.",starred:false,warn:false},
         {Day:4,time:"19:00",name:"Star Noodle (1287 Front St)",body:"⭐ 2023.8 라하이나 화재로 원위치 소실 → 2024년 1287 Front St 재오픈. 갈릭 누들·마우이 오니언 튀김. OpenTable 예약 (1주 전 권장). 디너 16:30~21:00. $20~40/메뉴.",starred:true,warn:false},
         {Day:5,time:"12:30",name:"OGG → HNL 국내선",body:"Hawaiian Air 또는 Southwest. 35분 / ~$80/인 / 짐 무료 1~2개. OGG 12:00~13:30 출발편 추천.",starred:false,warn:false},
+        {Day:5,time:"13:30",name:"HNL 렌트카 픽업 (CONRAC)",body:"⭐ 호놀룰루 공항 신축 <strong>CONRAC</strong> (Consolidated Rental Car Facility) — 공항에서 약 1km.<br><br><strong>이동</strong>:<br>• <strong>Wiki Wiki 셔틀 무료</strong> — 5분 간격, 5분 이동 (가장 권장)<br>• 도보 — 약 15~20분, 짐 많으면 비추천<br><br><strong>업체</strong>: Alamo · Avis · Budget · Dollar · Enterprise · Hertz · National · Thrifty (마우이와 같음).<br><br>⚠️ <strong>주의</strong>: 마우이 렌트카와 <strong>별도 계약</strong> — 각 섬마다 다른 업체일 수 있음. 한 번에 \"Inter-Island\" 옵션으로 묶을 수도 있는데 보통 별도가 저렴.<br><br><strong>차종</strong>: 오아후는 비포장 거의 없어 Compact·Mid-size로 충분. Waikiki 좁은 거리·일방통행 많음 — 큰 차 비추.",starred:true,warn:true},
         {Day:5,time:"15:30",name:"Kailua Beach",body:"오아후 동부 최고. 에메랄드 빛 얕은 바다. Mokulua 섬 뷰. 화장실·샤워·주차장 무료. ⚠️ <strong>카약 렌탈은 비치 내 X</strong> — 외부 상점에서 픽업·운반 의무.",starred:false,warn:true},
         {Day:5,time:"18:00",name:"Buzz's Original Steakhouse",body:"오바마 가족 단골. 1962년 오픈. 코나 커피 글레이즈드 립·테리야끼 스테이크. 점심 11:00~15:00 / 저녁 17:00~21:00. 예약 권장. $30~50/메뉴.",starred:false,warn:false},
         {Day:5,time:"20:00",name:"Waimānalo Beach Park 캠핑",body:"⚠️ 호놀룰루 시 캠핑 퍼밋. <strong>14일 전 12:00 PM HST 정확히 오픈</strong> (7/2). $32/박. 화장실·냉수 샤워. 야간 보안 주의 — 귀중품 차에 두지 말 것.",starred:false,warn:true},
@@ -884,13 +1911,131 @@
         {Day:8,time:"16:00",name:"Royal Hawaiian Center",body:"와이키키 칼라카우아 거리. 3개 빌딩. ABC Store·Honolulu Cookie Company + 푸드코트. <strong>무료 훌라쇼</strong> 화·목·금 17:30.",starred:false,warn:false},
         {Day:8,time:"17:30",name:"Maita'i Catamaran",body:"와이키키 Sheraton 앞 비치 직접 출발. 90분 일몰 크루즈. 음료 포함 ($65~85/인). Open Bar 옵션.",starred:false,warn:false},
         {Day:9,time:"07:30",name:"Leonard's Bakery",body:"Kapahulu Ave 본점. 1952년부터. 말라사다(포르투갈 도넛). 오리지널 + 구아바·마카다미아·커스터드. $1.50~2.50개당. 05:30~21:00.",starred:false,warn:false},
-        {Day:9,time:"10:30",name:"HNL 국제선 출국",body:"⚠️ 국제선 3시간 전 도착 권장 (10:05까지 공항). 짐 위탁 → 보안검사 → 면세점. KE 라운지 (프레스티지석 또는 스카이패스 다이아 이상). KE054 일반석은 좌석 사전 배정 권장 — 24h 전 web check-in.",starred:false,warn:true}
+        {Day:9,time:"10:00",name:"HNL 렌트카 반납 (CONRAC)",body:"⭐ <strong>반납 절차</strong>:<br>1. CONRAC 반납 게이트 도착<br>2. 직원 차량 점검 (주유 게이지·외관·내부)<br>3. 영수증 발급<br>4. <strong>Wiki Wiki 셔틀</strong>로 터미널 이동 (5분)<br><br>⚠️ <strong>풀탱크 반납</strong> 안 했으면 갤런당 ~$10 패널티 (시세의 2~3배). 공항 주변 셸/76 주유소 선반납 권장 (시세 +$0.30~0.50/갤런).<br><br><strong>반납 시간</strong> = 픽업시간 기준 (15분 그레이스 후 +1일 청구). 픽업이 7/16 13:30이면 7/20 13:30이 마감. 일찍 반납해도 환불 X.",starred:true,warn:true},
+        {Day:9,time:"10:30",name:"HNL 국제선 출국",body:"⚠️ 국제선 3시간 전 도착 권장 (10:05까지 공항). <strong>KE 카운터 J Lobby 7~9</strong>. 짐 위탁 일반석 23kg×2 무료 + 핸드캐리. 보안검사 → 면세점. <strong>KE 라운지</strong> (프레스티지석 또는 스카이패스 다이아 이상). KE054 일반석은 좌석 사전 배정 권장 — 24h 전 web check-in.<br><br><strong>면세점 추천</strong>: 마카다미아 박스·코나 커피·하와이안 호스트 초콜릿. 한국 도착 시 면세 한도 1인 $800.",starred:false,warn:true},
+        {Day:9,time:"17:40 KST",name:"ICN T2 도착 (+1일 7/21 화)",body:"⭐ 9h 35m 비행 후 <strong>인천공항 T2 도착</strong>.<br><br><strong>입국 심사</strong>:<br>• <strong>자동출입국심사</strong> 사전등록자 빠름 (만 7세+ 한국인, hikorea.go.kr 등록)<br>• 미등록자는 한국인 줄 (외국인 줄과 분리)<br>• 평소 5~15분<br><br>짐 찾기 약 30분 소요. 컨베이어 정보판에서 KE054 위치 확인.",starred:true,warn:false},
+        {Day:9,time:"18:30 KST",name:"입국심사 → 짐 찾기 → 세관",body:"<strong>세관 면세 한도</strong>: 1인 $800 (US 달러 기준). 2인 가족 합산 X — 각 $800씩.<br><br><strong>반입 OK</strong>: 마카다미아·코나 커피·하와이안 호스트 초콜릿·기념품·의류·화장품.<br><br><strong>반입 금지</strong>: 농산물 (생과일·생화·생고기·생채소)·일정 식품 (가공식품 일부)·동식물 박제. 면세 초과 시 신고 → 관세 + 가산세.<br><br><strong>녹색 선</strong> = 신고할 것 없음, <strong>빨간 선</strong> = 신고할 것 있음. 의심되면 빨간 선.",starred:false,warn:true},
+        {Day:9,time:"19:30 KST",name:"ICN → 집",body:"<strong>옵션 비교</strong>:<br>• <strong>공항철도 직통</strong> (AREX): T2→T1→서울역 43분 ₩9,500. 가장 가성비. 짐 적을 때 OK<br>• <strong>공항철도 일반</strong>: 각 역 정차, ₩4,750. 시간 더 걸림<br>• <strong>공항버스 (리무진)</strong>: 지역별 ₩15,000~20,000. 짐 많을 때 편함. 카카오버스 앱으로 시간표 확인<br>• <strong>KTX</strong>: 광명역 (셔틀버스 → KTX). 지방 거주자 적합<br>• <strong>카카오 택시</strong>: 야간 ₩70,000~150,000. 빠르지만 비쌈. 자가용 안 가져왔을 때 좋음<br>• <strong>자가용 픽업</strong>: T2 단기주차장에서 픽업 (짐 ↑·시차 회복 ↑)",starred:true,warn:false},
+        {Day:9,time:"21:00 KST",name:"집 도착 — 시차 회복 🏠",body:"⭐ <strong>시차 회복 전략</strong>: 한국 시간 기준 자기. 도착 당일 너무 일찍 자면 새벽 깸 → 다음날 오후까지 잠 권장. 카페인 X (저녁 이후). 짐 정리는 다음날. 사진·영상 정리는 시차 적응 후 (3~5일).",starred:false,warn:false}
+      ];
+
+      const ROADMAP = [
+        {date:"2026-05-01", phase:"now", title:"📍 오늘 (D-72)", desc:"출발까지 약 10주. 즉시 예약 항목부터 처리 — 매진 위험 큰 캠프·호텔 우선"},
+        {date:"5월 첫째 주 (이번주)", phase:"urgent", title:"🚨 즉시 예약 — 매진 위험", desc:"<strong>Camp Olowalu 캐빈</strong> · <strong>Malaekahana 유르트</strong> · 호텔 4박 (Paia/Kahului·Waikiki x2) · OGG↔HNL 국내선 왕복 (7/12·7/16)"},
+        {date:"2026-05-13 화 07:00 HST", phase:"late", title:"⭐ Haleakalā 일출 — 정확히 60일 전 7AM", desc:"recreation.gov · 매진 5분 안 · <strong>캘린더 알림 필수</strong> (한국 시간 5/14 02:00)"},
+        {date:"6월 중순 (6/13~6/18)", phase:"normal", title:"🟢 30일 전 일괄 예약", desc:"Wai'ānapanapa 입장+캠핑 별도 2건 (6/14) / ʻĪao Valley · Diamond Head 비거주자 입장 (gostateparks.hawaii.gov)"},
+        {date:"6월 말 ~ 7월 초", phase:"normal", title:"🟢 신혼 디너 (2~4주 전)", desc:"Senia (Chinatown 미슐랭) · Mariposa · Mar Mar · Roy's Waikiki 중 1 — Halekulani La Mer 운영 상태 확인"},
+        {date:"2026-07-02 12:00 PM HST", phase:"late", title:"🟠 Waimānalo 캠핑 — 정확히 14일 전 정오", desc:"camping.honolulu.gov · Bellows는 금~일만이라 목요일은 Waimānalo로"},
+        {date:"2026-07-08 ~", phase:"normal", title:"🟢 1주 전 마무리 예약", desc:"Star Noodle (OpenTable) · Maita'i Catamaran 일몰 크루즈 · 캠핑 장비 최종 점검"},
+        {date:"2026-07-12 일 21:05 ICN", phase:"depart", title:"✈️ 출발 — KE053 (프레스티지석)", desc:"ICN 21:05 → HNL 같은 날 10:55 도착 (8h 50m, 날짜선 통과)"},
+        {date:"2026-07-12 ~ 7/20", phase:"trip", title:"🌺 8박 9일 트립 — 마우이 4박 + 오아후 4박", desc:"Day 1~9 시간순 동선은 일정 탭 / 시각 캘린더는 아래 그리드 / 동선 시각화는 지도 탭"},
+        {date:"트립 중 · 2026-07-16 07:00 HST", phase:"urgent", title:"🔥 Hanauma Bay — 정확히 2일 전 7AM HST", desc:"pros.hnl.info · 매진 매우 빠름 · 트립 중 알림 필수 (한국 시간 7/17 02:00)"},
+        {date:"트립 중 · 2026-07-17", phase:"normal", title:"🟢 USS Arizona Memorial (1일 전)", desc:"recreation.gov · $1 예약 수수료. 8주 전 + 24h 전 두 차례 분량"},
+        {date:"2026-07-20 월 13:05 HNL", phase:"depart", title:"✈️ 귀국 — KE054 (일반석)", desc:"HNL 13:05 → ICN 7/21(화) 17:40 (9h 35m). 국제선 3시간 전 도착 권장"}
       ];
 
       const DAY_DATES = {1:"7/12 (일)",2:"7/13 (월)",3:"7/14 (화)",4:"7/15 (수)",5:"7/16 (목)",6:"7/17 (금)",7:"7/18 (토)",8:"7/19 (일)",9:"7/20 (월)"};
       const DAY_COLORS = {1:"#0e7c5a",2:"#e26d3f",3:"#6b4ba0",4:"#2d7a3d",5:"#c84641",6:"#b18a22",7:"#1e5fa8",8:"#9c3892",9:"#666666"};
 
       const uniq = (a) => Array.from(new Set(a)).filter(Boolean);
+
+      // ===== 카테고리 → 5그룹 매핑 =====
+      const CATEGORY_GROUPS = {
+        "✈️ 이동":"🚗 이동", "🚗 이동":"🚗 이동",
+        "🍽️ 식사":"🍽️ 식사", "🍽️ 점심":"🍽️ 식사", "🍽️ 저녁":"🍽️ 식사",
+        "☕ 아침":"🍽️ 식사", "🍩 아침":"🍽️ 식사", "🍩 디저트":"🍽️ 식사",
+        "🍷 신혼 디너":"🍽️ 식사", "🍜 저녁":"🍽️ 식사", "🦐 점심":"🍽️ 식사",
+        "🌅 일출":"🌿 자연·체험", "🌅 일몰":"🌿 자연·체험", "🌇 일몰":"🌿 자연·체험",
+        "🌿 자연":"🌿 자연·체험", "💧 폭포":"🌿 자연·체험",
+        "🏖️ 해변":"🌿 자연·체험", "🥾 하이킹":"🌿 자연·체험",
+        "🤿 액티비티":"🌿 자연·체험", "🤿 스노쿨링":"🌿 자연·체험",
+        "⛵ 액티비티":"🌿 자연·체험",
+        "🛍️ 쇼핑":"🛍️ 마을·문화", "🛍️ 마을":"🛍️ 마을·문화", "🏛️ 역사":"🛍️ 마을·문화",
+        "🛏️ 숙박":"🛏️ 숙박", "🏕️ 캠핑":"🛏️ 숙박", "🛏️ 휴식":"🛏️ 숙박"
+      };
+      const groupOf = (cat) => CATEGORY_GROUPS[cat] || "기타";
+      const ALL_GROUPS = ["🚗 이동","🍽️ 식사","🌿 자연·체험","🛍️ 마을·문화","🛏️ 숙박"];
+
+      // ===== 마스터 데이터 — __id + localStorage 변경 보존 =====
+      DATA.forEach((r, i) => { r.__id = i; });
+      const STORAGE_KEY = "hawaii-trip-overrides-v1";
+      const EDITABLE = ["시간","장소","메모","비용"];
+      function saveOverrides() {
+        const o = {};
+        DATA.forEach((r) => {
+          o[r.__id] = {};
+          EDITABLE.forEach((f) => { o[r.__id][f] = r[f]; });
+        });
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(o)); } catch(e) {}
+      }
+      function loadOverrides() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return false;
+          const o = JSON.parse(raw);
+          let touched = false;
+          DATA.forEach((r) => {
+            if (o[r.__id]) {
+              EDITABLE.forEach((f) => {
+                if (o[r.__id][f] !== undefined && o[r.__id][f] !== r[f]) {
+                  r[f] = o[r.__id][f]; touched = true;
+                }
+              });
+            }
+          });
+          return touched;
+        } catch(e) { return false; }
+      }
+      function resetOverrides() {
+        try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+        location.reload();
+      }
+      function rerenderAll() {
+        renderKpis();
+        renderTimeline();
+        renderDetails();
+        renderRoadmap();
+        renderCalendar();
+        renderTable();
+        renderMap();
+      }
+
+      // ===== 시간대 변환 (KST ↔ HST) =====
+      // 시차: KST = HST + 19h
+      function pad2(n) { return String(n).padStart(2, "0"); }
+      function altTime(timeStr, dateStr) {
+        const m = String(timeStr || "").match(/(\d{1,2}):(\d{2})/);
+        if (!m) return "";
+        const isKST = String(timeStr).includes("KST");
+        let h = parseInt(m[1], 10), min = parseInt(m[2], 10);
+        const dt = String(dateStr || "").match(/(\d{1,2})\/(\d{1,2})/);
+        if (!dt) return "";
+        let mo = parseInt(dt[1], 10), d = parseInt(dt[2], 10);
+        let altLabel, altDay = d;
+        if (isKST) {
+          h -= 19;
+          if (h < 0) { h += 24; altDay -= 1; }
+          altLabel = "HST";
+        } else {
+          h += 19;
+          if (h >= 24) { h -= 24; altDay += 1; }
+          altLabel = "KST";
+        }
+        return `${altLabel} ${mo}/${altDay} ${pad2(h)}:${pad2(min)}`;
+      }
+
+      function starHTML(rating) {
+        if (!rating || rating < 1) return "";
+        const r = Math.max(0, Math.min(5, Math.round(rating)));
+        const filled = "★".repeat(r);
+        const empty = r < 5 ? `<span class="empty">${"★".repeat(5 - r)}</span>` : "";
+        return `<span class="stars" title="${r}/5">${filled}${empty}</span>`;
+      }
+
+      function altHTML(alt) {
+        if (!alt) return "";
+        return `<div class="alt-option"><strong>대체:</strong> ${alt}</div>`;
+      }
 
       function renderKpis() {
         const days = uniq(DATA.map((r) => r.Day)).length;
@@ -1005,11 +2150,12 @@
               ${items.some((i) => i.fix) ? `<span class="pill fix">FIX 포함</span>` : `<span class="pill verified">검증</span>`}
             </div>
           `;
-          items.slice().sort((a,b) => a.시간 > b.시간 ? 1 : -1).forEach((r) => {
+          items.forEach((r) => {
             const it = document.createElement("div");
             it.className = "item";
+            const alt = altTime(r.시간, r.날짜);
             it.innerHTML = `
-              <div class="time">${r.시간}</div>
+              <div class="time">${r.시간}${alt ? `<span class="time-alt">${alt}</span>` : ""}</div>
               <div>
                 <div class="item-place">${r.url ? `<a href="${r.url}" target="_blank" rel="noopener">📍 ${r.장소}</a>` : r.장소}</div>
                 <div class="meta">
@@ -1017,8 +2163,10 @@
                   ${r.예약 ? `<span class="pill check">${r.예약}</span>` : ""}
                   ${r.비용 && r.비용 !== "-" ? `<span class="pill">${r.비용}</span>` : ""}
                   ${r.fix ? `<span class="pill fix">FIX</span>` : ""}
+                  ${starHTML(r.rating)}
                 </div>
                 ${r.메모 ? `<div class="item-memo">${r.메모}</div>` : ""}
+                ${altHTML(r.alt)}
               </div>
             `;
             block.appendChild(it);
@@ -1056,14 +2204,19 @@
           grouped[day].forEach((p) => {
             const dataItem = DATA.find((d) => d.Day === p.Day && d.시간 === p.time);
             const url = dataItem ? dataItem.url : "";
+            const rating = dataItem ? dataItem.rating : null;
+            const alt = dataItem ? dataItem.alt : null;
             const card = document.createElement("div");
             card.className = "detail-place" + (p.starred ? " starred" : "") + (p.warn ? " warn" : "");
+            const altT = altTime(p.time, dataItem ? dataItem.날짜 : "");
             card.innerHTML = `
               <div class="detail-place-head">
-                <span class="detail-place-time">${p.time}</span>
+                <span class="detail-place-time">${p.time}${altT ? `<span class="time-alt-inline">· ${altT}</span>` : ""}</span>
                 <span class="detail-place-name">${url ? `<a href="${url}" target="_blank" rel="noopener">${p.name}</a>` : p.name}</span>
+                ${starHTML(rating)}
               </div>
               <p class="detail-place-body">${p.body}</p>
+              ${altHTML(alt)}
             `;
             wrap.appendChild(card);
           });
@@ -1157,9 +2310,198 @@
         renderCostBanner();
       }
 
+      // 호텔
+      function renderHotels() {
+        const el = document.getElementById("c-hotels");
+        el.innerHTML = "";
+        const groups = {};
+        HOTELS.forEach((h) => { (groups[h.area] = groups[h.area] || []).push(h); });
+        Object.keys(groups).forEach((area) => {
+          const wrap = document.createElement("div");
+          wrap.className = "area-group";
+          wrap.innerHTML = `<h4>${area}</h4>`;
+          const grid = document.createElement("div");
+          grid.className = "hotel-grid";
+          groups[area].forEach((h) => {
+            const card = document.createElement("div");
+            card.className = "hotel-card" + (h.applied ? " applied" : "");
+            card.innerHTML = `
+              <div class="area">${h.type}</div>
+              <div class="name"><a href="${h.url}" target="_blank" rel="noopener">${h.name}</a></div>
+              <div class="meta-row">
+                ${starHTML(h.rating)}
+                <span class="price">${h.price}</span>
+              </div>
+              <div class="note">${h.note}</div>
+            `;
+            grid.appendChild(card);
+          });
+          wrap.appendChild(grid);
+          el.appendChild(wrap);
+        });
+      }
+
+      // 음식점
+      function renderRestaurants() {
+        const el = document.getElementById("c-restaurants");
+        el.innerHTML = "";
+        ["마우이", "오아후"].forEach((island) => {
+          const items = RESTAURANTS.filter((r) => r.island === island);
+          if (!items.length) return;
+          const wrap = document.createElement("div");
+          wrap.className = "area-group";
+          wrap.innerHTML = `<h4>${island} (${items.length})</h4>`;
+          const grid = document.createElement("div");
+          grid.className = "food-grid";
+          items.forEach((r) => {
+            const card = document.createElement("div");
+            card.className = "food-card" + (r.applied ? " applied" : "");
+            card.innerHTML = `
+              <div class="area">${r.area || ""}</div>
+              <div class="name"><a href="${r.url}" target="_blank" rel="noopener">${r.name}</a></div>
+              <div class="meta-row">
+                ${starHTML(r.rating)}
+                <span class="price">${r.price}</span>
+                ${r.hours ? `<span class="hours">${r.hours}</span>` : ""}
+              </div>
+              ${r.dish ? `<div class="dish"><strong>대표:</strong> ${r.dish}</div>` : ""}
+              <div class="note">${r.note || ""}</div>
+            `;
+            grid.appendChild(card);
+          });
+          wrap.appendChild(grid);
+          el.appendChild(wrap);
+        });
+      }
+
+      // 디저트
+      function renderDesserts() {
+        const el = document.getElementById("c-desserts");
+        el.innerHTML = "";
+        const grid = document.createElement("div");
+        grid.className = "food-grid";
+        DESSERTS.forEach((d) => {
+          const card = document.createElement("div");
+          card.className = "food-card" + (d.applied ? " applied" : "");
+          card.innerHTML = `
+            <div class="area">${d.island}${d.area ? " · " + d.area : ""}</div>
+            <div class="name"><a href="${d.url}" target="_blank" rel="noopener">${d.name}</a></div>
+            <div class="meta-row">
+              ${starHTML(d.rating)}
+              <span class="price">${d.price}</span>
+              ${d.hours ? `<span class="hours">${d.hours}</span>` : ""}
+            </div>
+            ${d.item ? `<div class="dish"><strong>품목:</strong> ${d.item}</div>` : ""}
+            <div class="note">${d.note || ""}</div>
+          `;
+          grid.appendChild(card);
+        });
+        el.appendChild(grid);
+      }
+
+      // 마트
+      function renderMarts() {
+        const el = document.getElementById("c-marts");
+        el.innerHTML = "";
+        // 한국·아시안 그룹 먼저
+        const koreanItems = MARTS.filter((m) => m.korean);
+        const generalItems = MARTS.filter((m) => !m.korean);
+        const renderGroup = (title, items, isKorean) => {
+          if (!items.length) return;
+          const wrap = document.createElement("div");
+          wrap.className = "area-group mart-section" + (isKorean ? " korean" : "");
+          wrap.innerHTML = `<h4>${title}</h4>`;
+          const grid = document.createElement("div");
+          grid.className = "food-grid";
+          items.forEach((m) => {
+            const card = document.createElement("div");
+            card.className = "food-card";
+            card.innerHTML = `
+              <div class="area">${m.island}${m.area ? " · " + m.area : ""}</div>
+              <div class="name"><a href="${m.url}" target="_blank" rel="noopener">${m.name}</a></div>
+              <div class="meta-row">
+                ${starHTML(m.rating)}
+                <span class="price">${m.type}</span>
+                ${m.hours ? `<span class="hours">${m.hours}</span>` : ""}
+              </div>
+              ${m.carries ? `<div class="carries"><strong>취급:</strong> ${m.carries}</div>` : ""}
+              <div class="note">${m.note || ""}</div>
+            `;
+            grid.appendChild(card);
+          });
+          wrap.appendChild(grid);
+          el.appendChild(wrap);
+        };
+        renderGroup("🇰🇷 한국·아시안 식자재", koreanItems, true);
+        renderGroup("🛒 일반 그로서리·편의점", generalItems, false);
+      }
+
+      // 📆 달력 — 로드맵
+      function renderRoadmap() {
+        const el = document.getElementById("c-roadmap");
+        el.innerHTML = "";
+        const wrap = document.createElement("div");
+        wrap.className = "roadmap";
+        ROADMAP.forEach((r) => {
+          const item = document.createElement("div");
+          item.className = "road-item " + r.phase;
+          item.innerHTML = `
+            <div class="road-date">${r.date}</div>
+            <div class="road-title">${r.title}</div>
+            <div class="road-desc">${r.desc}</div>
+          `;
+          wrap.appendChild(item);
+        });
+        el.appendChild(wrap);
+      }
+
+      // 📆 달력 — 캘린더 그리드
+      function renderCalendar() {
+        const el = document.getElementById("c-calendar");
+        el.innerHTML = "";
+        const grid = document.createElement("div");
+        grid.className = "calendar-grid";
+        for (let day = 1; day <= 9; day++) {
+          const items = DATA.filter((r) => r.Day === day);
+          const first = items[0];
+          if (!first) continue;
+          // ★4 이상만 하이라이트로, 없으면 첫 3개
+          let highlights = items.filter((r) => r.rating >= 4).slice(0, 3);
+          if (!highlights.length) highlights = items.slice(0, 2);
+          const sleeps = uniq(items.map((i) => i.숙박).filter((s) => s && s !== "-"));
+          const sleepLabel = sleeps.length ? sleeps[sleeps.length - 1] : "";
+          const cell = document.createElement("div");
+          cell.className = "cal-cell";
+          cell.style.borderTopColor = DAY_COLORS[day];
+          cell.dataset.day = day;
+          cell.innerHTML = `
+            <div>
+              <div class="cal-day-num" style="color:${DAY_COLORS[day]}">Day ${day}</div>
+              <div class="cal-date">${first.날짜} (${first.요일})</div>
+              <div class="cal-island">${first.섬}</div>
+            </div>
+            <div class="cal-highlights">
+              ${highlights.map((h) => `
+                <div class="cal-hl-row">
+                  <span class="cal-hl-time">${h.시간}${(() => { const a = altTime(h.시간, h.날짜); return a ? `<span class="time-alt">${a}</span>` : ""; })()}</span>
+                  <span class="cal-hl-place">${h.장소.replace(/⭐|🏕️/g, '').trim()}${h.rating ? ' ' + starHTML(h.rating) : ''}</span>
+                </div>
+              `).join("")}
+            </div>
+            ${sleepLabel ? `<div class="cal-sleep">🛏️ ${sleepLabel}</div>` : `<div class="cal-sleep">✈️ 출국일</div>`}
+          `;
+          cell.addEventListener("click", () => {
+            activateSubtab("schedule");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+          grid.appendChild(cell);
+        }
+        el.appendChild(grid);
+      }
+
       // 데이터 탭
       const islandSel = document.getElementById("c-filter-island");
-      const catSel = document.getElementById("c-filter-category");
+      const groupSel = document.getElementById("c-filter-group");
       const resSel = document.getElementById("c-filter-reservation");
       const searchInp = document.getElementById("c-search");
       const tableBody = document.querySelector("#c-table tbody");
@@ -1169,11 +2511,11 @@
         vals.forEach((v) => { const o = document.createElement("option"); o.value = v; o.textContent = v; sel.appendChild(o); });
       }
       function filterRows() {
-        const island = islandSel.value, cat = catSel.value, res = resSel.value;
+        const island = islandSel.value, group = groupSel.value, res = resSel.value;
         const q = searchInp.value.trim().toLowerCase();
         return DATA.filter((r) => {
           if (island !== "all" && r.섬 !== island) return false;
-          if (cat !== "all" && r.카테고리 !== cat) return false;
+          if (group !== "all" && groupOf(r.카테고리) !== group) return false;
           const has = String(r.예약).trim() !== "";
           if (res === "yes" && !has) return false;
           if (res === "no" && has) return false;
@@ -1186,20 +2528,59 @@
         tableBody.innerHTML = "";
         rows.forEach((r) => {
           const tr = document.createElement("tr");
+          tr.dataset.id = r.__id;
+          const _alt = altTime(r.시간, r.날짜);
           tr.innerHTML = `
             <td>${r.Day}</td>
             <td>${r.날짜} (${r.요일})</td>
             <td>${r.섬}</td>
-            <td>${r.시간}</td>
-            <td>${r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.장소}</a>` : r.장소}${r.fix ? ' <span class="pill fix">FIX</span>' : ""}</td>
+            <td><span class="pill">${groupOf(r.카테고리)}</span></td>
+            <td><span contenteditable="true" data-field="시간">${r.시간}</span>${_alt ? `<div class="time-alt">${_alt}</div>` : ""}</td>
+            <td>${r.url ? `<a href="${r.url}" target="_blank" rel="noopener" title="Google Maps">📍</a> ` : ""}<span contenteditable="true" data-field="장소">${r.장소}</span>${r.fix ? ' <span class="pill fix">FIX</span>' : ""}</td>
             <td>${r.카테고리}</td>
             <td>${r.예약 || "-"}</td>
-            <td>${r.비용 || "-"}</td>
+            <td contenteditable="true" data-field="비용">${r.비용 || "-"}</td>
+            <td>${starHTML(r.rating)}</td>
           `;
           tableBody.appendChild(tr);
         });
-        tableCount.textContent = `총 ${rows.length}개 일정 표시 중 (전체 ${DATA.length})`;
+        tableCount.textContent = `총 ${rows.length}개 / 전체 ${DATA.length}. ✏️ 셀 클릭 → 편집 → 다른 곳 클릭(blur)하면 저장.`;
       }
+
+      // 📝 인라인 편집 → DATA 갱신 → 모든 탭 재렌더 → localStorage 저장
+      const tableEl = document.getElementById("c-table");
+      tableEl.addEventListener("blur", (e) => {
+        const target = e.target.closest("[contenteditable='true']");
+        if (!target) return;
+        const tr = target.closest("tr"); if (!tr) return;
+        const id = parseInt(tr.dataset.id, 10);
+        const field = target.dataset.field;
+        if (!field) return;
+        const newVal = target.textContent.trim();
+        const row = DATA.find((r) => r.__id === id);
+        if (!row || String(row[field] || "") === newVal) return;
+        row[field] = newVal === "-" ? "" : newVal;
+        saveOverrides();
+        showOverrideStatus("저장됨 · " + new Date().toLocaleTimeString());
+        rerenderAll();
+      }, true);
+
+      // Enter 누르면 blur 트리거 (줄바꿈 방지)
+      tableEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && e.target.closest("[contenteditable='true']")) {
+          e.preventDefault(); e.target.blur();
+        }
+      });
+
+      function showOverrideStatus(msg) {
+        const el = document.getElementById("c-override-status");
+        if (el) { el.textContent = msg; setTimeout(() => { el.textContent = ""; }, 3000); }
+      }
+
+      // 초기화 버튼
+      document.getElementById("c-reset-overrides").addEventListener("click", () => {
+        if (confirm("모든 인라인 편집을 초기화하고 원본으로 복구할까?")) resetOverrides();
+      });
 
       // 지도
       let leafletMap = null;
@@ -1279,9 +2660,44 @@
         if (allPoints.length > 0) leafletMap.fitBounds(L.latLngBounds(allPoints), { padding: [40, 40] });
       }
 
-      // 서브탭
+      // ===== Hierarchical 탭 (메인 + 버티컬 서브) =====
+      const SUB_TO_MAIN = {
+        overview:"summary", calendar:"summary",
+        schedule:"trip", map:"trip", details:"trip",
+        stay:"prep", food:"prep", budget:"prep",
+        data:"system", tech:"system"
+      };
+      const MAIN_FIRST_SUB = {
+        summary:"overview", trip:"schedule", prep:"stay", system:"data"
+      };
+
+      function activateMain(mainName) {
+        document.querySelectorAll(".main-tab-btn").forEach((b) => {
+          b.setAttribute("aria-selected", b.dataset.main === mainName ? "true" : "false");
+        });
+        document.querySelectorAll(".main-panel").forEach((p) => {
+          p.classList.toggle("active", p.id === `main-${mainName}`);
+        });
+        // 활성 main에 active sub 없으면 첫 sub 활성화
+        const hasActive = document.querySelector(`#main-${mainName} .subtab-panel.active`);
+        if (!hasActive && MAIN_FIRST_SUB[mainName]) {
+          activateSubtab(MAIN_FIRST_SUB[mainName]);
+        }
+      }
+
       function activateSubtab(name) {
-        document.querySelectorAll(".subtab-btn").forEach((b) => {
+        // 부모 main도 활성화
+        const mainName = SUB_TO_MAIN[name];
+        if (mainName) {
+          document.querySelectorAll(".main-tab-btn").forEach((b) => {
+            b.setAttribute("aria-selected", b.dataset.main === mainName ? "true" : "false");
+          });
+          document.querySelectorAll(".main-panel").forEach((p) => {
+            p.classList.toggle("active", p.id === `main-${mainName}`);
+          });
+        }
+        // sub 활성화
+        document.querySelectorAll(".vtab-btn").forEach((b) => {
           b.setAttribute("aria-selected", b.dataset.subtab === name ? "true" : "false");
         });
         document.querySelectorAll(".subtab-panel").forEach((p) => {
@@ -1291,8 +2707,20 @@
           setTimeout(() => { initMap(); if (leafletMap) leafletMap.invalidateSize(); }, 50);
         }
       }
-      document.querySelectorAll(".subtab-btn").forEach((b) => {
+
+      document.querySelectorAll(".main-tab-btn").forEach((b) => {
+        b.addEventListener("click", () => activateMain(b.dataset.main));
+      });
+      document.querySelectorAll(".vtab-btn").forEach((b) => {
         b.addEventListener("click", () => activateSubtab(b.dataset.subtab));
+      });
+
+      // 주요 지침 카드 + 캘린더 셀 → 해당 탭 점프
+      document.querySelectorAll(".must-item[data-jump]").forEach((el) => {
+        el.addEventListener("click", () => {
+          activateSubtab(el.dataset.jump);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
       });
 
       // 환율 입력
@@ -1306,8 +2734,11 @@
 
       // 초기화
       fillSelect(islandSel, uniq(DATA.map((r) => r.섬)).sort());
-      fillSelect(catSel, uniq(DATA.map((r) => r.카테고리)).sort());
-      [islandSel, catSel, resSel, searchInp].forEach((el) => el.addEventListener("input", renderTable));
+      fillSelect(groupSel, ALL_GROUPS);
+      [islandSel, groupSel, resSel, searchInp].forEach((el) => el.addEventListener("input", renderTable));
+
+      // localStorage 변경사항 복원
+      if (loadOverrides()) showOverrideStatus("✅ 이전 편집 복원됨");
 
       renderKpis();
       renderFlights();
@@ -1320,6 +2751,12 @@
       renderCampSchedule();
       renderGear();
       renderBudget();
+      renderHotels();
+      renderRestaurants();
+      renderDesserts();
+      renderMarts();
+      renderRoadmap();
+      renderCalendar();
       renderTable();
     </script>
   </body>
