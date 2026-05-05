@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>하와이 신혼여행 · v2.0</title>
+    <title>하와이 신혼여행 · v2.1</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -1022,7 +1022,7 @@
     <div class="wrap">
       <header>
         <div class="header-left">
-          <p class="eyebrow"><span class="version">v2.0</span>검증 완료 · 2026.05 기준</p>
+          <p class="eyebrow"><span class="version">v2.1</span>검증 완료 · 2026.05 기준</p>
           <h1>하와이 신혼여행</h1>
           <p class="subtitle">KE053 · 8박 9일 · 2026.07.12 → 07.20 · 마우이 + 오아후</p>
         </div>
@@ -1438,6 +1438,8 @@
               <tbody></tbody>
             </table>
             <div class="changelog">
+              <h4>🔄 v2.1 (2026.05) — 숙소 재배치</h4>
+              <ul><li>Day 2 호텔 복귀 이벤트 추가</li><li>Day 5 Kailua/Lanikai 호텔 (오아후 첫날)</li><li>Day 7 Bellows Field Beach 캠핑4</li><li>Day 8 와이키키 + 신혼 디너</li></ul>
               <h4>🚀 v2.0 (2026.05) — Major release</h4>
               <ul>
                 <li>🎨 <strong>SaaS 팔레트 전면 적용</strong> — 매거진 톤 → cool indigo + slate (전체 통일)</li>
@@ -1650,6 +1652,7 @@
         {Day:2,날짜:"7/13",요일:"월",섬:"마우이",시간:"13:00",장소:"Tin Roof Maui (점심)",카테고리:"🍽️ 식사",예약:"",메모:"월요일 영업 본인 확인. 휴무면 Tasty Crust 대체",비용:"$$",숙박:"Paia/Kahului",fix:false,lat:20.8847,lng:-156.4666,url:gmaps("Tin Roof Maui Kahului")},
         {Day:2,날짜:"7/13",요일:"월",섬:"마우이",시간:"15:00",장소:"Big Beach (Makena)",카테고리:"🏖️ 해변",예약:"",메모:"마우이 남부 최고 해변",비용:"무료",숙박:"Paia/Kahului",fix:false,lat:20.6322,lng:-156.4496,url:gmaps("Big Beach Makena Maui")},
         {Day:2,날짜:"7/13",요일:"월",섬:"마우이",시간:"18:30",장소:"Coconut's Fish Cafe",카테고리:"🍽️ 저녁",예약:"",메모:"Kihei 캐주얼 시푸드",비용:"$$",숙박:"Paia/Kahului",fix:false,lat:20.7292,lng:-156.4475,url:gmaps("Coconuts Fish Cafe Kihei")},
+        {Day:2,날짜:"7/13",요일:"월",섬:"마우이",시간:"20:30",장소:"Kahului 호텔 복귀·취침",카테고리:"🛏️ 숙박",예약:"",메모:"일찍 취침 — 내일 Hana 로드 풀데이 대비",비용:"-",숙박:"Paia/Kahului",fix:false,lat:20.8847,lng:-156.4666,url:gmaps("Kahului Hotel Maui")},
         // Day 3
         {Day:3,날짜:"7/14",요일:"화",섬:"마우이",시간:"06:30",장소:"Paia 출발 (Hana Hwy)",카테고리:"🚗 이동",예약:"",메모:"4~6h 풀데이 시작",비용:"-",숙박:"Wai'ānapanapa Camp",fix:true,lat:20.9028,lng:-156.3690,url:gmaps("Paia Maui")},
         {Day:3,날짜:"7/14",요일:"화",섬:"마우이",시간:"07:00",장소:"Twin Falls",카테고리:"💧 폭포",예약:"",메모:"첫 정차. 짧은 트레일",비용:"무료",숙박:"Wai'ānapanapa Camp",fix:false,lat:20.9192,lng:-156.2528,url:gmaps("Twin Falls Maui")},
@@ -1667,14 +1670,14 @@
         {Day:4,날짜:"7/15",요일:"수",섬:"마우이",시간:"17:30",장소:"Black Rock 절벽 다이빙 의식",카테고리:"🌅 일몰",예약:"",메모:"Sheraton 매일 일몰 호롱불 의식",비용:"무료",숙박:"Camp Olowalu",fix:true,lat:20.9417,lng:-156.6975,url:gmaps("Sheraton Maui Kaanapali")},
         {Day:4,날짜:"7/15",요일:"수",섬:"마우이",시간:"19:00",장소:"Star Noodle (1287 Front St)",카테고리:"🍜 저녁",예약:"⚠️ 1주 전",메모:"2023 화재 후 새 주소 재오픈. 갈릭 누들",비용:"$$$",숙박:"Camp Olowalu",fix:true,lat:20.8753,lng:-156.6818,url:gmaps("Star Noodle 1287 Front Street Lahaina")},
         // Day 5
-        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"09:30",장소:"Olowalu → OGG",카테고리:"🚗 이동",예약:"",메모:"Camp Olowalu 정리·약 40분",비용:"-",숙박:"Waimānalo Camp",fix:true,lat:20.8089,lng:-156.6242,url:gmaps("Camp Olowalu Maui")},
-        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"12:30",장소:"OGG → HNL 국내선",카테고리:"✈️ 이동",예약:"⚠️ 사전 예약 시급",메모:"35분 비행",비용:"$$",숙박:"Waimānalo Camp",fix:false,lat:20.8987,lng:-156.4305,url:gmaps("Kahului Airport OGG")},
-        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"13:30",장소:"HNL 렌트카 픽업 (CONRAC)",카테고리:"🚗 이동",예약:"⚠️ 사전 예약",메모:"공항에서 <strong>CONRAC</strong>(Consolidated Rental Car Facility)까지 약 1km. <strong>Wiki Wiki 셔틀 무료</strong> (5분 간격, 5분 이동) 또는 도보 15~20분. 같은 업체들 (Alamo·Avis·Hertz·National 등). ⚠️ <strong>마우이 렌트카와 별도 계약</strong> — 각 섬마다 다른 업체일 수 있음. 오아후는 작은 차도 OK (비포장 거의 없음)",비용:"$$$",숙박:"Waimānalo Camp",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL Consolidated Rental Car Facility")},
-        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"15:30",장소:"Kailua Beach",카테고리:"🏖️ 해변",예약:"",메모:"오아후 최고 비치",비용:"무료",숙박:"Waimānalo Camp",fix:true,lat:21.3925,lng:-157.7344,url:gmaps("Kailua Beach Park Oahu")},
-        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"18:00",장소:"Buzz's Original Steakhouse",카테고리:"🍽️ 저녁",예약:"⚠️ 권장",메모:"오바마 단골",비용:"$$$",숙박:"Waimānalo Camp",fix:false,lat:21.3953,lng:-157.7378,url:gmaps("Buzzs Original Steakhouse Kailua")},
-        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"20:00",장소:"Waimānalo Beach 캠핑 체크인 🏕️",카테고리:"🏕️ 캠핑",예약:"⚠️ honolulu.gov (14일 전 12 PM)",메모:"오아후 4박 1일차. ⚠️ Bellows는 금~일만",비용:"$32",숙박:"Waimānalo Camp",fix:true,lat:21.3325,lng:-157.7022,url:gmaps("Waimanalo Beach Park Oahu")},
+        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"09:30",장소:"Olowalu → OGG",카테고리:"🚗 이동",예약:"",메모:"Camp Olowalu 정리·약 40분",비용:"-",숙박:"Kailua/Lanikai 호텔",fix:true,lat:20.8089,lng:-156.6242,url:gmaps("Camp Olowalu Maui")},
+        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"12:30",장소:"OGG → HNL 국내선",카테고리:"✈️ 이동",예약:"⚠️ 사전 예약 시급",메모:"35분 비행",비용:"$$",숙박:"Kailua/Lanikai 호텔",fix:false,lat:20.8987,lng:-156.4305,url:gmaps("Kahului Airport OGG")},
+        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"13:30",장소:"HNL 렌트카 픽업 (CONRAC)",카테고리:"🚗 이동",예약:"⚠️ 사전 예약",메모:"공항에서 <strong>CONRAC</strong>(Consolidated Rental Car Facility)까지 약 1km. <strong>Wiki Wiki 셔틀 무료</strong> (5분 간격, 5분 이동) 또는 도보 15~20분. 같은 업체들 (Alamo·Avis·Hertz·National 등). ⚠️ <strong>마우이 렌트카와 별도 계약</strong> — 각 섬마다 다른 업체일 수 있음. 오아후는 작은 차도 OK (비포장 거의 없음)",비용:"$$$",숙박:"Kailua/Lanikai 호텔",fix:false,lat:21.3187,lng:-157.9224,url:gmaps("HNL Consolidated Rental Car Facility")},
+        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"15:30",장소:"Kailua Beach",카테고리:"🏖️ 해변",예약:"",메모:"오아후 최고 비치",비용:"무료",숙박:"Kailua/Lanikai 호텔",fix:true,lat:21.3925,lng:-157.7344,url:gmaps("Kailua Beach Park Oahu")},
+        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"18:00",장소:"Buzz's Original Steakhouse",카테고리:"🍽️ 저녁",예약:"⚠️ 권장",메모:"오바마 단골",비용:"$$$",숙박:"Kailua/Lanikai 호텔",fix:false,lat:21.3953,lng:-157.7378,url:gmaps("Buzzs Original Steakhouse Kailua")},
+        {Day:5,날짜:"7/16",요일:"목",섬:"오아후",시간:"20:00",장소:"Kailua/Lanikai 호텔 체크인",카테고리:"🛏️ 숙박",예약:"⚠️ 사전 예약",메모:"오아후 첫날 호텔. Lanikai Pillbox 트레일 도보 20분·차 5분 거리 — 내일 새벽 일출 하이킹 최적 베이스. Pat's Kailua Beach Properties / Kailua Beachside Cottages 등",비용:"$$$",숙박:"Kailua/Lanikai 호텔",fix:true,lat:21.3925,lng:-157.7344,url:gmaps("Kailua Beach Hotel Oahu")},
         // Day 6
-        {Day:6,날짜:"7/17",요일:"금",섬:"오아후",시간:"05:00",장소:"Lanikai Pillbox 출발",카테고리:"🥾 하이킹",예약:"",메모:"Waimānalo 캠프 차로 약 15분",비용:"무료",숙박:"Malaekahana Camp",fix:false,lat:21.3933,lng:-157.7156,url:gmaps("Lanikai Pillbox Trail")},
+        {Day:6,날짜:"7/17",요일:"금",섬:"오아후",시간:"05:00",장소:"Lanikai Pillbox 출발",카테고리:"🥾 하이킹",예약:"",메모:"Kailua 호텔에서 도보 20분·차 5분",비용:"무료",숙박:"Malaekahana Camp",fix:false,lat:21.3933,lng:-157.7156,url:gmaps("Lanikai Pillbox Trail")},
         {Day:6,날짜:"7/17",요일:"금",섬:"오아후",시간:"05:50",장소:"Pillbox 정상 일출",카테고리:"🌅 일출",예약:"",메모:"라니카이+모쿠루아 섬 일출",비용:"무료",숙박:"Malaekahana Camp",fix:false,lat:21.3933,lng:-157.7156,url:gmaps("Lanikai Pillbox Trail")},
         {Day:6,날짜:"7/17",요일:"금",섬:"오아후",시간:"07:30",장소:"Cinnamon's (Kailua)",카테고리:"☕ 아침",예약:"",메모:"구아바 시폰 팬케이크",비용:"$$",숙박:"Malaekahana Camp",fix:false,lat:21.3925,lng:-157.7372,url:gmaps("Cinnamons Restaurant Kailua")},
         {Day:6,날짜:"7/17",요일:"금",섬:"오아후",시간:"09:30",장소:"Waimānalo → 노스쇼어",카테고리:"🚗 이동",예약:"",메모:"H-3 경로 약 1시간",비용:"-",숙박:"Malaekahana Camp",fix:true,lat:21.3325,lng:-157.7022,url:gmaps("H3 Highway Oahu")},
@@ -1684,22 +1687,23 @@
         {Day:6,날짜:"7/17",요일:"금",섬:"오아후",시간:"17:30",장소:"Sunset Beach 일몰",카테고리:"🌇 일몰",예약:"",메모:"7월 일몰 19:15",비용:"무료",숙박:"Malaekahana Camp",fix:false,lat:21.6797,lng:-158.0419,url:gmaps("Sunset Beach Park Oahu")},
         {Day:6,날짜:"7/17",요일:"금",섬:"오아후",시간:"21:30",장소:"Malaekahana 캠핑 체크인 🏕️",카테고리:"🏕️ 캠핑",예약:"⚠️ malaekahana.net",메모:"🟢 전기+온수. 유르트 $90~150 / 캐빈 $150~250",비용:"$120",숙박:"Malaekahana Camp",fix:true,lat:21.6517,lng:-157.9322,url:gmaps("Malaekahana Beach Campground")},
         // Day 7
-        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"04:30",장소:"Malaekahana 캠핑 정리·출발",카테고리:"🚗 이동",예약:"",메모:"North Shore → Diamond Head 약 50분",비용:"-",숙박:"Waikiki",fix:true,lat:21.6517,lng:-157.9322,url:gmaps("Malaekahana Beach Campground")},
-        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"06:00",장소:"Diamond Head 트레일",카테고리:"🥾 하이킹",예약:"⚠️ gostateparks.hawaii.gov",메모:"매일 06:00~18:00 운영. 토 정상 진행",비용:"$5+10",숙박:"Waikiki",fix:true,lat:21.2625,lng:-157.8050,url:gmaps("Diamond Head State Monument")},
-        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"08:00",장소:"Eggs 'n Things (와이키키)",카테고리:"☕ 아침",예약:"",메모:"빨리 먹고 Hanauma Bay 이동",비용:"$$",숙박:"Waikiki",fix:false,lat:21.2792,lng:-157.8294,url:gmaps("Eggs n Things Waikiki")},
-        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"09:30",장소:"Hanauma Bay 스노쿨링 ⭐",카테고리:"🤿 스노쿨링",예약:"⚠️ pros.hnl.info (2일 전 07:00 HST)",메모:"오아후 최고. 월·화 휴무. $25/인+$3주차. 9분 영상 시청",비용:"$28/인",숙박:"Waikiki",fix:true,lat:21.2694,lng:-157.6939,url:gmaps("Hanauma Bay Nature Preserve")},
-        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"13:00",장소:"Koko Marina Center 점심",카테고리:"🍽️ 점심",예약:"",메모:"Hanauma Bay 차로 5분",비용:"$$",숙박:"Waikiki",fix:true,lat:21.2828,lng:-157.7039,url:gmaps("Koko Marina Center Honolulu")},
-        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"14:30",장소:"USS Arizona Memorial",카테고리:"🏛️ 역사",예약:"⚠️ recreation.gov ($1)",메모:"펄 하버. 무료 입장 + $1 예약 수수료",비용:"$1",숙박:"Waikiki",fix:true,lat:21.3650,lng:-157.9500,url:gmaps("USS Arizona Memorial Pearl Harbor")},
-        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"17:30",장소:"와이키키 호텔 체크인",카테고리:"🛏️ 숙박",예약:"⚠️ 사전 예약",메모:"4박 캠핑 후 호텔 입성",비용:"$$$$",숙박:"Waikiki",fix:true,lat:21.2780,lng:-157.8333,url:gmaps("Waikiki Hotel")},
-        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"19:30",장소:"신혼 디너 (Senia / Mariposa / La Mer)",카테고리:"🍷 신혼 디너",예약:"⚠️ 2~4주 전",메모:"⚠️ Halekulani 리노베이션 가능 — Senia(미슐랭) / Mariposa 대안",비용:"$$$$$",숙박:"Waikiki",fix:true,lat:21.2772,lng:-157.8331,url:gmaps("Senia Restaurant Honolulu")},
+        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"04:30",장소:"Malaekahana 캠핑 정리·출발",카테고리:"🚗 이동",예약:"",메모:"North Shore → Diamond Head 약 50분",비용:"-",숙박:"Bellows Field Beach",fix:true,lat:21.6517,lng:-157.9322,url:gmaps("Malaekahana Beach Campground")},
+        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"06:00",장소:"Diamond Head 트레일",카테고리:"🥾 하이킹",예약:"⚠️ gostateparks.hawaii.gov",메모:"매일 06:00~18:00 운영. 토 정상 진행",비용:"$5+10",숙박:"Bellows Field Beach",fix:true,lat:21.2625,lng:-157.8050,url:gmaps("Diamond Head State Monument")},
+        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"08:00",장소:"Eggs 'n Things (와이키키)",카테고리:"☕ 아침",예약:"",메모:"빨리 먹고 Hanauma Bay 이동",비용:"$$",숙박:"Bellows Field Beach",fix:false,lat:21.2792,lng:-157.8294,url:gmaps("Eggs n Things Waikiki")},
+        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"09:30",장소:"Hanauma Bay 스노쿨링 ⭐",카테고리:"🤿 스노쿨링",예약:"⚠️ pros.hnl.info (2일 전 07:00 HST)",메모:"오아후 최고. 월·화 휴무. $25/인+$3주차. 9분 영상 시청",비용:"$28/인",숙박:"Bellows Field Beach",fix:true,lat:21.2694,lng:-157.6939,url:gmaps("Hanauma Bay Nature Preserve")},
+        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"13:00",장소:"Koko Marina Center 점심",카테고리:"🍽️ 점심",예약:"",메모:"Hanauma Bay 차로 5분",비용:"$$",숙박:"Bellows Field Beach",fix:true,lat:21.2828,lng:-157.7039,url:gmaps("Koko Marina Center Honolulu")},
+        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"14:30",장소:"USS Arizona Memorial",카테고리:"🏛️ 역사",예약:"⚠️ recreation.gov ($1)",메모:"펄 하버. 무료 입장 + $1 예약 수수료",비용:"$1",숙박:"Bellows Field Beach",fix:true,lat:21.3650,lng:-157.9500,url:gmaps("USS Arizona Memorial Pearl Harbor")},
+        {Day:7,날짜:"7/18",요일:"토",섬:"오아후",시간:"17:00",장소:"Bellows Field Beach 캠핑 체크인 🏕️",카테고리:"🏕️ 캠핑",예약:"⚠️ honolulu.gov (14일 전 12 PM)",메모:"캠핑 마지막날. 금~일 운영 — 토 OK. Waimānalo 백사장 직결. $32/박",비용:"$32",숙박:"Bellows Field Beach",fix:true,lat:21.3542,lng:-157.7011,url:gmaps("Bellows Field Beach Park Oahu")},
         // Day 8
+        {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"07:30",장소:"Bellows 캠핑 정리·출발 → Waikiki",카테고리:"🚗 이동",예약:"",메모:"Bellows → Waikiki 약 25분",비용:"-",숙박:"Waikiki",fix:true,lat:21.3542,lng:-157.7011,url:gmaps("Bellows Field Beach Park Oahu")},
         {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"08:00",장소:"와이키키 비치 모닝",카테고리:"🏖️ 해변",예약:"",메모:"듀크 카하나모쿠 동상 포토",비용:"무료",숙박:"Waikiki",fix:false,lat:21.2767,lng:-157.8275,url:gmaps("Waikiki Beach")},
+        {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"09:00",장소:"와이키키 호텔 체크인",카테고리:"🛏️ 숙박",예약:"⚠️ 사전 예약",메모:"조기 체크인 요청 또는 짐 보관 후 외출. 캠핑 마치고 와이키키 입성",비용:"$$$$",숙박:"Waikiki",fix:true,lat:21.2780,lng:-157.8333,url:gmaps("Waikiki Hotel")},
         {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"09:30",장소:"Heavenly Island Lifestyle",카테고리:"☕ 아침",예약:"",메모:"건강한 아일랜드 보울",비용:"$$",숙박:"Waikiki",fix:false,lat:21.2775,lng:-157.8298,url:gmaps("Heavenly Island Lifestyle Waikiki")},
         {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"11:00",장소:"Manoa Falls Trail",카테고리:"💧 폭포",예약:"",메모:"왕복 1.5h. 정글 폭포. 진흙 대비. 주차 $7",비용:"$7",숙박:"Waikiki",fix:false,lat:21.3294,lng:-157.8011,url:gmaps("Manoa Falls Trail Honolulu")},
         {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"14:00",장소:"Highway Inn (점심)",카테고리:"🍽️ 점심",예약:"",메모:"하와이안 플레이트. 일요일 영업",비용:"$$",숙박:"Waikiki",fix:false,lat:21.2961,lng:-157.8550,url:gmaps("Highway Inn Kakaako")},
         {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"16:00",장소:"Royal Hawaiian Center 쇼핑",카테고리:"🛍️ 쇼핑",예약:"",메모:"기념품·ABC Store·Honolulu Cookie",비용:"$$",숙박:"Waikiki",fix:false,lat:21.2772,lng:-157.8281,url:gmaps("Royal Hawaiian Center Waikiki")},
         {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"17:30",장소:"Maita'i Catamaran 일몰 크루즈",카테고리:"⛵ 액티비티",예약:"⚠️ 사전 예약",메모:"90분 일몰 크루즈",비용:"$50대/인",숙박:"Waikiki",fix:false,lat:21.2767,lng:-157.8294,url:gmaps("Maitai Catamaran Waikiki")},
-        {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"19:30",장소:"Roy's Waikiki / Marukame Udon",카테고리:"🍽️ 저녁",예약:"권장",메모:"파인 다이닝 vs 캐주얼",비용:"$$~$$$",숙박:"Waikiki",fix:false,lat:21.2780,lng:-157.8267,url:gmaps("Roys Waikiki")},
+        {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"19:30",장소:"신혼 디너 (Senia / Mariposa)",카테고리:"🍷 신혼 디너",예약:"⚠️ 2~4주 전",메모:"⚠️ Halekulani 리노베이션 가능 — Senia(미슐랭 1스타) / Mariposa 대안. 캠핑 4박 마치고 마지막 밤 파인 다이닝",비용:"$$$$$",숙박:"Waikiki",fix:true,lat:21.2772,lng:-157.8331,url:gmaps("Senia Restaurant Honolulu")},
         {Day:8,날짜:"7/19",요일:"일",섬:"오아후",시간:"21:30",장소:"호텔 복귀·짐 정리",카테고리:"🛏️ 숙박",예약:"",메모:"Day 9 출국 준비",비용:"-",숙박:"Waikiki",fix:false,lat:21.2780,lng:-157.8333,url:gmaps("Waikiki Hotel")},
         // Day 9
         {Day:9,날짜:"7/20",요일:"월",섬:"오아후",시간:"07:30",장소:"Leonard's Bakery 말라사다",카테고리:"🍩 아침",예약:"",메모:"05:30부터 영업",비용:"$",숙박:"-",fix:false,lat:21.2867,lng:-157.8375,url:gmaps("Leonards Bakery Honolulu")},
@@ -1878,13 +1882,13 @@
       const ACTIONS = [
         {priority:"🚨 늦음",deadline:"즉시 시도",item:"Camp Olowalu 캐빈 (Day 4)",why:"성수기 6개월 전부터 매진. 1월 권장이었음 → 빈자리 없으면 텐탈로/RV/텐트로",url:"https://www.campolowalu.com",cls:"late"},
         {priority:"🚨 늦음",deadline:"이번주 안",item:"Malaekahana 유르트 (Day 6)",why:"6주 전부터 매진 시작 — 이번주 안 미잡으면 텐트만",url:"https://www.malaekahana.net",cls:"late"},
-        {priority:"🔴 즉시",deadline:"이번주",item:"호텔 4박 (Day 1·2·7·8)",why:"Waikiki 7월 성수기. Paia/Kahului 1박씩 + Waikiki 2박 연속",url:"",cls:"urgent"},
+        {priority:"🔴 즉시",deadline:"이번주",item:"호텔 4박 (Day 1·2·5·8)",why:"Paia/Kahului 1박씩 + Kailua/Lanikai 1박 (오아후 첫날) + Waikiki 1박",url:"",cls:"urgent"},
         {priority:"🔴 즉시",deadline:"이번주",item:"OGG ↔ HNL 국내선 왕복 (7/12·7/16)",why:"좌석·가격 임박할수록 ↑",url:"https://www.hawaiianair.com",cls:"urgent"},
         {priority:"🟠 5/13",deadline:"5/13 화 07:00 HST",item:"⭐ Haleakalā 일출 예약 (Day 2)",why:"정확히 60일 전 7AM 오픈. 매진 5분 안. 캘린더 알림 필수",url:"https://www.recreation.gov/ticket/253731",cls:"urgent"},
         {priority:"🟢 6/14~",deadline:"30일 전",item:"Wai'ānapanapa 입장+캠핑 (Day 3)",why:"입장과 캠핑 별도 2건",url:"https://gostateparks.hawaii.gov/waianapanapa",cls:""},
         {priority:"🟢 6/13~",deadline:"30일 전",item:"ʻĪao Valley · Diamond Head 입장 (Day 2·7)",why:"비거주자 사전 예약",url:"https://gostateparks.hawaii.gov",cls:""},
-        {priority:"🟢 6/22~",deadline:"2~4주 전",item:"신혼 디너 — Senia / Mariposa (Day 7)",why:"⚠️ Halekulani La Mer 리노베이션 가능 — 대안 우선",url:"https://www.restaurantsenia.com",cls:""},
-        {priority:"🟢 7/2",deadline:"7/2 12:00 PM HST",item:"Waimānalo Beach 캠핑 (Day 5)",why:"정확히 14일 전 정오 오픈",url:"https://camping.honolulu.gov",cls:""},
+        {priority:"🟢 6/22~",deadline:"2~4주 전",item:"신혼 디너 — Senia / Mariposa (Day 8)",why:"⚠️ Halekulani La Mer 리노베이션 가능 — 대안 우선. Day 8 마지막 밤",url:"https://www.restaurantsenia.com",cls:""},
+        {priority:"🟢 7/4",deadline:"7/4 12:00 PM HST",item:"Bellows Field Beach 캠핑 (Day 7)",why:"정확히 14일 전 정오 오픈. 금~일 운영 — 토요일(7/18) OK",url:"https://camping.honolulu.gov",cls:""},
         {priority:"🟢 7/8~",deadline:"1주 전",item:"Star Noodle 디너 (Day 4)",why:"OpenTable. 라하이나 1287 Front St",url:"https://www.starnoodle.com",cls:""},
         {priority:"🟢 7/12~",deadline:"1주 전",item:"Maita'i Catamaran (Day 8)",why:"와이키키 일몰 크루즈 90분",url:"https://www.maitaicatamaran.com",cls:""},
         {priority:"⭐ 7/16",deadline:"7/16 07:00 HST",item:"⭐ Hanauma Bay 스노쿨링 (Day 7)",why:"정확히 2일 전 7AM HST. 매진 매우 빠름",url:"https://pros.hnl.info",cls:"urgent"},
@@ -1903,7 +1907,7 @@
         {n:9,item:"(자체 정정) KE054 시간",orig:"v2에서 13:05을 부정확이라 표기",fix:"실제 e-티켓 13:05 → 원본 시트 정확",type:"정정"},
         {n:10,item:"일수",orig:"7박 8일 표기 (실제 8박 9일)",fix:"7/12~7/20 = 8박 9일로 재구성",type:"누락"},
         {n:11,item:"숙박 누락",orig:"Day 3·5·6 숙소 미표시",fix:"전 일자 숙소 명시",type:"누락"},
-        {n:12,item:"캠핑 3박 → 4박 재배치",orig:"Hosmer/Wai'ānapanapa/Waimānalo (도착당일 캠핑 포함)",fix:"Day 3·4·5·6 캠핑 4박 + 호텔 4박",type:"컨셉"},
+        {n:12,item:"캠핑 재배치 + 중간 호텔",orig:"캠핑 4박 연속 (Day 3~6)",fix:"Day 3·4 마우이 캠핑 + Day 5 Kailua 호텔 (오아후 첫날) + Day 6·7 오아후 캠핑 + Day 8 와이키키",type:"컨셉"},
         {n:13,item:"Pi'ilani 백로드",orig:"언급 없음",fix:"비포장+렌트카 약관 위반 — 경고",type:"안전"},
         {n:14,item:"Pearl Harbor",orig:"누락",fix:"USS Arizona Memorial 추가",type:"누락"},
         {n:15,item:"신혼 디너",orig:"캐주얼만",fix:"신혼 파인 다이닝 (Senia/Mariposa)",type:"컨셉"},
@@ -1926,8 +1930,8 @@
       const CAMPSCHEDULE = [
         {day:"Day 3 (7/14 화)",camp:"Wai'ānapanapa State Park",site:"텐트 또는 케이빈",price:"텐트 $20 / 케이빈 $130",booking:"https://gostateparks.hawaii.gov/waianapanapa",open:"30일 전 (6/14~)",note:"⚠️ 입장+캠핑 별도 2건. 케이빈 매진 매우 빠름"},
         {day:"Day 4 (7/15 수)",camp:"Camp Olowalu",site:"캐빈 (신혼 추천)",price:"텐트 $40~60 / 캐빈 $200~300",booking:"https://www.campolowalu.com",open:"⚠️ 즉시 (이미 늦음)",note:"🟢 전기+온수. 캐빈 6개월 전부터 매진"},
-        {day:"Day 5 (7/16 목)",camp:"Waimānalo Beach Park",site:"텐트 사이트",price:"$32/박",booking:"https://camping.honolulu.gov",open:"7/2 12:00 PM HST",note:"⚠️ Bellows는 금~일만 → 목요일은 Waimānalo"},
-        {day:"Day 6 (7/17 금)",camp:"Malaekahana Campground",site:"유르트 또는 캐빈",price:"텐트 $25~35 / 유르트 $90~150 / 캐빈 $150~250",booking:"https://www.malaekahana.net",open:"⚠️ 이번주 안",note:"🟢 전기+온수. 유르트 6주 전부터 매진"}
+        {day:"Day 6 (7/17 금)",camp:"Malaekahana Campground",site:"유르트 또는 캐빈",price:"텐트 $25~35 / 유르트 $90~150 / 캐빈 $150~250",booking:"https://www.malaekahana.net",open:"⚠️ 이번주 안",note:"🟢 전기+온수. 유르트 6주 전부터 매진"},
+        {day:"Day 7 (7/18 토)",camp:"Bellows Field Beach",site:"텐트 사이트",price:"$32/박",booking:"https://camping.honolulu.gov",open:"7/4 12:00 PM HST",note:"금~일 운영 — 토요일 OK. Waimānalo 백사장 직결"}
       ];
 
       const GEAR = [
@@ -2137,7 +2141,7 @@
         {Day:5,time:"13:30",name:"HNL 렌트카 픽업 (CONRAC)",body:"⭐ 호놀룰루 공항 신축 <strong>CONRAC</strong> (Consolidated Rental Car Facility) — 공항에서 약 1km.<br><br><strong>이동</strong>:<br>• <strong>Wiki Wiki 셔틀 무료</strong> — 5분 간격, 5분 이동 (가장 권장)<br>• 도보 — 약 15~20분, 짐 많으면 비추천<br><br><strong>업체</strong>: Alamo · Avis · Budget · Dollar · Enterprise · Hertz · National · Thrifty (마우이와 같음).<br><br>⚠️ <strong>주의</strong>: 마우이 렌트카와 <strong>별도 계약</strong> — 각 섬마다 다른 업체일 수 있음. 한 번에 \"Inter-Island\" 옵션으로 묶을 수도 있는데 보통 별도가 저렴.<br><br><strong>차종</strong>: 오아후는 비포장 거의 없어 Compact·Mid-size로 충분. Waikiki 좁은 거리·일방통행 많음 — 큰 차 비추.",starred:true,warn:true},
         {Day:5,time:"15:30",name:"Kailua Beach",body:"오아후 동부 최고. 에메랄드 빛 얕은 바다. Mokulua 섬 뷰. 화장실·샤워·주차장 무료. ⚠️ <strong>카약 렌탈은 비치 내 X</strong> — 외부 상점에서 픽업·운반 의무.",starred:false,warn:true},
         {Day:5,time:"18:00",name:"Buzz's Original Steakhouse",body:"오바마 가족 단골. 1962년 오픈. 코나 커피 글레이즈드 립·테리야끼 스테이크. 점심 11:00~15:00 / 저녁 17:00~21:00. 예약 권장. $30~50/메뉴.",starred:false,warn:false},
-        {Day:5,time:"20:00",name:"Waimānalo Beach Park 캠핑",body:"⚠️ 호놀룰루 시 캠핑 퍼밋. <strong>14일 전 12:00 PM HST 정확히 오픈</strong> (7/2). $32/박. 화장실·냉수 샤워. 야간 보안 주의 — 귀중품 차에 두지 말 것.",starred:false,warn:true},
+        {Day:5,time:"20:00",name:"Kailua/Lanikai 호텔 체크인",body:"오아후 첫날 호텔. <strong>Lanikai Pillbox 트레일까지 도보 20분·차 5분 거리</strong> — 다음날 새벽 일출 하이킹 최적 베이스.<br><br><strong>추천 숙소</strong>:<br>• <strong>Pat's Kailua Beach Properties</strong> — Kailua 비치 직결 코티지<br>• <strong>Kailua Beachside Cottages</strong> — 로컬 BnB<br>• <strong>Lanikai Beach Rentals</strong> — Lanikai 인근<br><br>⚠️ Kailua에 대형 체인 호텔 없음 — 성수기 사전 예약 필수.",starred:false,warn:true},
         {Day:6,time:"05:00",name:"Lanikai Pillbox Trail",body:"공식명 Kaiwa Ridge Trail. 왕복 30분~1시간. 가파름 + 미끄러움 (운동화 필수). <strong>헤드램프 필수</strong>. 두 개 콘크리트 벙커 — 일본·미군 잔재. 주차는 주거지역 — 도보 10분 + 주민 민폐 주의.",starred:false,warn:false},
         {Day:6,time:"07:30",name:"Cinnamon's (Kailua)",body:"구아바 시폰 팬케이크 명물 ($14). 레드벨벳 팬케이크도 인기. 평일 07:00~13:00 / 주말 ~14:00. 30분 대기.",starred:false,warn:false},
         {Day:6,time:"11:00",name:"Hale'iwa 마을",body:"노스쇼어 중심 마을. 갤러리·서프샵·푸드트럭. <strong>Matsumoto Shave Ice</strong> 줄 길지만 머스트 ($5).",starred:false,warn:false},
@@ -2150,7 +2154,8 @@
         {Day:7,time:"09:30",name:"Hanauma Bay 스노쿨링",body:"⭐⭐ 오아후 최고 스노쿨링. ⚠️ <strong>월·화 휴무</strong>. 수~일 06:45~13:30 (마지막 입장 12:00). $25/인 + $3 주차. 9분 교육 영상 시청 의무. <strong>예약은 정확히 2일 전 07:00 HST에 pros.hnl.info</strong>. 산호 보호 — 미네랄 선크림만.",starred:true,warn:true},
         {Day:7,time:"13:00",name:"Koko Marina Center",body:"Hanauma Bay 차로 5분. Kona Brewing Pub·포케 등. 점심 옵션.",starred:false,warn:false},
         {Day:7,time:"14:30",name:"USS Arizona Memorial",body:"⭐ 펄 하버. ⚠️ recreation.gov 예약 ($1 수수료, 입장 무료). 8주 전 + 24h 전 두 차례 오픈. 지상 박물관 → 셔틀 보트 → 침몰 함 위 메모리얼. 약 1시간. 짐 검사 — 가방·카메라 케이스 X (lockers $5).",starred:true,warn:false},
-        {Day:7,time:"19:30",name:"신혼 디너 — Senia / Mariposa / La Mer",body:"⚠️ <strong>Halekulani 호텔이 2024년부터 리노베이션 중일 수 있음</strong> — La Mer 운영 상태 본인 확인.<br><br>대안:<br>• <strong>Senia</strong> (Chinatown, 미슐랭 1스타) — 모던 하와이안. $150~200/인.<br>• <strong>Mariposa</strong> (Neiman Marcus) — 오션뷰.<br>• <strong>Mar Mar Beach Side</strong> (Royal Hawaiian) — 오션프론트.<br>• <strong>Roy's Waikiki</strong> — Roy Yamaguchi.<br><br>2~4주 전 예약. 드레스 코드 스마트 캐주얼.",starred:true,warn:true},
+        {Day:7,time:"17:00",name:"Bellows Field Beach 캠핑",body:"⭐ Waimānalo 해안 직결 캠핑. ⚠️ <strong>금~일만 운영</strong> — 토요일(7/18) OK. camping.honolulu.gov 퍼밋 ($32/박). <strong>14일 전 정오 오픈 (7/4 12:00 PM HST)</strong>. 화장실·냉수 샤워. 야간 보안 — 귀중품 차에 보관. 이튿날 Waikiki까지 약 25분.",starred:false,warn:true},
+        {Day:8,time:"19:30",name:"신혼 디너 — Senia / Mariposa / La Mer",body:"⚠️ <strong>Halekulani 호텔이 2024년부터 리노베이션 중일 수 있음</strong> — La Mer 운영 상태 본인 확인.<br><br>대안:<br>• <strong>Senia</strong> (Chinatown, 미슐랭 1스타) — 모던 하와이안. $150~200/인.<br>• <strong>Mariposa</strong> (Neiman Marcus) — 오션뷰.<br>• <strong>Mar Mar Beach Side</strong> (Royal Hawaiian) — 오션프론트.<br>• <strong>Roy's Waikiki</strong> — Roy Yamaguchi.<br><br>2~4주 전 예약. 드레스 코드 스마트 캐주얼.",starred:true,warn:true},
         {Day:8,time:"09:30",name:"Heavenly Island Lifestyle",body:"와이키키 Beachwalk Hotel 1층. 건강한 조식. 06:30~14:00. $15~22.",starred:false,warn:false},
         {Day:8,time:"11:00",name:"Manoa Falls Trail",body:"호놀룰루 마노아 계곡. 왕복 1.5h / 2.5km. 정글 + 60m 폭포. ⚠️ <strong>폭포 수영 금지</strong> (낙석·렙토스피라병 위험). 비온 후 진흙 — 운동화 + 여벌. 주차 $7.",starred:false,warn:true},
         {Day:8,time:"14:00",name:"Highway Inn (Kakaako)",body:"1947년 오픈. 하와이안 플레이트 런치 명소. 라우라우(돼지+토란잎)·포이·로미 새먼·칼루아 피그. 일요일 영업 (10:00~20:00). $14~20.",starred:false,warn:false},
@@ -2167,11 +2172,11 @@
 
       const ROADMAP = [
         {date:"2026-05-01", phase:"now", title:"📍 오늘 (D-72)", desc:"출발까지 약 10주. 즉시 예약 항목부터 처리 — 매진 위험 큰 캠프·호텔 우선"},
-        {date:"5월 첫째 주 (이번주)", phase:"urgent", title:"🚨 즉시 예약 — 매진 위험", desc:"<strong>Camp Olowalu 캐빈</strong> · <strong>Malaekahana 유르트</strong> · 호텔 4박 (Paia/Kahului·Waikiki x2) · OGG↔HNL 국내선 왕복 (7/12·7/16)"},
+        {date:"5월 첫째 주 (이번주)", phase:"urgent", title:"🚨 즉시 예약 — 매진 위험", desc:"<strong>Camp Olowalu 캐빈</strong> · <strong>Malaekahana 유르트</strong> · 호텔 4박 (Paia/Kahului·Kailua/Lanikai·Waikiki) · OGG↔HNL 국내선 왕복 (7/12·7/16)"},
         {date:"2026-05-13 화 07:00 HST", phase:"late", title:"⭐ Haleakalā 일출 — 정확히 60일 전 7AM", desc:"recreation.gov · 매진 5분 안 · <strong>캘린더 알림 필수</strong> (한국 시간 5/14 02:00)"},
         {date:"6월 중순 (6/13~6/18)", phase:"normal", title:"🟢 30일 전 일괄 예약", desc:"Wai'ānapanapa 입장+캠핑 별도 2건 (6/14) / ʻĪao Valley · Diamond Head 비거주자 입장 (gostateparks.hawaii.gov)"},
         {date:"6월 말 ~ 7월 초", phase:"normal", title:"🟢 신혼 디너 (2~4주 전)", desc:"Senia (Chinatown 미슐랭) · Mariposa · Mar Mar · Roy's Waikiki 중 1 — Halekulani La Mer 운영 상태 확인"},
-        {date:"2026-07-02 12:00 PM HST", phase:"late", title:"🟠 Waimānalo 캠핑 — 정확히 14일 전 정오", desc:"camping.honolulu.gov · Bellows는 금~일만이라 목요일은 Waimānalo로"},
+        {date:"2026-07-04 12:00 PM HST", phase:"late", title:"🟠 Bellows Field Beach 캠핑 (Day 7) — 정확히 14일 전 정오", desc:"camping.honolulu.gov · 토요일(7/18) 운영 OK"},
         {date:"2026-07-08 ~", phase:"normal", title:"🟢 1주 전 마무리 예약", desc:"Star Noodle (OpenTable) · Maita'i Catamaran 일몰 크루즈 · 캠핑 장비 최종 점검"},
         {date:"2026-07-12 일 21:05 ICN", phase:"depart", title:"✈️ 출발 — KE053 (프레스티지석)", desc:"ICN 21:05 → HNL 같은 날 10:55 도착 (8h 50m, 날짜선 통과)"},
         {date:"2026-07-12 ~ 7/20", phase:"trip", title:"🌺 8박 9일 트립 — 마우이 4박 + 오아후 4박", desc:"Day 1~9 시간순 동선은 일정 탭 / 시각 캘린더는 아래 그리드 / 동선 시각화는 지도 탭"},
