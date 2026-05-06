@@ -761,6 +761,13 @@
       }
       .lock-btn.locked:hover { background: var(--camp); }
       .item.locked { background: linear-gradient(to right, rgba(16,185,129,0.05), transparent 30%); }
+      .res-btn {
+        padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
+        background: var(--surface); border: 1.5px solid var(--line-strong); color: var(--muted);
+        cursor: pointer; font-family: inherit; transition: all 0.15s;
+      }
+      .res-btn:hover { border-color: var(--accent); color: var(--accent); }
+      .res-btn.reserved { background: var(--accent); color: #fff; border-color: var(--accent); }
       .item.locked .item-place::after {
         content: " ✅";
         font-size: 13px;
@@ -1426,7 +1433,7 @@
           <article class="card full">
             <h2 class="section-title">상세 목록 — <span class="accent">셀 클릭 → 인라인 편집</span></h2>
             <table class="table editable" id="c-table">
-              <thead><tr><th>Day</th><th>날짜</th><th>섬</th><th>그룹</th><th>시간 ✏️</th><th>장소 ✏️</th><th>카테고리</th><th>예약</th><th>비용 ✏️</th><th>★</th><th>🔒</th></tr></thead>
+              <thead><tr><th>Day</th><th>날짜</th><th>섬</th><th>그룹</th><th>시간 ✏️</th><th>장소 ✏️</th><th>카테고리</th><th>예약</th><th>비용 ✏️</th><th>★</th><th>🔒</th><th>📋</th></tr></thead>
               <tbody></tbody>
             </table>
             <p class="muted" id="c-table-count"></p>
@@ -1623,6 +1630,8 @@
       const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
       const SHEET_EDIT_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
       const LOCK_KEY = "hawaii-trip-locks-v2";
+      const RESERVED_KEY = "hawaii-trip-reserved-v1";
+      const N8N_WEBHOOK = "http://localhost:5678/webhook/dashboard-status";
 
       const gmaps = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
       let EXCHANGE_RATE = 1475;
@@ -1771,7 +1780,8 @@
       DATA.forEach((r) => {
         const meta = RATINGS[`${r.Day}|${r.시간}`];
         if (meta) Object.assign(r, meta);
-        r.locked = false; // 확정 상태
+        r.locked = false;
+        r.reserved = false;
       });
 
       // ===== v2.0 — Lock(확정) 시스템 =====
@@ -1796,6 +1806,36 @@
         row.locked = !row.locked;
         saveLocks();
         rerenderAll();
+        sendToN8n(row, row.locked ? "confirmed" : "unconfirmed");
+      }
+
+      function loadReserved() {
+        try {
+          const raw = localStorage.getItem(RESERVED_KEY);
+          if (!raw) return;
+          const map = JSON.parse(raw);
+          DATA.forEach((r) => { if (map[r.__id]) r.reserved = true; });
+        } catch(e) {}
+      }
+      function saveReserved() {
+        const map = {};
+        DATA.forEach((r) => { if (r.reserved) map[r.__id] = true; });
+        try { localStorage.setItem(RESERVED_KEY, JSON.stringify(map)); } catch(e) {}
+      }
+      function toggleReserved(id) {
+        const row = DATA.find((r) => r.__id === id);
+        if (!row) return;
+        row.reserved = !row.reserved;
+        saveReserved();
+        rerenderAll();
+        sendToN8n(row, row.reserved ? "reserved" : "unreserved");
+      }
+      function sendToN8n(row, status) {
+        fetch(N8N_WEBHOOK, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({day: row.Day, date: row.날짜, place: row.장소, category: row.카테고리, status, timestamp: new Date().toISOString()})
+        }).catch(() => {});
       }
 
       // ===== v2.0 — CSV Export (Sheet 시드용) =====
@@ -2418,6 +2458,7 @@
                   ${r.fix ? `<span class="pill fix">FIX</span>` : ""}
                   ${starHTML(r.rating)}
                   <button class="lock-btn ${r.locked ? "locked" : ""}" data-lock-id="${r.__id}" type="button">${r.locked ? "✅ 확정됨" : "🔓 미확정"}</button>
+                  ${r.예약 ? `<button class="res-btn ${r.reserved ? "reserved" : ""}" data-res-id="${r.__id}" type="button">${r.reserved ? "✅ 예약완료" : "📋 예약필요"}</button>` : ""}
                 </div>
                 ${r.메모 ? `<div class="item-memo">${r.메모}</div>` : ""}
                 ${altHTML(r.alt)}
@@ -2802,18 +2843,19 @@
             <td ${editAttr} data-field="비용">${r.비용 || "-"}</td>
             <td>${starHTML(r.rating)}</td>
             <td><button class="lock-btn ${r.locked ? "locked" : ""}" data-lock-id="${r.__id}" type="button">${r.locked ? "✅" : "🔓"}</button></td>
+            <td>${r.예약 ? `<button class="res-btn ${r.reserved ? "reserved" : ""}" data-res-id="${r.__id}" type="button">${r.reserved ? "✅" : "📋"}</button>` : ""}</td>
           `;
           tableBody.appendChild(tr);
         });
         tableCount.textContent = `총 ${rows.length}개 / 전체 ${DATA.length}. ✏️ 셀 클릭 → 편집 → 다른 곳 클릭(blur)하면 저장.`;
       }
 
-      // 🔒 Lock 토글 — 데이터 테이블에서도
+      // 🔒 Lock + 📋 Reserved 토글 — 데이터 테이블에서도
       document.getElementById("c-table").addEventListener("click", (e) => {
-        const btn = e.target.closest(".lock-btn[data-lock-id]");
-        if (!btn) return;
-        const id = parseInt(btn.dataset.lockId, 10);
-        toggleLock(id);
+        const lockBtn = e.target.closest(".lock-btn[data-lock-id]");
+        if (lockBtn) { toggleLock(parseInt(lockBtn.dataset.lockId, 10)); return; }
+        const resBtn = e.target.closest(".res-btn[data-res-id]");
+        if (resBtn) { toggleReserved(parseInt(resBtn.dataset.resId, 10)); }
       });
 
       // 📤 CSV Export 버튼
@@ -3015,14 +3057,12 @@
         });
       });
 
-      // 🔒 Lock 토글 (delegated)
+      // 🔒 Lock + 📋 Reserved 토글 (delegated)
       document.getElementById("c-timeline").addEventListener("click", (e) => {
         const lockBtn = e.target.closest(".lock-btn[data-lock-id]");
-        if (lockBtn) {
-          const id = parseInt(lockBtn.dataset.lockId, 10);
-          toggleLock(id);
-          return;
-        }
+        if (lockBtn) { toggleLock(parseInt(lockBtn.dataset.lockId, 10)); return; }
+        const resBtn = e.target.closest(".res-btn[data-res-id]");
+        if (resBtn) { toggleReserved(parseInt(resBtn.dataset.resId, 10)); return; }
       });
 
       // 📖 일정 탭 자세히 보기 토글 (delegated)
@@ -3078,9 +3118,10 @@
       fillSelect(groupSel, ALL_GROUPS);
       [islandSel, groupSel, resSel, searchInp].forEach((el) => el.addEventListener("input", renderTable));
 
-      // localStorage 변경사항 복원 + lock 복원
+      // localStorage 변경사항 복원 + lock/reserved 복원
       if (loadOverrides()) showOverrideStatus("✅ 이전 편집 복원됨");
       loadLocks();
+      loadReserved();
 
       // 🔄 페이지 로드 시 Sheet에서 자동 fetch (있으면 override)
       (async () => {
