@@ -808,6 +808,10 @@
       .shop-badge.walmart { background:#0071CE22; color:#0071CE; }
       .shop-badge.rei { background:#5C832F22; color:#3d5a1f; }
       .shop-badge.target { background:#CC000022; color:#CC0000; }
+      .shop-badge.coupang { background:#e8f4fd; color:#1a54c8; }
+      .shop-section-title { font-size:13.5px; font-weight:700; margin:0 0 10px; padding:8px 14px; border-radius:8px; border-left:4px solid; }
+      .shop-section-title.korea { background:#d1fae5; color:#065f46; border-color:#10b981; }
+      .shop-section-title.usa { background:#ffedd5; color:#9a3412; border-color:#f97316; }
       .item.locked .item-place::after {
         content: " ✅";
         font-size: 13px;
@@ -1089,22 +1093,14 @@
 
       <nav class="main-tabs" role="tablist">
         <button class="main-tab-btn" role="tab" aria-selected="true"  data-main="summary">📊 개요</button>
-        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="trip">🗺️ 트립</button>
+        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="trip">🗓️ 일정</button>
         <button class="main-tab-btn" role="tab" aria-selected="false" data-main="prep">📋 준비</button>
         <button class="main-tab-btn" role="tab" aria-selected="false" data-main="system">⚙️ 시스템</button>
       </nav>
 
       <!-- ════════ 📊 개요 ════════ -->
       <div class="main-panel active" id="main-summary">
-        <div class="vlayout">
-          <nav class="vtabs">
-            <button class="vtab-btn" aria-selected="true"  data-subtab="overview">📍 한눈에</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="calendar">📆 달력</button>
-          </nav>
-          <div class="vcontent">
-
-      <!-- 📊 한눈에 -->
-      <div class="subtab-panel active" id="sub-overview">
+        <div id="sub-overview" style="padding-top:28px">
         <section class="grid">
           <article class="card full rate-chart-card">
             <h2 class="section-title">💱 USD/KRW 환율 — 최근 3개월 일별 흐름</h2>
@@ -1270,8 +1266,21 @@
         </section>
       </div>
 
-      <!-- 📆 달력 -->
-      <div class="subtab-panel" id="sub-calendar">
+      </div><!-- /main-summary -->
+
+      <!-- ════════ 🗓️ 일정 ════════ -->
+      <div class="main-panel" id="main-trip">
+        <div class="vlayout">
+          <nav class="vtabs">
+            <button class="vtab-btn" aria-selected="true"  data-subtab="calendar">📆 달력</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="schedule">📅 타임라인</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="map">🗺️ 지도</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="details">📖 상세·가이드</button>
+          </nav>
+          <div class="vcontent">
+
+      <!-- 📆 달력 (개요에서 이동) -->
+      <div class="subtab-panel active" id="sub-calendar">
         <section class="grid">
           <article class="card full">
             <h2 class="section-title">🗺️ 출발 전 로드맵 <span class="accent">— 오늘 (2026-05-01) → 출발 (7/12)</span></h2>
@@ -1283,26 +1292,12 @@
           <article class="card full">
             <h2 class="section-title">📆 트립 캘린더 <span class="accent">— 8박 9일 (7/12 → 7/20)</span></h2>
             <div id="c-calendar"></div>
-            <p class="claude-note">각 셀 클릭 → 일정 탭으로 이동 (전체 시간순 디테일). Day별 색상 = 지도 탭과 동일.</p>
+            <p class="claude-note">각 셀 클릭 → 타임라인 탭으로 이동 (전체 시간순 디테일). Day별 색상 = 지도 탭과 동일.</p>
           </article>
         </section>
       </div>
 
-          </div><!-- /.vcontent -->
-        </div><!-- /.vlayout -->
-      </div><!-- /main-summary -->
-
-      <!-- ════════ 🗺️ 트립 ════════ -->
-      <div class="main-panel" id="main-trip">
-        <div class="vlayout">
-          <nav class="vtabs">
-            <button class="vtab-btn" aria-selected="true"  data-subtab="schedule">📅 일정</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="map">🗺️ 지도</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="details">📖 상세 정보</button>
-          </nav>
-          <div class="vcontent">
-
-      <!-- 📅 일정 -->
+      <!-- 📅 타임라인 -->
       <div class="subtab-panel" id="sub-schedule">
         <section class="grid">
           <article class="card full">
@@ -1358,10 +1353,10 @@
       <div class="main-panel" id="main-prep">
         <div class="vlayout">
           <nav class="vtabs">
-            <button class="vtab-btn" aria-selected="true"  data-subtab="stay">🛏️ 숙박</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="food">🍴 먹거리</button>
+            <button class="vtab-btn" aria-selected="true"  data-subtab="stay">🛏️ 숙박·캠핑</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="food">🍽️ 먹거리</button>
             <button class="vtab-btn" aria-selected="false" data-subtab="budget">💰 비용</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="packing">🎒 짐 체크리스트</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="packing">🎒 준비물</button>
           </nav>
           <div class="vcontent">
 
@@ -3071,13 +3066,13 @@
 
       // ===== Hierarchical 탭 (메인 + 버티컬 서브) =====
       const SUB_TO_MAIN = {
-        overview:"summary", calendar:"summary",
-        schedule:"trip", map:"trip", details:"trip",
-        stay:"prep", food:"prep", budget:"prep",
+        overview:"summary",
+        calendar:"trip", schedule:"trip", map:"trip", details:"trip",
+        stay:"prep", food:"prep", budget:"prep", packing:"prep",
         data:"system", tech:"system"
       };
       const MAIN_FIRST_SUB = {
-        summary:"overview", trip:"schedule", prep:"stay", system:"data"
+        summary:null, trip:"calendar", prep:"stay", system:"data"
       };
 
       function activateMain(mainName) {
@@ -3278,18 +3273,24 @@
       ];
 
       const CAMP_GEAR_SHOP = [
-        {item:"2인용 텐트",timing:"Day 1~2 (마우이)",walmart:"$40~80",wl:"https://www.walmart.com/search?q=2+person+tent+camping",rei:"$89~199",rl:"https://www.rei.com/c/camping-tents/f/pr-2-person",target:"$45~90",tl:"https://www.target.com/s?searchTerm=2+person+tent",note:"Coleman Sundome 추천. Camp Olowalu 대여 $25~40/일 대안"},
-        {item:"침낭 (여름용)",timing:"Day 1~2 (마우이)",walmart:"$20~45",wl:"https://www.walmart.com/search?q=summer+sleeping+bag",rei:"$60~150",rl:"https://www.rei.com/c/sleeping-bags",target:"$25~55",tl:"https://www.target.com/s?searchTerm=sleeping+bag",note:"하와이 밤 약 18~22°C — 여름용 OK"},
-        {item:"에어매트·슬리핑패드",timing:"Day 1~2 (마우이)",walmart:"$15~35",wl:"https://www.walmart.com/search?q=sleeping+pad+camping",rei:"$40~100",rl:"https://www.rei.com/c/sleeping-pads",target:"$20~40",tl:"https://www.target.com/s?searchTerm=sleeping+pad",note:"에어 타입 짐 절약"},
-        {item:"캠핑 버너 + 가스통",timing:"Day 1~2 필수",walmart:"$15~25",wl:"https://www.walmart.com/search?q=camping+stove+propane",rei:"$30~65",rl:"https://www.rei.com/c/backpacking-stoves",target:"$18~35",tl:"https://www.target.com/s?searchTerm=camping+stove",note:"⚠️ 가스 기내 반입 X — 반드시 현지 구매"},
-        {item:"캠핑 랜턴",timing:"Day 1~2 (마우이)",walmart:"$10~22",wl:"https://www.walmart.com/search?q=camping+lantern+LED",rei:"$25~55",rl:"https://www.rei.com/c/camping-lanterns",target:"$12~28",tl:"https://www.target.com/s?searchTerm=camping+lantern",note:"다이소에서 한국에서 구매도 OK"},
-        {item:"캠핑 의자 2개",timing:"Day 1~2 (마우이)",walmart:"$20~40",wl:"https://www.walmart.com/search?q=camping+folding+chair",rei:"$35~80",rl:"https://www.rei.com/c/camp-chairs",target:"$20~45",tl:"https://www.target.com/s?searchTerm=camping+chair",note:"Camp Olowalu에 일부 의자 비치"},
-        {item:"쿨러·아이스박스",timing:"Day 1~2 (마우이)",walmart:"$25~60",wl:"https://www.walmart.com/search?q=camping+cooler",rei:"$40~120",rl:"https://www.rei.com/c/coolers",target:"$30~70",tl:"https://www.target.com/s?searchTerm=camping+cooler",note:"식재료·음료 보관. 마우이 Costco에서도 구매 가능"},
-        {item:"코펠·캠핑 식기 세트",timing:"Day 1~2 (마우이)",walmart:"$15~25",wl:"https://www.walmart.com/search?q=camping+cookware+set",rei:"$20~55",rl:"https://www.rei.com/c/camp-cookware",target:"$15~30",tl:"https://www.target.com/s?searchTerm=camp+cookware",note:"간단한 건 다이소 한국에서 준비 가능"},
-        {item:"DEET 벌레 스프레이",timing:"도착 즉시",walmart:"$5~10",wl:"https://www.walmart.com/search?q=DEET+bug+spray+OFF",rei:"$6~12",rl:"https://www.rei.com/c/insect-repellent",target:"$6~12",tl:"https://www.target.com/s?searchTerm=bug+spray+DEET",note:"OFF! 30% DEET 추천. Hana 정글·캠핑장 필수"},
-        {item:"Reef-safe 미네랄 선크림",timing:"도착 즉시",walmart:"$8~15",wl:"https://www.walmart.com/search?q=reef+safe+mineral+sunscreen",rei:"$15~28",rl:"https://www.rei.com/c/sunscreen",target:"$12~22",tl:"https://www.target.com/s?searchTerm=reef+safe+sunscreen",note:"⚠️ 하와이 법 — 옥시벤존·옥티노세이트 금지"},
-        {item:"스노클링 세트 (마스크+오리발)",timing:"Day 1~2 (마우이)",walmart:"$20~40",wl:"https://www.walmart.com/search?q=snorkel+set+mask+fins",rei:"$35~90",rl:"https://www.rei.com/c/snorkels",target:"$25~55",tl:"https://www.target.com/s?searchTerm=snorkel+set",note:"Hanauma Bay 현지 대여도 가능 ($12~15). 개인 소지 위생 유리"},
-        {item:"방수백·드라이백",timing:"Day 1~2 (마우이)",walmart:"$10~20",wl:"https://www.walmart.com/search?q=dry+bag+waterproof",rei:"$15~45",rl:"https://www.rei.com/c/dry-bags",target:"$12~25",tl:"https://www.target.com/s?searchTerm=dry+bag+waterproof",note:"스노클링·해변·폭포 트레일 필수"},
+        // ✅ 한국(쿠팡) 구매 — 현지보다 저렴 + 짐 무게 부담 없는 것
+        {where:"korea",item:"침낭 (여름용)",price:"₩15,000~45,000",cl:"https://www.coupang.com/np/search?q=여름침낭캠핑",daiso:false,note:"하와이 밤 18~22°C. 압축 가능 — 짐 부담 적음"},
+        {where:"korea",item:"에어매트·슬리핑패드",price:"₩8,000~25,000",cl:"https://www.coupang.com/np/search?q=캠핑에어매트슬리핑패드",daiso:false,note:"접으면 작아짐. 에어 타입 권장"},
+        {where:"korea",item:"헤드램프",price:"₩5,000~15,000",cl:"https://www.coupang.com/np/search?q=헤드랜턴캠핑",daiso:true,dNote:"₩3,000~5,000",note:"다이소 기본형도 충분"},
+        {where:"korea",item:"캠핑 랜턴",price:"₩5,000~20,000",cl:"https://www.coupang.com/np/search?q=캠핑랜턴LED충전",daiso:true,dNote:"₩3,000~5,000",note:"USB 충전형 권장"},
+        {where:"korea",item:"코펠·식기·수저 세트",price:"₩5,000~25,000",cl:"https://www.coupang.com/np/search?q=캠핑코펠식기세트",daiso:true,dNote:"₩2,000~5,000",note:"다이소 기본 식기로도 충분"},
+        {where:"korea",item:"방수백·드라이백",price:"₩5,000~15,000",cl:"https://www.coupang.com/np/search?q=드라이백방수백캠핑",daiso:true,dNote:"₩2,000~5,000",note:"스노클링·폭포 트레일 필수"},
+        {where:"korea",item:"지퍼락 대·소",price:"₩2,000~5,000",cl:"https://www.coupang.com/np/search?q=지퍼백지퍼락대용량",daiso:true,dNote:"₩1,000~2,000",note:"다이소가 가장 저렴"},
+        {where:"korea",item:"스노클링 마스크+스노클",price:"₩8,000~25,000",cl:"https://www.coupang.com/np/search?q=스노클링마스크세트",daiso:false,note:"오리발은 Hanauma Bay 대여 $12~15 추천 (부피 절약)"},
+        {where:"korea",item:"캠핑 버너 본체",price:"₩10,000~30,000",cl:"https://www.coupang.com/np/search?q=캠핑버너이소부탄",daiso:false,note:"가스통은 기내 반입 X → 미국서 구매 필수"},
+        // 🇺🇸 미국 현지 구매 — 기내 반입 불가 or 부피 큼 or 현지가 더 저렴
+        {where:"usa",item:"가스통·연료 (부탄/이소)",timing:"Day 1~2 필수",walmart:"$5~12",wl:"https://www.walmart.com/search?q=camping+fuel+canister+butane",rei:"$6~15",rl:"https://www.rei.com/c/camp-fuel",note:"⚠️ 기내 반입 절대 X. Walmart 카훌루이 도착 당일"},
+        {where:"usa",item:"2인용 텐트",timing:"Day 1~2 또는 대여",walmart:"$40~80",wl:"https://www.walmart.com/search?q=2+person+tent+camping",rei:"$89~199",rl:"https://www.rei.com/c/camping-tents/f/pr-2-person",note:"Camp Olowalu 텐트 대여 $25~40/일 대안 — 짐 절약"},
+        {where:"usa",item:"캠핑 의자 2개",timing:"Day 1~2 (마우이)",walmart:"$20~40",wl:"https://www.walmart.com/search?q=camping+folding+chair",rei:"$35~80",rl:"https://www.rei.com/c/camp-chairs",note:"부피 커서 현지 구매 유리"},
+        {where:"usa",item:"쿨러·아이스박스",timing:"Day 1~2 (마우이)",walmart:"$25~60",wl:"https://www.walmart.com/search?q=camping+cooler",rei:"$40~120",rl:"https://www.rei.com/c/coolers",note:"매우 부피 큼 — 현지 필수. Costco 마우이 대안"},
+        {where:"usa",item:"DEET 벌레 스프레이",timing:"도착 즉시",walmart:"$5~10",wl:"https://www.walmart.com/search?q=DEET+bug+spray+OFF",rei:"$6~12",rl:"https://www.rei.com/c/insect-repellent",note:"OFF! 30% DEET. 미국이 한국보다 저렴. Hana 정글 필수"},
+        {where:"usa",item:"Reef-safe 미네랄 선크림",timing:"도착 즉시",walmart:"$8~15",wl:"https://www.walmart.com/search?q=reef+safe+mineral+sunscreen",rei:"$15~28",rl:"https://www.rei.com/c/sunscreen",note:"⚠️ 옥시벤존 하와이 법 금지. 현지가 저렴·선택 많음"},
+        {where:"usa",item:"오리발 (스노클링)",timing:"Day 1~2 또는 현지 대여",walmart:"$15~30",wl:"https://www.walmart.com/search?q=snorkel+fins+adult",rei:"$25~60",rl:"https://www.rei.com/c/fins",note:"Hanauma Bay 대여 $12~15가 가장 저렴 (1회 사용 시)"},
       ];
 
       const CL_KEY = "hawaii-checklist-v1";
@@ -3339,17 +3340,30 @@
       function renderCampShop() {
         const el = document.getElementById("c-camp-shop");
         if (!el) return;
-        el.innerHTML = `<table class="errors-table">
-          <thead><tr><th>항목</th><th>구매 시점</th><th><span class="shop-badge walmart">Walmart</span></th><th><span class="shop-badge rei">REI</span></th><th><span class="shop-badge target">Target</span></th><th>비고</th></tr></thead>
-          <tbody>${CAMP_GEAR_SHOP.map(r=>`<tr>
-            <td><strong>${r.item}</strong></td>
-            <td><span class="pill">${r.timing}</span></td>
-            <td><a href="${r.wl}" target="_blank" rel="noopener">${r.walmart}</a></td>
-            <td>${r.rei?`<a href="${r.rl}" target="_blank" rel="noopener">${r.rei}</a>`:"—"}</td>
-            <td><a href="${r.tl}" target="_blank" rel="noopener">${r.target}</a></td>
-            <td class="muted">${r.note||""}</td>
-          </tr>`).join("")}</tbody>
-        </table>`;
+        const korea = CAMP_GEAR_SHOP.filter(r=>r.where==="korea");
+        const usa = CAMP_GEAR_SHOP.filter(r=>r.where==="usa");
+        el.innerHTML = `
+          <div class="shop-section-title korea">✅ 출발 전 한국(쿠팡)에서 구매 — 현지보다 저렴</div>
+          <table class="errors-table" style="margin-bottom:20px">
+            <thead><tr><th>항목</th><th><span class="shop-badge coupang">쿠팡</span> 가격</th><th>다이소</th><th>비고</th></tr></thead>
+            <tbody>${korea.map(r=>`<tr>
+              <td><strong><a href="${r.cl}" target="_blank" rel="noopener">${r.item}</a></strong></td>
+              <td>${r.price}</td>
+              <td>${r.daiso?`✅ ${r.dNote}`:"—"}</td>
+              <td class="muted">${r.note||""}</td>
+            </tr>`).join("")}</tbody>
+          </table>
+          <div class="shop-section-title usa">🇺🇸 미국 현지에서 구매 — 기내 반입 불가 or 부피 큼 or 현지가 더 저렴</div>
+          <table class="errors-table">
+            <thead><tr><th>항목</th><th>구매 시점</th><th><span class="shop-badge walmart">Walmart</span></th><th><span class="shop-badge rei">REI</span></th><th>비고</th></tr></thead>
+            <tbody>${usa.map(r=>`<tr>
+              <td><strong>${r.item}</strong></td>
+              <td><span class="pill">${r.timing}</span></td>
+              <td><a href="${r.wl}" target="_blank" rel="noopener">${r.walmart}</a></td>
+              <td>${r.rei?`<a href="${r.rl}" target="_blank" rel="noopener">${r.rei}</a>`:"—"}</td>
+              <td class="muted">${r.note||""}</td>
+            </tr>`).join("")}</tbody>
+          </table>`;
       }
 
       // 💱 환율 차트 (Frankfurter API, 90일)
