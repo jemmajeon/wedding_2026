@@ -778,6 +778,36 @@
       }
       .res-btn:hover { border-color: var(--accent); color: var(--accent); }
       .res-btn.reserved { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+      /* 🎒 짐 체크리스트 */
+      .cl-top { display:flex; align-items:center; gap:16px; margin-bottom:18px; flex-wrap:wrap; }
+      .cl-progress-bar { height:8px; background:var(--line); border-radius:999px; overflow:hidden; width:100%; margin-bottom:4px; }
+      .cl-progress-fill { height:100%; background:linear-gradient(90deg,var(--primary),var(--camp)); border-radius:999px; transition:width .4s ease; }
+      .cl-progress-text { font-size:12px; color:var(--muted); font-weight:600; }
+      .cl-reset-btn { padding:6px 14px; border-radius:8px; border:1.5px solid var(--line-strong); background:var(--surface); color:var(--muted); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; white-space:nowrap; }
+      .cl-reset-btn:hover { border-color:var(--warn); color:var(--warn); }
+      .cl-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+      .cl-cat { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+      .cl-cat-header { padding:10px 14px; background:var(--bg-2); font-size:13px; font-weight:700; display:flex; justify-content:space-between; align-items:center; }
+      .cl-cat-count { font-size:11px; font-weight:600; color:var(--muted); background:var(--surface); padding:2px 8px; border-radius:999px; border:1px solid var(--line); }
+      .cl-items { padding:6px 0; }
+      .cl-item { display:flex; align-items:flex-start; gap:8px; padding:7px 14px; cursor:pointer; transition:background .12s; flex-wrap:wrap; }
+      .cl-item:hover { background:var(--bg-2); }
+      .cl-item.checked .cl-text { text-decoration:line-through; color:var(--muted); }
+      .cl-item input[type=checkbox] { margin-top:2px; flex-shrink:0; accent-color:var(--camp); width:15px; height:15px; cursor:pointer; }
+      .cl-text { flex:1; font-size:13px; line-height:1.5; }
+      .cl-note { width:100%; padding-left:23px; font-size:11px; color:var(--muted); line-height:1.4; margin-top:1px; }
+      .daiso-badge { margin-left:auto; flex-shrink:0; font-size:10.5px; font-weight:700; padding:2px 7px; border-radius:5px; background:#e8f4fd; color:#0073a8; border:1px solid #b3d9f0; text-decoration:none; white-space:nowrap; }
+      .daiso-badge:hover { background:#b3d9f0; }
+      /* 🛒 현지 구매 가이드 */
+      .shop-store-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:20px; }
+      .shop-store-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; font-size:13px; line-height:1.7; }
+      .shop-store-card strong { display:block; margin-bottom:2px; }
+      .shop-store-card a { color:var(--primary); text-decoration:none; font-size:12px; }
+      .shop-badge { display:inline-block; font-size:10px; font-weight:700; padding:1px 6px; border-radius:4px; }
+      .shop-badge.walmart { background:#0071CE22; color:#0071CE; }
+      .shop-badge.rei { background:#5C832F22; color:#3d5a1f; }
+      .shop-badge.target { background:#CC000022; color:#CC0000; }
       .item.locked .item-place::after {
         content: " ✅";
         font-size: 13px;
@@ -1331,6 +1361,7 @@
             <button class="vtab-btn" aria-selected="true"  data-subtab="stay">🛏️ 숙박</button>
             <button class="vtab-btn" aria-selected="false" data-subtab="food">🍴 먹거리</button>
             <button class="vtab-btn" aria-selected="false" data-subtab="budget">💰 비용</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="packing">🎒 짐 체크리스트</button>
           </nav>
           <div class="vcontent">
 
@@ -1407,6 +1438,27 @@
             <p class="claude-note">
               ※ 2026년 7월 기준 2인 추정. 상단 환율 입력값 변경 시 KRW 자동 갱신. 캠핑 4박 적용 시 호텔 베이스 대비 약 $1,700 절감.
             </p>
+          </article>
+        </section>
+      </div>
+
+      <!-- 🎒 짐 체크리스트 -->
+      <div class="subtab-panel" id="sub-packing">
+        <section class="grid">
+          <article class="card full">
+            <h2 class="section-title">🎒 짐 체크리스트 <span class="accent">— 캠핑 4박 + 호텔 4박 + 신혼 디너</span></h2>
+            <div id="c-checklist"></div>
+          </article>
+          <article class="card full">
+            <h2 class="section-title">🛒 캠핑용품 현지 구매 가이드 <span class="accent">— 미국 도착 후 구매 권장 품목</span></h2>
+            <div class="shop-store-grid">
+              <div class="shop-store-card"><strong>🏪 Walmart 카훌루이 (마우이)</strong>101 Pakaula St, Kahului · Day 1~2<br><a href="https://www.walmart.com/store/2172" target="_blank" rel="noopener">walmart.com/store/2172</a></div>
+              <div class="shop-store-card"><strong>🎯 Target 카훌루이 (마우이)</strong>70 E Kaahumanu Ave · Walmart 바로 근처<br><a href="https://www.target.com/store-locator/find-stores" target="_blank" rel="noopener">매장 찾기</a></div>
+              <div class="shop-store-card"><strong>🏔️ REI 호놀룰루 (오아후)</strong>1221 Kapiolani Blvd · Day 5 이후<br><a href="https://www.rei.com/stores/honolulu.html" target="_blank" rel="noopener">rei.com/stores/honolulu</a></div>
+              <div class="shop-store-card"><strong>📦 Amazon 배송</strong>호텔 주소로 배송 · Day 1 도착 전 주문 시 당일~2일<br><a href="https://www.amazon.com/s?k=camping+gear+hawaii" target="_blank" rel="noopener">amazon.com</a></div>
+            </div>
+            <div id="c-camp-shop"></div>
+            <p class="claude-note">가격은 2025~2026년 기준 추정 (하와이 소비세 4.712% 미포함). <strong>가스통·연료는 기내 반입 X</strong> — 반드시 현지 구매. 성수기 재고 부족 가능 — 도착 당일 오전 구매 권장.</p>
           </article>
         </section>
       </div>
@@ -3141,6 +3193,165 @@
       fillSelect(groupSel, ALL_GROUPS);
       [islandSel, groupSel, resSel, searchInp].forEach((el) => el.addEventListener("input", renderTable));
 
+      // 🎒 짐 체크리스트 데이터
+      const CHECKLIST = [
+        {cat:"📄 서류·필수품", items:[
+          {id:"d1",t:"여권 (잔여 6개월+)"},
+          {id:"d2",t:"ESTA 승인서",note:"출발 72시간 전 · $21 · esta.cbp.dhs.gov"},
+          {id:"d3",t:"항공권 e-티켓 (KE053/054)"},
+          {id:"d4",t:"트래블카드 (트래블월렛·하나비바X)"},
+          {id:"d5",t:"여행자 보험 증권"},
+          {id:"d6",t:"달러 현금 ($50~100)",note:"팁·소액 결제용"},
+          {id:"d7",t:"국제운전면허증"},
+        ]},
+        {cat:"✈️ 기내·이동", items:[
+          {id:"f1",t:"목베개",daiso:"여행목베개"},
+          {id:"f2",t:"귀마개",daiso:"귀마개"},
+          {id:"f3",t:"안대",daiso:"수면안대"},
+          {id:"f4",t:"핸드크림·립밤",daiso:"립밤"},
+          {id:"f5",t:"마스크 여분",daiso:"마스크"},
+          {id:"f6",t:"멀미약",note:"기내 + Hana Hwy 620 커브 필수",daiso:"멀미약"},
+        ]},
+        {cat:"👗 의류·신발", items:[
+          {id:"c1",t:"패딩·방풍재킷",note:"할레아칼라 정상 5~10°C 필수"},
+          {id:"c2",t:"장갑·비니 (정상용)"},
+          {id:"c3",t:"수영복 2세트"},
+          {id:"c4",t:"래쉬가드"},
+          {id:"c5",t:"트레킹화·운동화"},
+          {id:"c6",t:"샌들·슬리퍼",daiso:"슬리퍼"},
+          {id:"c7",t:"스마트 캐주얼 (신혼 디너용)",note:"셔츠+슬랙스 또는 원피스"},
+          {id:"c8",t:"일상복 5~6벌"},
+          {id:"c9",t:"모자 (햇빛 차단)",daiso:"여행모자"},
+          {id:"c10",t:"우비·판초",daiso:"우비"},
+        ]},
+        {cat:"🏕️ 캠핑 전용", items:[
+          {id:"p1",t:"텐트 (2인용)",note:"현지 구매 또는 Camp Olowalu 대여 $25~40/일"},
+          {id:"p2",t:"침낭 (3시즌)"},
+          {id:"p3",t:"에어매트·폼매트"},
+          {id:"p4",t:"헤드램프 + 여분 배터리",daiso:"헤드랜턴"},
+          {id:"p5",t:"캠핑 랜턴",daiso:"캠핑랜턴"},
+          {id:"p6",t:"캠핑 버너 + 가스통",note:"가스 기내 반입 X → 현지 구매 필수"},
+          {id:"p7",t:"코펠·식기·수저 세트",daiso:"캠핑식기"},
+          {id:"p8",t:"DEET 모기 스프레이",note:"Hana 정글 모기 필수",daiso:"모기스프레이"},
+          {id:"p9",t:"방수백·드라이백",daiso:"방수파우치"},
+          {id:"p10",t:"지퍼락 대·소",daiso:"지퍼백"},
+          {id:"p11",t:"쓰레기봉투",daiso:"쓰레기봉투"},
+          {id:"p12",t:"빨래줄·집게",daiso:"빨래줄"},
+        ]},
+        {cat:"🧴 세면·위생", items:[
+          {id:"s1",t:"미네랄 선크림 (reef-safe)",note:"옥시벤존 X — 하와이 법 판매 금지 성분"},
+          {id:"s2",t:"샴푸·린스·바디워시 (여행용)",daiso:"여행용샴푸"},
+          {id:"s3",t:"치약·칫솔",daiso:"여행칫솔"},
+          {id:"s4",t:"면도기",daiso:"면도기"},
+          {id:"s5",t:"물티슈 (캠핑용 대용량)",daiso:"물티슈"},
+          {id:"s6",t:"소분 공병 세트",daiso:"소분공병"},
+          {id:"s7",t:"세탁망·여행 세제",daiso:"세탁망"},
+          {id:"s8",t:"생리용품",daiso:"생리대"},
+        ]},
+        {cat:"💊 의약품·응급", items:[
+          {id:"m1",t:"타이레놀·진통제",daiso:"진통제"},
+          {id:"m2",t:"소화제·지사제",daiso:"소화제"},
+          {id:"m3",t:"밴드·거즈·소독약 세트",daiso:"응급밴드"},
+          {id:"m4",t:"항히스타민제 (알레르기·벌레)",note:"모기 물림·꽃가루 대비"},
+          {id:"m5",t:"모기 물린 데 약",daiso:"모기패치"},
+          {id:"m6",t:"상비약 케이스·소분통",daiso:"약통"},
+        ]},
+        {cat:"📱 전자기기", items:[
+          {id:"e1",t:"스마트폰 + 충전기"},
+          {id:"e2",t:"보조배터리 (10000mAh+)",note:"기내 반입만 가능 · 위탁 X"},
+          {id:"e3",t:"미국 플러그 어댑터 (110V)",daiso:"멀티어댑터"},
+          {id:"e4",t:"멀티탭 (미국 규격)",daiso:"멀티탭"},
+          {id:"e5",t:"카메라 + 메모리카드 여분",daiso:"메모리카드"},
+          {id:"e6",t:"방수 폰 케이스·파우치",daiso:"방수파우치"},
+          {id:"e7",t:"이어폰·이어버즈"},
+        ]},
+        {cat:"🛍️ 기타·편의", items:[
+          {id:"x1",t:"여권 케이스·목걸이",daiso:"여권케이스"},
+          {id:"x2",t:"캐리어 자물쇠 (TSA)",daiso:"캐리어자물쇠"},
+          {id:"x3",t:"압축 봉투·패킹큐브",daiso:"압축팩"},
+          {id:"x4",t:"에코백·접이식 가방",daiso:"접이식가방"},
+          {id:"x5",t:"선글라스"},
+          {id:"x6",t:"스노클링 세트",note:"현지 대여 가능. 개인 소지 권장"},
+          {id:"x7",t:"비치 타월 (캠핑·해변겸용)"},
+          {id:"x8",t:"현지 심카드 또는 로밍 설정",note:"T-Mobile 관광 SIM 약 $30~50"},
+        ]},
+      ];
+
+      const CAMP_GEAR_SHOP = [
+        {item:"2인용 텐트",timing:"Day 1~2 (마우이)",walmart:"$40~80",wl:"https://www.walmart.com/search?q=2+person+tent+camping",rei:"$89~199",rl:"https://www.rei.com/c/camping-tents/f/pr-2-person",target:"$45~90",tl:"https://www.target.com/s?searchTerm=2+person+tent",note:"Coleman Sundome 추천. Camp Olowalu 대여 $25~40/일 대안"},
+        {item:"침낭 (여름용)",timing:"Day 1~2 (마우이)",walmart:"$20~45",wl:"https://www.walmart.com/search?q=summer+sleeping+bag",rei:"$60~150",rl:"https://www.rei.com/c/sleeping-bags",target:"$25~55",tl:"https://www.target.com/s?searchTerm=sleeping+bag",note:"하와이 밤 약 18~22°C — 여름용 OK"},
+        {item:"에어매트·슬리핑패드",timing:"Day 1~2 (마우이)",walmart:"$15~35",wl:"https://www.walmart.com/search?q=sleeping+pad+camping",rei:"$40~100",rl:"https://www.rei.com/c/sleeping-pads",target:"$20~40",tl:"https://www.target.com/s?searchTerm=sleeping+pad",note:"에어 타입 짐 절약"},
+        {item:"캠핑 버너 + 가스통",timing:"Day 1~2 필수",walmart:"$15~25",wl:"https://www.walmart.com/search?q=camping+stove+propane",rei:"$30~65",rl:"https://www.rei.com/c/backpacking-stoves",target:"$18~35",tl:"https://www.target.com/s?searchTerm=camping+stove",note:"⚠️ 가스 기내 반입 X — 반드시 현지 구매"},
+        {item:"캠핑 랜턴",timing:"Day 1~2 (마우이)",walmart:"$10~22",wl:"https://www.walmart.com/search?q=camping+lantern+LED",rei:"$25~55",rl:"https://www.rei.com/c/camping-lanterns",target:"$12~28",tl:"https://www.target.com/s?searchTerm=camping+lantern",note:"다이소에서 한국에서 구매도 OK"},
+        {item:"캠핑 의자 2개",timing:"Day 1~2 (마우이)",walmart:"$20~40",wl:"https://www.walmart.com/search?q=camping+folding+chair",rei:"$35~80",rl:"https://www.rei.com/c/camp-chairs",target:"$20~45",tl:"https://www.target.com/s?searchTerm=camping+chair",note:"Camp Olowalu에 일부 의자 비치"},
+        {item:"쿨러·아이스박스",timing:"Day 1~2 (마우이)",walmart:"$25~60",wl:"https://www.walmart.com/search?q=camping+cooler",rei:"$40~120",rl:"https://www.rei.com/c/coolers",target:"$30~70",tl:"https://www.target.com/s?searchTerm=camping+cooler",note:"식재료·음료 보관. 마우이 Costco에서도 구매 가능"},
+        {item:"코펠·캠핑 식기 세트",timing:"Day 1~2 (마우이)",walmart:"$15~25",wl:"https://www.walmart.com/search?q=camping+cookware+set",rei:"$20~55",rl:"https://www.rei.com/c/camp-cookware",target:"$15~30",tl:"https://www.target.com/s?searchTerm=camp+cookware",note:"간단한 건 다이소 한국에서 준비 가능"},
+        {item:"DEET 벌레 스프레이",timing:"도착 즉시",walmart:"$5~10",wl:"https://www.walmart.com/search?q=DEET+bug+spray+OFF",rei:"$6~12",rl:"https://www.rei.com/c/insect-repellent",target:"$6~12",tl:"https://www.target.com/s?searchTerm=bug+spray+DEET",note:"OFF! 30% DEET 추천. Hana 정글·캠핑장 필수"},
+        {item:"Reef-safe 미네랄 선크림",timing:"도착 즉시",walmart:"$8~15",wl:"https://www.walmart.com/search?q=reef+safe+mineral+sunscreen",rei:"$15~28",rl:"https://www.rei.com/c/sunscreen",target:"$12~22",tl:"https://www.target.com/s?searchTerm=reef+safe+sunscreen",note:"⚠️ 하와이 법 — 옥시벤존·옥티노세이트 금지"},
+        {item:"스노클링 세트 (마스크+오리발)",timing:"Day 1~2 (마우이)",walmart:"$20~40",wl:"https://www.walmart.com/search?q=snorkel+set+mask+fins",rei:"$35~90",rl:"https://www.rei.com/c/snorkels",target:"$25~55",tl:"https://www.target.com/s?searchTerm=snorkel+set",note:"Hanauma Bay 현지 대여도 가능 ($12~15). 개인 소지 위생 유리"},
+        {item:"방수백·드라이백",timing:"Day 1~2 (마우이)",walmart:"$10~20",wl:"https://www.walmart.com/search?q=dry+bag+waterproof",rei:"$15~45",rl:"https://www.rei.com/c/dry-bags",target:"$12~25",tl:"https://www.target.com/s?searchTerm=dry+bag+waterproof",note:"스노클링·해변·폭포 트레일 필수"},
+      ];
+
+      const CL_KEY = "hawaii-checklist-v1";
+      function getChecked() { try { return JSON.parse(localStorage.getItem(CL_KEY)||"[]"); } catch{return[];} }
+      function setChecked(a) { try { localStorage.setItem(CL_KEY, JSON.stringify(a)); } catch{} }
+
+      function renderChecklist() {
+        const el = document.getElementById("c-checklist");
+        if (!el) return;
+        const checked = getChecked();
+        const total = CHECKLIST.reduce((a,c)=>a+c.items.length,0);
+        const cnt = checked.length;
+        const pct = total ? Math.round(cnt/total*100) : 0;
+        el.innerHTML = `
+          <div class="cl-top">
+            <div style="flex:1">
+              <div class="cl-progress-bar"><div class="cl-progress-fill" style="width:${pct}%"></div></div>
+              <div class="cl-progress-text">${cnt} / ${total} 완료 (${pct}%)</div>
+            </div>
+            <button class="cl-reset-btn" id="cl-reset">↺ 전체 초기화</button>
+          </div>
+          <div class="cl-grid">${CHECKLIST.map(cat=>{
+            const cc=cat.items.filter(i=>checked.includes(i.id)).length;
+            return `<div class="cl-cat">
+              <div class="cl-cat-header">${cat.cat}<span class="cl-cat-count">${cc}/${cat.items.length}</span></div>
+              <div class="cl-items">${cat.items.map(item=>`
+                <label class="cl-item${checked.includes(item.id)?" checked":""}">
+                  <input type="checkbox" data-cl-id="${item.id}"${checked.includes(item.id)?" checked":""}>
+                  <span class="cl-text">${item.t}</span>
+                  ${item.note?`<span class="cl-note">${item.note}</span>`:""}
+                  ${item.daiso?`<a href="https://www.daiso.co.kr/search.do?query=${encodeURIComponent(item.daiso)}" target="_blank" rel="noopener" class="daiso-badge" onclick="event.stopPropagation()">다이소 🔗</a>`:""}
+                </label>`).join("")}
+              </div>
+            </div>`;
+          }).join("")}</div>`;
+        el.querySelector("#cl-reset").onclick = ()=>{ if(confirm("모든 체크를 초기화할까?")){ setChecked([]); renderChecklist(); } };
+        el.querySelectorAll("input[data-cl-id]").forEach(inp=>{
+          inp.onchange = ()=>{
+            let a=getChecked();
+            if(inp.checked){ if(!a.includes(inp.dataset.clId)) a.push(inp.dataset.clId); }
+            else { a=a.filter(x=>x!==inp.dataset.clId); }
+            setChecked(a); renderChecklist();
+          };
+        });
+      }
+
+      function renderCampShop() {
+        const el = document.getElementById("c-camp-shop");
+        if (!el) return;
+        el.innerHTML = `<table class="errors-table">
+          <thead><tr><th>항목</th><th>구매 시점</th><th><span class="shop-badge walmart">Walmart</span></th><th><span class="shop-badge rei">REI</span></th><th><span class="shop-badge target">Target</span></th><th>비고</th></tr></thead>
+          <tbody>${CAMP_GEAR_SHOP.map(r=>`<tr>
+            <td><strong>${r.item}</strong></td>
+            <td><span class="pill">${r.timing}</span></td>
+            <td><a href="${r.wl}" target="_blank" rel="noopener">${r.walmart}</a></td>
+            <td>${r.rei?`<a href="${r.rl}" target="_blank" rel="noopener">${r.rei}</a>`:"—"}</td>
+            <td><a href="${r.tl}" target="_blank" rel="noopener">${r.target}</a></td>
+            <td class="muted">${r.note||""}</td>
+          </tr>`).join("")}</tbody>
+        </table>`;
+      }
+
       // 💱 환율 차트 (Frankfurter API, 90일)
       async function loadRateChart() {
         try {
@@ -3203,6 +3414,8 @@
       if (loadOverrides()) showOverrideStatus("✅ 이전 편집 복원됨");
       loadLocks();
       loadReserved();
+      renderChecklist();
+      renderCampShop();
 
       // 🔄 페이지 로드 시 Sheet에서 자동 fetch (있으면 override)
       (async () => {
