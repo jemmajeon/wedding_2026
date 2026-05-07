@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>지혜 & 형구 · 대시보드 허브</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+:root {
+  --bg: #fdf8f4;
+  --surface: #ffffff;
+  --ink: #1a1210;
+  --ink-2: #3d2f2a;
+  --muted: #8a7570;
+  --line: #ede4db;
+  --rose: #c4576a;
+  --rose-soft: #fceef1;
+  --gold: #b07d3a;
+  --gold-soft: #fdf3e3;
+  --teal: #2d7d6f;
+  --teal-soft: #e2f2ef;
+  --radius: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  background-image:
+    radial-gradient(900px 500px at 10% -5%, rgba(196,87,106,0.07), transparent 55%),
+    radial-gradient(700px 600px at 90% 5%, rgba(176,125,58,0.06), transparent 50%);
+  background-attachment: fixed;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, sans-serif;
+  color: var(--ink); font-size: 15px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 860px; margin: 0 auto; padding: 64px 28px 96px; }
+
+/* Header */
+header { text-align: center; margin-bottom: 56px; }
+.couple {
+  font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--rose); font-weight: 700; margin-bottom: 16px;
+}
+h1 {
+  font-size: clamp(32px, 5vw, 48px); font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1.1;
+  color: var(--ink); margin-bottom: 12px;
+}
+.sub {
+  font-size: 14px; color: var(--muted);
+}
+.divider {
+  width: 48px; height: 2px;
+  background: linear-gradient(90deg, var(--rose), var(--gold));
+  border-radius: 2px; margin: 24px auto 0;
+}
+
+/* Cards */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
+
+.card {
+  display: block; text-decoration: none;
+  background: var(--surface);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius);
+  padding: 28px 28px 24px;
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  position: relative; overflow: hidden;
+}
+.card::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  border-radius: var(--radius) var(--radius) 0 0;
+  opacity: 0; transition: opacity 0.18s;
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+.card:hover::before { opacity: 1; }
+.card:hover { border-color: transparent; }
+
+.card.rose::before  { background: linear-gradient(90deg, var(--rose), #e8899a); }
+.card.gold::before  { background: linear-gradient(90deg, var(--gold), #d4a55a); }
+.card.teal::before  { background: linear-gradient(90deg, var(--teal), #4aaa96); }
+
+.card-tag {
+  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  font-weight: 700; margin-bottom: 12px;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.card.rose .card-tag  { color: var(--rose); }
+.card.gold .card-tag  { color: var(--gold); }
+.card.teal .card-tag  { color: var(--teal); }
+
+.card-title {
+  font-size: 20px; font-weight: 800; color: var(--ink);
+  letter-spacing: -0.02em; margin-bottom: 8px;
+}
+.card-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
+.card-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font-size: 11px; font-weight: 600; padding: 3px 10px;
+  border-radius: 999px; background: var(--line); color: var(--muted);
+}
+.card.rose .chip  { background: var(--rose-soft); color: var(--rose); }
+.card.gold .chip  { background: var(--gold-soft); color: var(--gold); }
+.card.teal .chip  { background: var(--teal-soft); color: var(--teal); }
+
+.card-arrow {
+  position: absolute; bottom: 24px; right: 24px;
+  font-size: 18px; color: var(--line); transition: color 0.15s, transform 0.15s;
+}
+.card:hover .card-arrow { color: var(--muted); transform: translate(2px, -2px); }
+
+/* Coming soon */
+.card.soon { opacity: 0.55; cursor: default; }
+.card.soon:hover { transform: none; box-shadow: none; border-color: var(--line); }
+.soon-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: 999px; background: var(--line); color: var(--muted);
+  margin-left: 6px; vertical-align: middle;
+}
+
+/* Footer */
+footer {
+  margin-top: 56px; text-align: center;
+  font-size: 12px; color: var(--muted); letter-spacing: 0.04em;
+}
+footer a { color: var(--muted); text-decoration: none; }
+footer a:hover { color: var(--rose); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="couple">지혜 &amp; 형구</div>
+    <h1>우리의 대시보드</h1>
+    <p class="sub">일정 확인, 예약 현황, 여행 계획을 한 곳에서</p>
+    <div class="divider"></div>
+  </header>
+
+  <div class="cards">
+
+    <!-- 하와이 신혼여행 -->
+    <a class="card gold" href="hawaii-trip-dashboard.html">
+      <div class="card-tag">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 14 8 14s8-8.75 8-14a8 8 0 0 0-8-8z"/></svg>
+        Honeymoon
+      </div>
+      <div class="card-title">하와이 신혼여행</div>
+      <div class="card-desc">7월 하와이 일정, 예약 현황, 지도, 체크리스트를 한눈에. 형구오빠랑 같이 확인하고 일정 맞춰봐요.</div>
+      <div class="card-chips">
+        <span class="chip">일정표</span>
+        <span class="chip">예약 현황</span>
+        <span class="chip">지도</span>
+        <span class="chip">체크리스트</span>
+      </div>
+      <div class="card-arrow">↗</div>
+    </a>
+
+    <!-- 웨딩 대시보드 -->
+    <a class="card rose" href="wedding-dashboard.html">
+      <div class="card-tag">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Wedding
+      </div>
+      <div class="card-title">웨딩 대시보드</div>
+      <div class="card-desc">결혼식 D-Day 카운트다운, 예약 체크리스트, 캘린더. 결혼 준비 전반을 한 곳에서 관리.</div>
+      <div class="card-chips">
+        <span class="chip">D-Day</span>
+        <span class="chip">예약 체크</span>
+        <span class="chip">캘린더</span>
+      </div>
+      <div class="card-arrow">↗</div>
+    </a>
+
+  </div>
+
+  <footer>
+    <p>지혜 &amp; 형구 · 2026 &nbsp;·&nbsp; <a href="https://github.com/jemmajeon/wedding_2026" target="_blank">GitHub</a></p>
+  </footer>
+
+</div>
+</body>
+</html>
