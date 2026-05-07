@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>하와이 신혼여행 · v2.1</title>
+    <title>하와이 신혼여행 · v3.0</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -812,6 +812,30 @@
       .shop-section-title { font-size:13.5px; font-weight:700; margin:0 0 10px; padding:8px 14px; border-radius:8px; border-left:4px solid; }
       .shop-section-title.korea { background:#d1fae5; color:#065f46; border-color:#10b981; }
       .shop-section-title.usa { background:#ffedd5; color:#9a3412; border-color:#f97316; }
+      /* 🆚 A/B 플랜 비교 */
+      .ab-day-block { margin-bottom: 28px; }
+      .ab-day-header { font-size: 15px; font-weight: 800; padding: 10px 16px; background: var(--bg-2); border-radius: 10px; margin-bottom: 12px; border-left: 4px solid var(--primary); display:flex; align-items:center; gap:10px; }
+      .ab-day-header .ab-day-num { color: var(--primary); }
+      .ab-day-header .ab-day-date { color: var(--muted); font-size:13px; font-weight:500; }
+      .ab-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      @media (max-width:700px) { .ab-cols { grid-template-columns: 1fr; } }
+      .ab-col { border-radius: 12px; overflow: hidden; border: 2px solid; }
+      .ab-col.plan-a { border-color: var(--primary); }
+      .ab-col.plan-b { border-color: var(--camp); }
+      .ab-col-header { padding: 10px 14px; font-size: 13px; font-weight: 800; display:flex; align-items:center; gap:6px; }
+      .ab-col.plan-a .ab-col-header { background: var(--primary-soft); color: var(--primary-strong); }
+      .ab-col.plan-b .ab-col-header { background: var(--camp-soft); color: #065f46; }
+      .ab-item { display: flex; gap: 8px; padding: 7px 12px; border-top: 1px solid var(--line); align-items: flex-start; }
+      .ab-item:last-child { }
+      .ab-time { font-size: 11.5px; color: var(--muted); font-family: "JetBrains Mono", monospace; min-width: 38px; flex-shrink:0; padding-top:1px; }
+      .ab-tag { flex-shrink:0; font-size: 13px; }
+      .ab-body { flex:1; }
+      .ab-place { font-size: 13px; font-weight: 600; color: var(--ink); }
+      .ab-note { font-size: 11px; color: var(--muted); margin-top: 1px; }
+      .ab-drop { background: var(--bg-2); }
+      .ab-drop .ab-place { color: var(--muted); font-weight:500; text-decoration: line-through; }
+      .ab-legend { display:flex; gap:16px; margin-bottom:16px; flex-wrap:wrap; }
+      .ab-legend span { font-size:12px; color:var(--muted); display:flex; align-items:center; gap:4px; }
       .item.locked .item-place::after {
         content: " ✅";
         font-size: 13px;
@@ -1073,7 +1097,7 @@
     <div class="wrap">
       <header>
         <div class="header-left">
-          <p class="eyebrow"><span class="version">v2.1</span>검증 완료 · 2026.05 기준</p>
+          <p class="eyebrow"><span class="version">v3.0</span>검증 완료 · 2026.05 기준</p>
           <h1>하와이 신혼여행</h1>
           <p class="subtitle">KE053 · 8박 9일 · 2026.07.12 → 07.20 · 마우이 + 오아후</p>
         </div>
@@ -1273,6 +1297,7 @@
         <div class="vlayout">
           <nav class="vtabs">
             <button class="vtab-btn" aria-selected="true"  data-subtab="calendar">📆 달력</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="planab">🆚 A/B 비교</button>
             <button class="vtab-btn" aria-selected="false" data-subtab="schedule">📅 타임라인</button>
             <button class="vtab-btn" aria-selected="false" data-subtab="map">🗺️ 지도</button>
             <button class="vtab-btn" aria-selected="false" data-subtab="details">📖 상세·가이드</button>
@@ -1293,6 +1318,17 @@
             <h2 class="section-title">📆 트립 캘린더 <span class="accent">— 8박 9일 (7/12 → 7/20)</span></h2>
             <div id="c-calendar"></div>
             <p class="claude-note">각 셀 클릭 → 타임라인 탭으로 이동 (전체 시간순 디테일). Day별 색상 = 지도 탭과 동일.</p>
+          </article>
+        </section>
+      </div>
+
+      <!-- 🆚 A/B 비교 -->
+      <div class="subtab-panel" id="sub-planab">
+        <section class="grid">
+          <article class="card full">
+            <h2 class="section-title">🆚 A/B 플랜 비교 <span class="accent">— 💪 빡센 풀코스 vs 😌 여유 릴렉스</span></h2>
+            <p style="color:var(--muted);font-size:13px;margin:0 0 16px">매일 아침 컨디션 보고 선택. 🔴고정은 양쪽 공통 — 건너뛸 수 없음. 🟢선택 항목은 B안에서 생략해도 여행 완성됨.</p>
+            <div id="c-plan-ab"></div>
           </article>
         </section>
       </div>
@@ -1513,6 +1549,8 @@
               <tbody></tbody>
             </table>
             <div class="changelog">
+              <h4>🚀 v3.0 (2026.05) — A/B 플랜 비교 + 탭 구조 개편</h4>
+              <ul><li>일정 탭 A/B 빡센/여유 2안 좌우 비교</li><li>항목별 🔴고정/🟡권장/🟢선택 태그</li><li>탭 구조 재배치, 쿠팡/미국 구매 가이드 분리</li></ul>
               <h4>🔄 v2.1 (2026.05) — 숙소 재배치</h4>
               <ul><li>Day 2 호텔 복귀 이벤트 추가</li><li>Day 5 Kailua/Lanikai 호텔 (오아후 첫날)</li><li>Day 7 Bellows Field Beach 캠핑4</li><li>Day 8 와이키키 + 신혼 디너</li></ul>
               <h4>🚀 v2.0 (2026.05) — Major release</h4>
@@ -3067,7 +3105,7 @@
       // ===== Hierarchical 탭 (메인 + 버티컬 서브) =====
       const SUB_TO_MAIN = {
         overview:"summary",
-        calendar:"trip", schedule:"trip", map:"trip", details:"trip",
+        calendar:"trip", planab:"trip", schedule:"trip", map:"trip", details:"trip",
         stay:"prep", food:"prep", budget:"prep", packing:"prep",
         data:"system", tech:"system"
       };
@@ -3293,6 +3331,197 @@
         {where:"usa",item:"오리발 (스노클링)",timing:"Day 1~2 또는 현지 대여",walmart:"$15~30",wl:"https://www.walmart.com/search?q=snorkel+fins+adult",rei:"$25~60",rl:"https://www.rei.com/c/fins",note:"Hanauma Bay 대여 $12~15가 가장 저렴 (1회 사용 시)"},
       ];
 
+      // 🆚 A/B 플랜 데이터  tag: fixed=🔴고정 / rec=🟡권장 / opt=🟢선택(빼도됨)
+      const TAG = { fixed:"🔴", rec:"🟡", opt:"🟢" };
+      const PLAN_AB = [
+        {day:1, date:"7/12 일", label:"마우이 도착일", a:{title:"A — 도착 즉시 일정 시작",items:[
+          {t:"10:55",p:"HNL 도착 · 입국심사",tag:"fixed",n:"짐 찾기 포함 60~90분"},
+          {t:"13:30",p:"HNL→OGG 국내선",tag:"fixed",n:"Hawaiian Air 35분"},
+          {t:"14:30",p:"OGG 렌트카 픽업",tag:"fixed",n:"SUV 권장"},
+          {t:"16:00",p:"Paia Fish Market",tag:"rec",n:"마히마히 버거 추천"},
+          {t:"18:00",p:"Paia Inn 체크인",tag:"fixed",n:""},
+          {t:"20:00",p:"취침 (시차 적응)",tag:"rec",n:"내일 03:00 기상 대비"},
+        ]}, b:{title:"B — 도착 당일 회복 우선",items:[
+          {t:"10:55",p:"HNL 도착 · 입국심사",tag:"fixed",n:"짐 찾기 포함 60~90분"},
+          {t:"13:30",p:"HNL→OGG 국내선",tag:"fixed",n:""},
+          {t:"14:30",p:"OGG 렌트카 픽업",tag:"fixed",n:""},
+          {t:"15:30",p:"Walmart/Costco 장보기",tag:"rec",n:"캠핑 식재료·간식 미리 구매"},
+          {t:"18:00",p:"Paia Inn 체크인 + 숙소 근처 캐주얼",tag:"fixed",n:"Paia 마을 식당"},
+          {t:"19:30",p:"조기 취침",tag:"rec",n:"시차 회복 최우선"},
+          {t:"",p:"Paia Fish Market 생략",tag:"opt",n:"시간 여유 없으면 패스"},
+        ]}},
+        {day:2, date:"7/13 월", label:"할레아칼라 일출", a:{title:"A — 일출 후 마우이 남부 풀코스",items:[
+          {t:"03:00",p:"기상 + 출발",tag:"fixed",n:"정상까지 1.5~2시간"},
+          {t:"05:50",p:"Haleakalā 정상 일출 ⭐",tag:"fixed",n:"예약됨 · 5~10°C 패딩 필수"},
+          {t:"07:30",p:"Kula Lodge 아침",tag:"rec",n:"중턱 따뜻한 식사"},
+          {t:"11:00",p:"Iao Valley",tag:"rec",n:"왕복 30분 트레일"},
+          {t:"13:00",p:"Tin Roof Maui 점심",tag:"rec",n:"모치코 치킨"},
+          {t:"15:00",p:"Big Beach (Makena)",tag:"rec",n:"마우이 남부 수영"},
+          {t:"18:30",p:"Coconut's Fish Cafe",tag:"rec",n:"Kihei 캐주얼"},
+          {t:"20:30",p:"호텔 복귀·취침",tag:"fixed",n:"내일 Hana 로드 대비"},
+        ]}, b:{title:"B — 일출 후 회복 (오후 자유)",items:[
+          {t:"03:00",p:"기상 + 출발",tag:"fixed",n:""},
+          {t:"05:50",p:"Haleakalā 정상 일출 ⭐",tag:"fixed",n:"예약됨"},
+          {t:"07:30",p:"Kula Lodge 아침",tag:"rec",n:""},
+          {t:"10:00",p:"호텔 복귀 + 낮잠",tag:"rec",n:"일출 피로 회복 우선"},
+          {t:"15:00",p:"Big Beach 수영",tag:"rec",n:"컨디션 좋으면"},
+          {t:"18:00",p:"호텔 근처 캐주얼 저녁",tag:"rec",n:""},
+          {t:"",p:"Iao Valley 생략",tag:"opt",n:"내일 Hana 에너지 아끼기"},
+          {t:"",p:"Tin Roof·Coconut's 생략",tag:"opt",n:""},
+        ]}},
+        {day:3, date:"7/14 화", label:"Hana Highway 풀데이", a:{title:"A — 전 구간 정차 풀코스",items:[
+          {t:"06:30",p:"Paia 출발",tag:"fixed",n:"4~6시간 운전 시작"},
+          {t:"07:00",p:"Twin Falls",tag:"rec",n:"짧은 트레일·폭포"},
+          {t:"08:30",p:"Garden of Eden·Waikamoi Trail",tag:"opt",n:"추가 정원 트레일"},
+          {t:"10:00",p:"Aunty Sandy's 바나나빵 ⭐",tag:"rec",n:"현지 명물"},
+          {t:"11:30",p:"Wailua Falls",tag:"opt",n:"로드사이드 사진"},
+          {t:"12:30",p:"Wai'ānapanapa 흑사 해변 ⭐",tag:"fixed",n:"예약됨"},
+          {t:"14:00",p:"Hana Farms / Thai by Pranee",tag:"rec",n:"Hana 마을 점심"},
+          {t:"15:30",p:"Hamoa Beach",tag:"rec",n:"Hana 최고 해변"},
+          {t:"17:30",p:"Wai'ānapanapa 캠핑 체크인",tag:"fixed",n:""},
+        ]}, b:{title:"B — 핵심 스팟만 (여유 있는 페이스)",items:[
+          {t:"07:00",p:"Paia 출발 (조금 늦게)",tag:"fixed",n:""},
+          {t:"07:30",p:"Twin Falls",tag:"rec",n:""},
+          {t:"10:00",p:"Aunty Sandy's 바나나빵 ⭐",tag:"rec",n:"필수 정차"},
+          {t:"12:30",p:"Wai'ānapanapa 흑사 해변 ⭐",tag:"fixed",n:"예약됨"},
+          {t:"14:00",p:"Hana 마을 점심",tag:"rec",n:""},
+          {t:"16:00",p:"Hamoa Beach or 캠프 휴식",tag:"rec",n:"피곤하면 캠프 직행"},
+          {t:"17:30",p:"캠핑 체크인",tag:"fixed",n:""},
+          {t:"",p:"Garden of Eden·Wailua Falls 생략",tag:"opt",n:"시간·체력 절약"},
+        ]}},
+        {day:4, date:"7/15 수", label:"Hana → Camp Olowalu", a:{title:"A — Kaanapali 관광 + 파인 디너",items:[
+          {t:"09:00",p:"Hana 출발 (역방향)",tag:"fixed",n:"약 3.5시간"},
+          {t:"12:30",p:"Sam Sato's 점심 (Wailuku)",tag:"rec",n:"드라이 누들 명물"},
+          {t:"14:30",p:"Camp Olowalu 체크인",tag:"fixed",n:""},
+          {t:"15:30",p:"Black Rock 스노클링 ⭐",tag:"rec",n:"거북·열대어"},
+          {t:"17:30",p:"Black Rock 절벽 다이빙 의식",tag:"rec",n:"Sheraton 일몰 무료 관람"},
+          {t:"19:00",p:"Star Noodle (Lahaina) ⭐",tag:"rec",n:"예약 권장"},
+          {t:"20:30",p:"Camp Olowalu 복귀",tag:"fixed",n:""},
+        ]}, b:{title:"B — 캠프 베이스로 여유",items:[
+          {t:"09:00",p:"Hana 출발",tag:"fixed",n:""},
+          {t:"12:30",p:"Sam Sato's 또는 드라이브스루 캐주얼",tag:"rec",n:""},
+          {t:"14:30",p:"Camp Olowalu 체크인",tag:"fixed",n:""},
+          {t:"15:00",p:"캠프 앞 해변 자유시간",tag:"rec",n:"수영·스노클링·낮잠"},
+          {t:"18:00",p:"캠프 BBQ 또는 Lahaina 캐주얼",tag:"rec",n:""},
+          {t:"",p:"Black Rock 스노클링 생략",tag:"opt",n:"Day 7 Hanauma Bay가 훨씬 나음"},
+          {t:"",p:"Star Noodle 생략",tag:"opt",n:"피곤하면 캠프 BBQ로 대체"},
+        ]}},
+        {day:5, date:"7/16 목", label:"마우이→오아후 이동", a:{title:"A — 이동 + Kailua 풀활용",items:[
+          {t:"09:30",p:"Olowalu → OGG",tag:"fixed",n:"캠프 정리 40분"},
+          {t:"12:30",p:"OGG→HNL 국내선",tag:"fixed",n:"35분"},
+          {t:"13:30",p:"HNL CONRAC 렌트카 픽업",tag:"fixed",n:""},
+          {t:"15:30",p:"Kailua Beach ⭐",tag:"rec",n:"오아후 최고 비치"},
+          {t:"18:00",p:"Buzz's Original Steakhouse",tag:"rec",n:"오바마 단골 · 예약 권장"},
+          {t:"20:00",p:"Kailua 호텔 체크인",tag:"fixed",n:"내일 새벽 Pillbox 대비"},
+        ]}, b:{title:"B — 이동 후 회복",items:[
+          {t:"09:30",p:"Olowalu → OGG",tag:"fixed",n:""},
+          {t:"12:30",p:"OGG→HNL 국내선",tag:"fixed",n:""},
+          {t:"13:30",p:"렌트카 픽업",tag:"fixed",n:""},
+          {t:"15:00",p:"Walmart/Target Kahului 마지막 쇼핑",tag:"rec",n:"마우이 기념품·캠핑 정리"},
+          {t:"16:30",p:"Kailua Beach 잠깐",tag:"rec",n:"1시간만"},
+          {t:"18:30",p:"Kailua 숙소 근처 캐주얼 저녁",tag:"rec",n:""},
+          {t:"20:00",p:"호텔 체크인·내일 준비",tag:"fixed",n:""},
+          {t:"",p:"Buzz's 생략",tag:"opt",n:"피곤하면 인근 간단식"},
+        ]}},
+        {day:6, date:"7/17 금", label:"라니카이 일출 + 노스쇼어", a:{title:"A — 일출 + 노스쇼어 풀코스",items:[
+          {t:"05:00",p:"Lanikai Pillbox 출발 ⭐",tag:"rec",n:"호텔서 도보 20분"},
+          {t:"05:50",p:"정상 일출 관람",tag:"rec",n:"라니카이+모쿠루아 섬"},
+          {t:"07:30",p:"Cinnamon's 아침 ⭐",tag:"rec",n:"구아바 팬케이크"},
+          {t:"09:30",p:"Kailua→노스쇼어 이동 (H-3)",tag:"fixed",n:"약 1시간"},
+          {t:"11:00",p:"Hale'iwa 마을 + Matsumoto 쉐이브아이스",tag:"rec",n:""},
+          {t:"12:30",p:"Giovanni's Shrimp Truck ⭐",tag:"rec",n:"갈릭 슈림프"},
+          {t:"14:00",p:"Waimea Bay 수영",tag:"rec",n:"거북 출현"},
+          {t:"17:30",p:"Sunset Beach 일몰",tag:"opt",n:"7월 일몰 19:15"},
+          {t:"21:30",p:"Malaekahana 캠핑 체크인",tag:"fixed",n:""},
+        ]}, b:{title:"B — 노스쇼어만 (일출 생략)",items:[
+          {t:"07:30",p:"Cinnamon's 아침",tag:"rec",n:"늦잠 후 브런치"},
+          {t:"09:30",p:"Kailua→노스쇼어",tag:"fixed",n:""},
+          {t:"11:00",p:"Hale'iwa + 쉐이브아이스",tag:"rec",n:""},
+          {t:"12:30",p:"Giovanni's Shrimp Truck ⭐",tag:"rec",n:""},
+          {t:"14:00",p:"Waimea Bay 수영",tag:"rec",n:""},
+          {t:"16:30",p:"Malaekahana 캠핑 체크인 (일찍)",tag:"fixed",n:"일몰 캠프에서 감상"},
+          {t:"",p:"Pillbox 일출 생략",tag:"opt",n:"04:30 기상 힘들면 패스"},
+          {t:"",p:"Sunset Beach 생략",tag:"opt",n:"캠프 일몰로 대체"},
+        ]}},
+        {day:7, date:"7/18 토", label:"Diamond Head + Hanauma Bay", a:{title:"A — 다이아몬드·하나우마·펄하버",items:[
+          {t:"04:30",p:"Malaekahana 출발",tag:"fixed",n:"Diamond Head 50분"},
+          {t:"06:00",p:"Diamond Head 트레일 ⭐",tag:"rec",n:"예약됨 · 1.3km 90분"},
+          {t:"08:00",p:"Eggs 'n Things 아침",tag:"rec",n:"팬케이크"},
+          {t:"09:30",p:"Hanauma Bay 스노클링 ⭐",tag:"fixed",n:"예약 필수 · 7/16 07:00 HST 오픈"},
+          {t:"13:00",p:"Koko Marina 점심",tag:"rec",n:""},
+          {t:"14:30",p:"USS Arizona Memorial ⭐",tag:"rec",n:"펄하버 · 예약 $1"},
+          {t:"17:00",p:"Bellows Field Beach 캠핑 체크인",tag:"fixed",n:"토요일 OK"},
+        ]}, b:{title:"B — 다이아몬드·하나우마만 (펄하버 생략)",items:[
+          {t:"06:00",p:"Diamond Head 트레일 ⭐",tag:"rec",n:"좀 더 여유있게 출발"},
+          {t:"08:00",p:"Eggs 'n Things 아침",tag:"rec",n:""},
+          {t:"09:30",p:"Hanauma Bay 스노클링 ⭐",tag:"fixed",n:"예약 필수"},
+          {t:"13:00",p:"Koko Marina 점심",tag:"rec",n:""},
+          {t:"14:30",p:"Waimānalo Beach 자유시간",tag:"opt",n:"Bellows 근처"},
+          {t:"16:30",p:"Bellows 캠핑 체크인",tag:"fixed",n:""},
+          {t:"",p:"USS Arizona 생략",tag:"opt",n:"동선 W자 +40분 절약. Day 8에 재검토"},
+        ]}},
+        {day:8, date:"7/19 일", label:"와이키키 + 신혼 디너", a:{title:"A — 와이키키 풀코스",items:[
+          {t:"07:30",p:"Bellows 출발→Waikiki",tag:"fixed",n:"25분"},
+          {t:"09:00",p:"와이키키 호텔 체크인",tag:"fixed",n:"조기 체크인 or 짐 보관"},
+          {t:"09:30",p:"와이키키 비치 모닝",tag:"rec",n:""},
+          {t:"10:30",p:"Leonard's Bakery 말라사다",tag:"rec",n:""},
+          {t:"12:00",p:"Manoa Falls Trail",tag:"opt",n:"왕복 1.5시간 정글 폭포"},
+          {t:"14:00",p:"Royal Hawaiian Center 쇼핑",tag:"rec",n:"기념품"},
+          {t:"17:30",p:"Maita'i Catamaran 일몰 크루즈 ⭐",tag:"rec",n:"예약 권장"},
+          {t:"19:30",p:"신혼 디너 (Senia/Mariposa) ⭐",tag:"fixed",n:"2~4주 전 예약"},
+        ]}, b:{title:"B — 와이키키 여유 (Manoa 생략)",items:[
+          {t:"07:30",p:"Bellows 출발→Waikiki",tag:"fixed",n:""},
+          {t:"09:00",p:"와이키키 호텔 체크인",tag:"fixed",n:""},
+          {t:"09:30",p:"와이키키 비치 자유시간",tag:"rec",n:"4박 캠핑 후 휴식"},
+          {t:"12:00",p:"Leonard's Bakery 말라사다",tag:"rec",n:""},
+          {t:"14:00",p:"쇼핑 + 와이키키 산책",tag:"rec",n:""},
+          {t:"17:30",p:"Maita'i Catamaran ⭐",tag:"rec",n:""},
+          {t:"19:30",p:"신혼 디너 ⭐",tag:"fixed",n:""},
+          {t:"",p:"Manoa Falls 생략",tag:"opt",n:"캠핑 후 등산 체력 고려"},
+        ]}},
+        {day:9, date:"7/20 월", label:"출국", a:{title:"A / B 동일 — 고정",items:[
+          {t:"07:30",p:"Leonard's Bakery (못 갔다면)",tag:"opt",n:"05:30 영업"},
+          {t:"09:00",p:"호텔 체크아웃",tag:"fixed",n:""},
+          {t:"10:00",p:"HNL CONRAC 렌트카 반납",tag:"fixed",n:"풀탱크 반납 확인"},
+          {t:"10:30",p:"HNL 국제선 체크인",tag:"fixed",n:"KE 카운터 J7~9"},
+          {t:"13:05",p:"KE054 출발 ✈️",tag:"fixed",n:"HNL→ICN 9h 35m"},
+        ]}, b:{title:"",items:[]}},
+      ];
+
+      function renderPlanAB() {
+        const el = document.getElementById("c-plan-ab");
+        if (!el) return;
+        el.innerHTML = `<div class="ab-legend">
+          <span>${TAG.fixed} 고정 — 예약됨·변경 불가</span>
+          <span>${TAG.rec} 권장 — 꼭 하면 좋음</span>
+          <span>${TAG.opt} 선택 — 빼도 됨 / 2안에서 생략</span>
+        </div>` + PLAN_AB.map(d => {
+          if (d.day === 9) {
+            // Day 9는 단일 컬럼
+            return `<div class="ab-day-block">
+              <div class="ab-day-header"><span class="ab-day-num">Day ${d.day}</span><span>${d.date}</span><span class="ab-day-date">— ${d.label}</span></div>
+              <div class="ab-col plan-a" style="max-width:580px">
+                <div class="ab-col-header">🔴 고정 일정 (A·B 동일)</div>
+                ${d.a.items.map(i=>`<div class="ab-item${i.tag==="opt"?" ab-drop":""}"><span class="ab-time">${i.t||""}</span><span class="ab-tag">${TAG[i.tag]||""}</span><div class="ab-body"><div class="ab-place">${i.p}</div>${i.n?`<div class="ab-note">${i.n}</div>`:""}</div></div>`).join("")}
+              </div>
+            </div>`;
+          }
+          return `<div class="ab-day-block">
+            <div class="ab-day-header"><span class="ab-day-num">Day ${d.day}</span><span>${d.date}</span><span class="ab-day-date">— ${d.label}</span></div>
+            <div class="ab-cols">
+              <div class="ab-col plan-a">
+                <div class="ab-col-header">💪 ${d.a.title}</div>
+                ${d.a.items.map(i=>`<div class="ab-item${i.tag==="opt"?" ab-drop":""}"><span class="ab-time">${i.t||""}</span><span class="ab-tag">${TAG[i.tag]||""}</span><div class="ab-body"><div class="ab-place">${i.p}</div>${i.n?`<div class="ab-note">${i.n}</div>`:""}</div></div>`).join("")}
+              </div>
+              <div class="ab-col plan-b">
+                <div class="ab-col-header">😌 ${d.b.title}</div>
+                ${d.b.items.map(i=>`<div class="ab-item${i.tag==="opt"?" ab-drop":""}"><span class="ab-time">${i.t||""}</span><span class="ab-tag">${TAG[i.tag]||""}</span><div class="ab-body"><div class="ab-place">${i.p}</div>${i.n?`<div class="ab-note">${i.n}</div>`:""}</div></div>`).join("")}
+              </div>
+            </div>
+          </div>`;
+        }).join("");
+      }
+
       const CL_KEY = "hawaii-checklist-v1";
       function getChecked() { try { return JSON.parse(localStorage.getItem(CL_KEY)||"[]"); } catch{return[];} }
       function setChecked(a) { try { localStorage.setItem(CL_KEY, JSON.stringify(a)); } catch{} }
@@ -3430,6 +3659,7 @@
       loadReserved();
       renderChecklist();
       renderCampShop();
+      renderPlanAB();
 
       // 🔄 페이지 로드 시 Sheet에서 자동 fetch (있으면 override)
       (async () => {
