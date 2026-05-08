@@ -45,64 +45,64 @@
           radial-gradient(900px 700px at 100% 0%, rgba(249,115,22,0.05), transparent 55%);
         background-attachment: fixed;
         font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-        font-size: 15px; line-height: 1.6;
+        font-size: 14px; line-height: 1.65;
         -webkit-font-smoothing: antialiased;
         font-feature-settings: "ss01", "tnum";
       }
-      .wrap { max-width: 1240px; margin: 0 auto; padding: 40px 28px 96px; }
+      .wrap { max-width: 1300px; margin: 0 auto; padding: 36px 32px 80px; }
 
       /* Header */
       header {
-        display: flex; flex-wrap: wrap; gap: 24px;
-        align-items: flex-end; justify-content: space-between;
-        margin-bottom: 36px; padding-bottom: 28px;
+        display: flex; flex-wrap: wrap; gap: 20px;
+        align-items: center; justify-content: space-between;
+        margin-bottom: 28px; padding-bottom: 24px;
         border-bottom: 1px solid var(--line);
       }
-      .header-left { flex: 1; min-width: 280px; }
+      .header-left { flex: 1; min-width: 260px; }
       .eyebrow {
-        display: inline-flex; align-items: center; gap: 10px;
-        margin: 0 0 14px; font-size: 12px;
+        display: inline-flex; align-items: center; gap: 8px;
+        margin: 0 0 10px; font-size: 11px;
         letter-spacing: 0.14em; text-transform: uppercase;
         color: var(--muted); font-weight: 600;
       }
       .version {
-        display: inline-block; padding: 4px 12px;
+        display: inline-block; padding: 3px 10px;
         background: var(--primary); color: #fff;
-        border-radius: 999px; font-size: 11px; font-weight: 700;
+        border-radius: 999px; font-size: 10px; font-weight: 700;
         letter-spacing: 0.06em;
       }
       h1 {
-        margin: 0 0 12px;
-        font-weight: 800; font-size: clamp(38px, 5.6vw, 60px);
-        letter-spacing: -0.025em; line-height: 1.02;
+        margin: 0 0 8px;
+        font-weight: 800; font-size: clamp(28px, 4vw, 46px);
+        letter-spacing: -0.025em; line-height: 1.05;
         color: var(--ink);
       }
       .subtitle {
-        margin: 0; font-size: 15px; color: var(--muted);
+        margin: 0; font-size: 13px; color: var(--muted);
         letter-spacing: 0.01em; font-weight: 500;
       }
       .header-right {
-        display: flex; flex-direction: column; gap: 14px;
-        align-items: flex-end; min-width: 240px;
+        display: flex; flex-direction: column; gap: 10px;
+        align-items: flex-end;
       }
       .rate-box {
-        display: flex; align-items: center; gap: 10px;
+        display: flex; align-items: center; gap: 8px;
         background: var(--surface); border: 1px solid var(--line);
-        border-radius: 999px; padding: 8px 16px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        border-radius: 999px; padding: 7px 14px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
       }
       .rate-box label {
-        font-size: 11px; color: var(--muted);
+        font-size: 10px; color: var(--muted);
         letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
       }
       .rate-box input {
-        width: 64px; padding: 0; border: none; outline: none;
+        width: 58px; padding: 0; border: none; outline: none;
         background: transparent; font-family: "JetBrains Mono", monospace;
-        font-size: 15px; font-weight: 700; color: var(--primary);
+        font-size: 14px; font-weight: 700; color: var(--primary);
         text-align: center;
       }
       .rate-box .suffix {
-        font-size: 11px; color: var(--muted); font-weight: 500;
+        font-size: 10px; color: var(--muted); font-weight: 500;
       }
       .tagline {
         text-align: right; font-size: 13px; color: var(--muted);
@@ -119,53 +119,56 @@
       .rate-stat .rs-current { color: #6366f1; }
       .rate-stat .rs-high { color: #ef4444; }
       .rate-stat .rs-low { color: #10b981; }
-      .rate-chart-wrap { position: relative; height: 190px; }
+      .rate-chart-wrap { position: relative; height: 160px; }
 
-      /* 🔝 Main horizontal tabs */
+      /* 🔝 탭바 행 — 탭 + A/B 스위치 한 줄 */
+      .tab-bar-row {
+        display: flex; align-items: flex-end; justify-content: space-between;
+        border-bottom: 2.5px solid var(--primary); gap: 12px; flex-wrap: wrap;
+        margin-bottom: 0;
+      }
       .main-tabs {
-        display: flex; flex-wrap: wrap; gap: 4px;
-        margin-bottom: 0; padding-top: 4px;
-        border-bottom: 3px solid var(--primary);
-        position: relative;
+        display: flex; flex-wrap: wrap; gap: 2px;
+        padding-top: 4px; border-bottom: none;
       }
       .main-tab-btn {
-        padding: 14px 28px;
-        background: var(--surface);
-        border: 1.5px solid var(--line); border-bottom: none;
-        border-radius: 14px 14px 0 0;
-        font-family: inherit; font-weight: 700; font-size: 15px;
+        padding: 11px 22px;
+        background: transparent;
+        border: 1.5px solid transparent; border-bottom: none;
+        border-radius: 10px 10px 0 0;
+        font-family: inherit; font-weight: 600; font-size: 14px;
         color: var(--muted);
         cursor: pointer;
-        margin-bottom: -3px;
+        margin-bottom: -2.5px;
         transition: all 0.15s;
         white-space: nowrap;
       }
-      .main-tab-btn:hover { color: var(--ink); border-color: var(--primary); }
+      .main-tab-btn:hover { color: var(--ink); background: var(--surface); border-color: var(--line); }
       .main-tab-btn[aria-selected="true"] {
         background: var(--primary); color: #fff;
         border-color: var(--primary);
-        box-shadow: 0 -2px 8px rgba(14,124,90,0.2);
+        font-weight: 700;
       }
       .main-panel { display: none; padding-top: 28px; }
       .main-panel.active { display: block; animation: fadeIn 0.25s ease; }
 
       .vlayout {
-        display: grid; grid-template-columns: 220px 1fr; gap: 28px;
+        display: grid; grid-template-columns: 196px 1fr; gap: 24px;
       }
       .vtabs {
-        display: flex; flex-direction: column; gap: 4px;
-        position: sticky; top: 24px; align-self: start;
+        display: flex; flex-direction: column; gap: 2px;
+        position: sticky; top: 20px; align-self: start;
         border: 1px solid var(--line); border-radius: var(--radius);
-        padding: 10px; background: var(--surface);
+        padding: 8px; background: var(--surface);
         box-shadow: 0 1px 3px rgba(0,0,0,0.03);
       }
       .vtab-btn {
-        padding: 12px 14px;
+        padding: 10px 12px;
         background: transparent;
         border: none; border-left: 3px solid transparent;
         border-radius: 6px;
         text-align: left; cursor: pointer;
-        font-family: inherit; font-size: 13.5px;
+        font-family: inherit; font-size: 13px;
         color: var(--ink-2); font-weight: 500;
         transition: all 0.15s;
       }
@@ -188,8 +191,10 @@
         .vtab-btn { border: 1px solid var(--line); border-left: 1px solid var(--line); }
         .vtab-btn[aria-selected="true"] { border-color: var(--primary); }
       }
-      @media (max-width: 600px) {
-        .main-tab-btn { padding: 11px 16px; font-size: 13.5px; }
+      @media (max-width: 720px) {
+        .tab-bar-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .main-tab-btn { padding: 9px 14px; font-size: 13px; }
+        .ab-switch { margin-bottom: 0; }
       }
 
       /* Subtabs (legacy — 일부 컴포넌트 fallback) */
@@ -219,52 +224,52 @@
       @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
       /* Cards */
-      .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 18px; }
+      .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
       .card {
         background: var(--surface);
         border: 1px solid var(--line);
         border-radius: var(--radius);
-        padding: 28px 30px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 6px 20px rgba(0,0,0,0.04);
+        padding: 22px 26px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
       }
       .card.full { grid-column: span 12; }
       .hero { grid-column: span 7; }
       .stats { grid-column: span 5; }
       .section-title {
-        margin: 0 0 18px; font-size: 12px; font-weight: 700;
+        margin: 0 0 14px; font-size: 11px; font-weight: 700;
         letter-spacing: 0.1em; text-transform: uppercase;
         color: var(--muted);
       }
       .section-title .accent { color: var(--accent); }
 
       /* KPI — SaaS style colorful cards */
-      .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      .kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
       .kpi {
-        border: none; padding: 22px;
+        border: none; padding: 18px 20px;
         border-radius: var(--radius); color: white;
-        box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.07);
         transition: transform 0.18s ease, box-shadow 0.18s ease;
       }
-      .kpi:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0,0,0,0.1); }
+      .kpi:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
       .kpi-top {
         display: flex; justify-content: space-between; align-items: center;
-        padding-bottom: 14px;
+        padding-bottom: 12px;
         border-bottom: 1px solid rgba(255,255,255,0.32);
-        margin-bottom: 14px;
+        margin-bottom: 12px;
       }
       .kpi-icon {
-        width: 40px; height: 40px;
+        width: 36px; height: 36px;
         background: rgba(255,255,255,0.22);
-        border-radius: 10px;
+        border-radius: 9px;
         display: flex; align-items: center; justify-content: center;
-        font-size: 20px;
+        font-size: 18px;
       }
       .kpi-num {
-        font-size: 22px; font-weight: 800; color: white;
+        font-size: 19px; font-weight: 800; color: white;
         letter-spacing: -0.01em; text-align: right; line-height: 1.1;
       }
       .kpi-label {
-        font-size: 11px; text-transform: uppercase;
+        font-size: 10px; text-transform: uppercase;
         letter-spacing: 0.12em; font-weight: 700;
         color: rgba(255,255,255,0.95);
       }
@@ -304,13 +309,13 @@
       .flight-airport { text-align: center; }
       .flight-airport .city { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
       .flight-airport .code {
-        font-size: 36px; font-weight: 800;
-        letter-spacing: 0.04em; margin: 6px 0 4px; line-height: 1;
+        font-size: 30px; font-weight: 800;
+        letter-spacing: 0.04em; margin: 4px 0 3px; line-height: 1;
         color: var(--ink);
       }
       .flight-airport .time {
         font-family: "JetBrains Mono", monospace;
-        font-size: 20px; font-weight: 600; color: var(--ink-2);
+        font-size: 17px; font-weight: 600; color: var(--ink-2);
       }
       .flight-arrow { text-align: center; font-size: 20px; color: var(--muted); }
       .flight-arrow .duration { font-size: 11px; margin-top: 6px; letter-spacing: 0.06em; white-space: nowrap; font-weight: 600; }
@@ -319,10 +324,10 @@
       /* Action list */
       .action-list { display: grid; gap: 8px; }
       .action-row {
-        display: grid; grid-template-columns: 130px 170px 1fr;
-        gap: 16px; padding: 14px 18px; align-items: center;
+        display: grid; grid-template-columns: 120px 160px 1fr;
+        gap: 14px; padding: 12px 16px; align-items: center;
         border: 1px solid var(--line); border-radius: var(--radius);
-        background: #f8fafc; font-size: 13.5px;
+        background: #f8fafc; font-size: 13px;
       }
       .action-row.urgent { background: var(--warn-soft); border-left: 4px solid var(--warn); }
       .action-row.late { background: var(--accent-soft); border-left: 4px solid var(--accent); }
@@ -339,26 +344,26 @@
       /* Day blocks */
       .day-block {
         border: 1px solid var(--line); border-left: 4px solid var(--primary);
-        border-radius: var(--radius); padding: 22px 26px; margin-bottom: 16px;
+        border-radius: var(--radius); padding: 18px 22px; margin-bottom: 14px;
         background: #f8fafc;
       }
       .day-block h3 {
-        margin: 0 0 6px;
-        font-size: 22px; font-weight: 800;
+        margin: 0 0 4px;
+        font-size: 19px; font-weight: 800;
         letter-spacing: -0.015em; color: var(--ink);
       }
-      .day-block .day-date { color: var(--muted); font-weight: 500; font-size: 14px; }
+      .day-block .day-date { color: var(--muted); font-weight: 500; font-size: 13px; }
       .day-meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
       .item {
-        display: grid; grid-template-columns: 64px 1fr;
-        gap: 14px; padding: 12px 0; border-top: 1px dashed var(--line);
+        display: grid; grid-template-columns: 60px 1fr;
+        gap: 12px; padding: 10px 0; border-top: 1px dashed var(--line);
       }
       .item:first-of-type { border-top: none; padding-top: 0; }
       .item .time {
         font-family: "JetBrains Mono", monospace;
-        font-size: 12px; color: var(--accent); font-weight: 700; padding-top: 1px;
+        font-size: 11px; color: var(--accent); font-weight: 700; padding-top: 2px;
       }
-      .item-place { font-weight: 700; font-size: 15px; color: var(--ink); }
+      .item-place { font-weight: 700; font-size: 14px; color: var(--ink); }
       .item-place a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--muted); }
       .item-place a:hover { color: var(--primary); border-bottom-color: var(--primary); }
       .meta { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
@@ -411,7 +416,7 @@
       select:focus, input:focus { outline: none; border-color: var(--primary); }
 
       /* Map */
-      #c-map { height: 660px; width: 100%; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+      #c-map { height: 580px; width: 100%; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
       .map-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
       .map-day-btn {
         padding: 8px 14px; border: 1px solid var(--line);
@@ -616,13 +621,13 @@
       }
       .cal-cell {
         border: 1px solid var(--line);
-        border-top: 5px solid var(--primary);
+        border-top: 4px solid var(--primary);
         border-radius: var(--radius);
-        padding: 16px 18px;
+        padding: 14px 16px;
         background: #f8fafc;
         cursor: pointer;
         transition: all 0.18s ease;
-        min-height: 180px;
+        min-height: 160px;
         display: flex; flex-direction: column;
       }
       .cal-cell:hover {
@@ -630,7 +635,7 @@
         box-shadow: 0 8px 22px rgba(0,0,0,0.08);
       }
       .cal-day-num {
-        font-size: 24px; font-weight: 800;
+        font-size: 20px; font-weight: 800;
         letter-spacing: -0.02em; color: var(--ink);
         line-height: 1;
       }
@@ -1065,19 +1070,20 @@
         border-left: 4px solid var(--accent);
       }
 
-      /* A/B 모드 스위치 */
+      /* A/B 모드 스위치 — 탭바 우측 인라인 */
       .ab-switch {
-        display: flex; gap: 6px; margin-bottom: 12px;
-        background: var(--bg-2); border-radius: 12px; padding: 4px;
-        width: fit-content;
+        display: flex; gap: 3px; margin-bottom: 5px;
+        background: var(--bg-2); border-radius: 10px; padding: 3px;
+        width: fit-content; flex-shrink: 0;
       }
       .ab-btn {
-        padding: 8px 20px; border-radius: 9px; border: none;
-        font-family: inherit; font-size: 13px; font-weight: 700;
+        padding: 6px 14px; border-radius: 7px; border: none;
+        font-family: inherit; font-size: 12px; font-weight: 700;
         cursor: pointer; color: var(--muted); background: transparent;
-        transition: all 0.15s;
+        transition: all 0.15s; white-space: nowrap;
       }
-      .ab-btn.active { background: var(--surface); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+      .ab-btn#ab-btn-a.active { background: var(--primary); color: #fff; box-shadow: 0 1px 4px rgba(99,102,241,0.3); }
+      .ab-btn#ab-btn-b.active { background: var(--camp); color: #fff; box-shadow: 0 1px 4px rgba(16,185,129,0.3); }
 
       /* 수평 서브탭 버튼 */
 
@@ -1136,7 +1142,7 @@
         <div class="header-left">
           <p class="eyebrow"><span class="version">v3.2</span>검증 완료 · 2026.05 기준</p>
           <h1>하와이 신혼여행</h1>
-          <p class="subtitle">KE053 · 8박 9일 · 2026.07.12 → 07.20 · 마우이 + 오아후</p>
+          <p class="subtitle">KE053 · 8박 9일 · 2026.07.12–07.20 · 마우이 + 오아후 · 호텔 4박 + 캠핑 4박</p>
         </div>
         <div class="header-right">
           <div class="rate-box">
@@ -1144,29 +1150,25 @@
             <input id="rate" type="number" value="1475" min="500" max="3000" step="1" />
             <span class="suffix">KRW / USD</span>
           </div>
-          <div class="tagline">
-            <p><strong>호텔 4박 + 캠핑 4박</strong></p>
-            <p>일출 2회 · Hanauma 스노쿨링</p>
-            <p>신혼 디너 1회</p>
-          </div>
         </div>
       </header>
 
-      <div class="ab-switch" id="ab-switch">
-        <button class="ab-btn active" id="ab-btn-a" onclick="setABMode('a')">💪 A안 — 풀코스</button>
-        <button class="ab-btn"        id="ab-btn-b" onclick="setABMode('b')">😌 B안 — 여유</button>
+      <div class="tab-bar-row">
+        <nav class="main-tabs" role="tablist">
+          <button class="main-tab-btn" role="tab" aria-selected="true"  data-main="summary">📊 개요</button>
+          <button class="main-tab-btn" role="tab" aria-selected="false" data-main="trip">🗓️ 일정</button>
+          <button class="main-tab-btn" role="tab" aria-selected="false" data-main="map">🗺️ 지도</button>
+          <button class="main-tab-btn" role="tab" aria-selected="false" data-main="prep">📋 준비</button>
+          <button class="main-tab-btn" role="tab" aria-selected="false" data-main="system">⚙️ 시스템</button>
+        </nav>
+        <div class="ab-switch" id="ab-switch">
+          <button class="ab-btn active" id="ab-btn-a" onclick="setABMode('a')">💪 A안</button>
+          <button class="ab-btn"        id="ab-btn-b" onclick="setABMode('b')">😌 B안</button>
+        </div>
       </div>
-      <nav class="main-tabs" role="tablist">
-        <button class="main-tab-btn" role="tab" aria-selected="true"  data-main="summary">📊 개요</button>
-        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="trip">🗓️ 일정</button>
-        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="map">🗺️ 지도</button>
-        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="prep">📋 준비</button>
-        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="system">⚙️ 시스템</button>
-      </nav>
 
       <!-- ════════ 📊 개요 ════════ -->
       <div class="main-panel active" id="main-summary">
-        <div id="sub-overview" style="padding-top:28px">
         <section class="grid">
           <article class="card full rate-chart-card">
             <h2 class="section-title">💱 USD/KRW 환율 — 최근 3개월 일별 흐름</h2>
@@ -1180,7 +1182,7 @@
             <p class="claude-note" id="rs-note" style="margin-top:6px">환율 데이터 로딩 중...</p>
           </article>
           <article class="card full must-have-card">
-            <h2 class="section-title">주요 지침 — 사용자 요청 사항 (전체 적용 ✅)</h2>
+            <h2 class="section-title">✅ 핵심 체크포인트</h2>
 
             <div class="must-section">
               <h4>🔥 핵심 필수 (사용자 강조)</h4>
@@ -1303,9 +1305,9 @@
             </div>
           </article>
 
-          <article class="card hero">
+          <article class="card full">
             <h2 class="section-title">여행 요약</h2>
-            <div class="kpis" id="c-kpi-grid"></div>
+            <div class="kpis" id="c-kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px"></div>
             <div class="cost-banner">
               <div>
                 <div class="label">중예산 합계 (2인 / 8박 9일)</div>
@@ -1313,10 +1315,6 @@
               </div>
               <div class="muted" style="font-size:12px;text-align:right">환율 변경 → 자동 갱신</div>
             </div>
-          </article>
-          <article class="card stats">
-            <h2 class="section-title">검증 현황</h2>
-            <div id="c-quick-stats" class="kpis"></div>
           </article>
           <article class="card full">
             <h2 class="section-title">✈️ 항공 스케줄 <span class="accent">— e-티켓 확인됨</span></h2>
@@ -1339,8 +1337,7 @@
             <p class="claude-note">각 셀 클릭 → 타임라인 탭으로 이동.</p>
           </article>
         </section>
-      </div>
-
+      </section>
       </div><!-- /main-summary -->
 
       <!-- ════════ 🗓️ 일정 ════════ -->
@@ -2478,12 +2475,7 @@
           kpi("yellow", "⚠️", reservations, "예약 필요"),
           kpi("green",  "🛏️", `${stays}곳`, "호텔 4 · 캠프 4")
         ].join("");
-        document.getElementById("c-quick-stats").innerHTML = [
-          kpi("pink",   "🚨", `${ERRORS.length}건`, "오류 정정"),
-          kpi("blue",   "✅", fixes, "FIX 적용"),
-          kpi("green",  "🎁", free, "무료 스팟"),
-          kpi("purple", "📂", cats, "카테고리")
-        ].join("");
+        // 검증 현황 KPI 제거됨 (c-quick-stats)
       }
 
       function renderCostBanner() {
