@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>하와이 신혼여행 · v3.0</title>
+    <title>하와이 신혼여행 · v3.2</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -1065,6 +1065,22 @@
         border-left: 4px solid var(--accent);
       }
 
+      /* A/B 모드 스위치 */
+      .ab-switch {
+        display: flex; gap: 6px; margin-bottom: 12px;
+        background: var(--bg-2); border-radius: 12px; padding: 4px;
+        width: fit-content;
+      }
+      .ab-btn {
+        padding: 8px 20px; border-radius: 9px; border: none;
+        font-family: inherit; font-size: 13px; font-weight: 700;
+        cursor: pointer; color: var(--muted); background: transparent;
+        transition: all 0.15s;
+      }
+      .ab-btn.active { background: var(--surface); color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+      /* 수평 서브탭 버튼 */
+
       /* Changelog */
       .changelog {
         margin-top: 16px; padding: 18px 22px;
@@ -1118,7 +1134,7 @@
     <div class="wrap">
       <header>
         <div class="header-left">
-          <p class="eyebrow"><span class="version">v3.0</span>검증 완료 · 2026.05 기준</p>
+          <p class="eyebrow"><span class="version">v3.2</span>검증 완료 · 2026.05 기준</p>
           <h1>하와이 신혼여행</h1>
           <p class="subtitle">KE053 · 8박 9일 · 2026.07.12 → 07.20 · 마우이 + 오아후</p>
         </div>
@@ -1136,9 +1152,14 @@
         </div>
       </header>
 
+      <div class="ab-switch" id="ab-switch">
+        <button class="ab-btn active" id="ab-btn-a" onclick="setABMode('a')">💪 A안 — 풀코스</button>
+        <button class="ab-btn"        id="ab-btn-b" onclick="setABMode('b')">😌 B안 — 여유</button>
+      </div>
       <nav class="main-tabs" role="tablist">
         <button class="main-tab-btn" role="tab" aria-selected="true"  data-main="summary">📊 개요</button>
         <button class="main-tab-btn" role="tab" aria-selected="false" data-main="trip">🗓️ 일정</button>
+        <button class="main-tab-btn" role="tab" aria-selected="false" data-main="map">🗺️ 지도</button>
         <button class="main-tab-btn" role="tab" aria-selected="false" data-main="prep">📋 준비</button>
         <button class="main-tab-btn" role="tab" aria-selected="false" data-main="system">⚙️ 시스템</button>
       </nav>
@@ -1308,6 +1329,15 @@
               🚨 늦음 / 🔴 즉시 / 🟠 정확한 시점 (캘린더 알림 필수) / 🟢 6월~7월 진행. <strong>5/13 화요일 07:00 HST = Haleakalā 일출 60일 전 오픈</strong>, 매진 5분 안.
             </p>
           </article>
+          <article class="card full">
+            <h2 class="section-title">🗺️ 출발 전 로드맵</h2>
+            <div id="c-roadmap"></div>
+          </article>
+          <article class="card full">
+            <h2 class="section-title">📆 트립 캘린더 — 8박 9일</h2>
+            <div id="c-calendar"></div>
+            <p class="claude-note">각 셀 클릭 → 타임라인 탭으로 이동.</p>
+          </article>
         </section>
       </div>
 
@@ -1315,96 +1345,20 @@
 
       <!-- ════════ 🗓️ 일정 ════════ -->
       <div class="main-panel" id="main-trip">
-        <div class="vlayout">
-          <nav class="vtabs">
-            <button class="vtab-btn" aria-selected="true"  data-subtab="calendar">📆 달력</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="planab">🆚 A/B 비교</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="schedule">📅 타임라인</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="map">🗺️ 지도</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="details">📖 상세·가이드</button>
-          </nav>
-          <div class="vcontent">
+        <div id="c-ab-timeline"></div>
+      </div><!-- /main-trip -->
 
-      <!-- 📆 달력 (개요에서 이동) -->
-      <div class="subtab-panel active" id="sub-calendar">
+      <!-- ════════ 🗺️ 지도 ════════ -->
+      <div class="main-panel" id="main-map">
         <section class="grid">
           <article class="card full">
-            <h2 class="section-title">🗺️ 출발 전 로드맵 <span class="accent">— 오늘 (2026-05-01) → 출발 (7/12)</span></h2>
-            <div id="c-roadmap"></div>
-            <p class="claude-note">
-              출발까지 약 <strong>10주 (D-72)</strong>. 시간 순으로 마일스톤 12개. <span style="color:var(--warn)">●</span> 즉시/늦음 / <span style="color:var(--accent)">●</span> 정확한 시점 / <span style="color:var(--gold)">●</span> 오늘 / <span style="color:var(--primary)">●</span> 출국·귀국 / <span style="color:var(--camp)">●</span> 트립 진행.
-            </p>
-          </article>
-          <article class="card full">
-            <h2 class="section-title">📆 트립 캘린더 <span class="accent">— 8박 9일 (7/12 → 7/20)</span></h2>
-            <div id="c-calendar"></div>
-            <p class="claude-note">각 셀 클릭 → 타임라인 탭으로 이동 (전체 시간순 디테일). Day별 색상 = 지도 탭과 동일.</p>
-          </article>
-        </section>
-      </div>
-
-      <!-- 🆚 A/B 비교 -->
-      <div class="subtab-panel" id="sub-planab">
-        <section class="grid">
-          <article class="card full">
-            <h2 class="section-title">🆚 A/B 플랜 비교 <span class="accent">— 💪 빡센 풀코스 vs 😌 여유 릴렉스</span></h2>
-            <p style="color:var(--muted);font-size:13px;margin:0 0 16px">매일 아침 컨디션 보고 선택. 🔴고정은 양쪽 공통 — 건너뛸 수 없음. 🟢선택 항목은 B안에서 생략해도 여행 완성됨.</p>
-            <div id="c-plan-ab"></div>
-          </article>
-        </section>
-      </div>
-
-      <!-- 📅 타임라인 -->
-      <div class="subtab-panel" id="sub-schedule">
-        <section class="grid">
-          <article class="card full">
-            <h2 class="section-title">📅 일자별 타임라인 — 8박 9일</h2>
-            <div class="timeline-controls">
-              <button class="timeline-ctrl-btn" id="c-expand-all">▼ 전체 펼치기</button>
-              <button class="timeline-ctrl-btn" id="c-collapse-all">▲ 전체 접기</button>
-            </div>
-            <div id="c-timeline"></div>
-            <p class="claude-note">장소명 📍 클릭 → Google Maps. 각 항목 <strong>▶ 자세히</strong> 클릭 → 풀 디테일 펼침.</p>
-          </article>
-        </section>
-      </div>
-
-      <!-- 🗺️ 지도 -->
-      <div class="subtab-panel" id="sub-map">
-        <section class="grid">
-          <article class="card full">
-            <h2 class="section-title">🗺️ 전체 동선 <span class="accent">— Google Maps 좌표 기준</span></h2>
             <div class="map-controls" id="c-map-controls"></div>
             <div id="c-map"></div>
             <div class="map-legend" id="c-map-legend"></div>
-            <p class="claude-note">
-              마커 클릭 → 팝업에서 <strong>Google Maps에서 열기</strong> 링크로 길찾기 가능. 점선 = 일자별 동선.
-            </p>
+            <p class="claude-note">상단 A/B 전역 토글 연동 — A안: 전체 동선, B안: 확정 스팟만.</p>
           </article>
         </section>
-      </div>
-
-      <!-- 📖 상세 정보 -->
-      <div class="subtab-panel" id="sub-details">
-        <section class="grid">
-          <article class="card full">
-            <h2 class="section-title">🌺 하와이 첫 방문자 가이드</h2>
-            <div class="tips-grid" id="c-tips"></div>
-            <p class="claude-note">출발 전 한 번 훑어보면 좋은 기본 정보. 시차·운전·전압·팁·선크림·도난 주의 등.</p>
-          </article>
-          <article class="card full">
-            <h2 class="section-title">📍 장소별 상세 — 일자별</h2>
-            <div id="c-details"></div>
-            <p class="claude-note">
-              ⭐ 표시 = 대표 명소 (예약 필수 또는 핵심 일정). ⚠️ 박스 = 주의·체크 항목. 운영 시간·예약 시점·가격·팁 정리.
-            </p>
-          </article>
-        </section>
-      </div>
-
-          </div><!-- /.vcontent -->
-        </div><!-- /.vlayout -->
-      </div><!-- /main-trip -->
+      </div><!-- /main-map -->
 
       <!-- ════════ 📋 준비 ════════ -->
       <div class="main-panel" id="main-prep">
@@ -1414,6 +1368,7 @@
             <button class="vtab-btn" aria-selected="false" data-subtab="food">🍽️ 먹거리</button>
             <button class="vtab-btn" aria-selected="false" data-subtab="budget">💰 비용</button>
             <button class="vtab-btn" aria-selected="false" data-subtab="packing">🎒 준비물</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="guide">🌺 가이드</button>
           </nav>
           <div class="vcontent">
 
@@ -1515,6 +1470,20 @@
         </section>
       </div>
 
+      <!-- 🌺 가이드 -->
+      <div class="subtab-panel" id="sub-guide">
+        <section class="grid">
+          <article class="card full">
+            <h2 class="section-title">🌺 하와이 첫 방문자 가이드</h2>
+            <div class="tips-grid" id="c-tips"></div>
+          </article>
+          <article class="card full">
+            <h2 class="section-title">📍 장소별 상세</h2>
+            <div id="c-details"></div>
+          </article>
+        </section>
+      </div>
+
           </div><!-- /.vcontent -->
         </div><!-- /.vlayout -->
       </div><!-- /main-prep -->
@@ -1570,6 +1539,8 @@
               <tbody></tbody>
             </table>
             <div class="changelog">
+              <h4>🚀 v3.1 (2026.05) — 탭 구조 개편 + 전역 A/B 모드 토글</h4>
+              <ul><li>메인탭 5개 (개요·일정·지도·준비·시스템) — 지도 독립 main panel</li><li>전역 A/B 모드 스위치 (localStorage 저장, 일정 탭 타임라인 연동)</li><li>개요 탭에 로드맵·달력 추가</li><li>준비 탭에 가이드(팁+장소 상세) 서브탭 추가</li><li>시스템 탭에 구글 캘린더 연동 계획 추가</li></ul>
               <h4>🚀 v3.0 (2026.05) — A/B 플랜 비교 + 탭 구조 개편</h4>
               <ul><li>일정 탭 A/B 빡센/여유 2안 좌우 비교</li><li>항목별 🔴고정/🟡권장/🟢선택 태그</li><li>탭 구조 재배치, 쿠팡/미국 구매 가이드 분리</li></ul>
               <h4>🔄 v2.1 (2026.05) — 숙소 재배치</h4>
@@ -1741,6 +1712,17 @@
               <li>Google Maps URL 패턴: <code>https://www.google.com/maps/search/?api=1&query=&lt;encoded&gt;</code></li>
             </ul>
           </article>
+
+          <article class="card full" style="margin-top:16px">
+            <h2 class="section-title">📅 구글 캘린더 연동 계획</h2>
+            <ul style="font-size:14px;color:var(--ink-2);line-height:2">
+              <li>PLAN_AB 데이터 → ICS 파일 생성 → 구글 캘린더 가져오기</li>
+              <li>확정 일정(fix:true)만 먼저 등록 → A/B 결정 후 선택 안 추가</li>
+              <li>n8n 워크플로로 자동화 가능: webhook → ICS 생성 → Gmail 발송</li>
+              <li>각 이벤트에 예약 링크·메모 포함</li>
+            </ul>
+            <p class="claude-note">ICS 내보내기 버튼은 v3.2에서 구현 예정.</p>
+          </article>
         </section>
       </div>
 
@@ -1752,6 +1734,22 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script>
+      // ===== v3.1 — 전역 A/B 모드 =====
+      const AB_MODE_KEY = "hawaii-ab-mode-v1";
+      window.AB_MODE = localStorage.getItem(AB_MODE_KEY) || "a";
+
+      function setABMode(mode) {
+        window.AB_MODE = mode;
+        localStorage.setItem(AB_MODE_KEY, mode);
+        document.getElementById("ab-btn-a").classList.toggle("active", mode === "a");
+        document.getElementById("ab-btn-b").classList.toggle("active", mode === "b");
+        renderABTimeline();
+        // 지도 탭이 열려 있으면 즉시 갱신
+        if (document.getElementById("main-map").classList.contains("active")) {
+          renderMap();
+        }
+      }
+
       // ===== v2.0 — Sheet DB 설정 =====
       const SHEET_ID = "17iA80c5rmGxYHtNJbDBq6P-iAAGfLXm1X-qQ_7FxH-o";
       const SHEET_GID = "0";
@@ -2418,6 +2416,7 @@
         renderCalendar();
         renderTable();
         renderMap();
+        renderABTimeline();
       }
 
       // ===== 시간대 변환 (KST ↔ HST) =====
@@ -2553,6 +2552,7 @@
         const grouped = {};
         DATA.forEach((r) => { (grouped[r.Day] = grouped[r.Day] || []).push(r); });
         const tl = document.getElementById("c-timeline");
+        if (!tl) return;
         tl.innerHTML = "";
         Object.keys(grouped).map(Number).sort((a,b)=>a-b).forEach((day) => {
           const items = grouped[day];
@@ -2623,6 +2623,7 @@
 
       function renderTips() {
         const el = document.getElementById("c-tips");
+        if (!el) return;
         el.innerHTML = "";
         TIPS.forEach((t) => {
           const card = document.createElement("div");
@@ -2636,6 +2637,7 @@
         const grouped = {};
         PLACE_DETAILS.forEach((p) => { (grouped[p.Day] = grouped[p.Day] || []).push(p); });
         const el = document.getElementById("c-details");
+        if (!el) return;
         el.innerHTML = "";
         Object.keys(grouped).map(Number).sort((a,b)=>a-b).forEach((day) => {
           const wrap = document.createElement("div");
@@ -2937,7 +2939,7 @@
             ${sleepLabel ? `<div class="cal-sleep">🛏️ ${sleepLabel}</div>` : `<div class="cal-sleep">✈️ 출국일</div>`}
           `;
           cell.addEventListener("click", () => {
-            activateSubtab("schedule");
+            activateMain("trip");
             window.scrollTo({ top: 0, behavior: "smooth" });
           });
           grid.appendChild(cell);
@@ -3067,6 +3069,7 @@
       let leafletMap = null;
       const mapLayers = { markers: [], polylines: [] };
       let currentMapDay = "all";
+      // MAP_MODE 제거 — window.AB_MODE 전역 토글로 통합
       function initMap() {
         if (leafletMap) return;
         leafletMap = L.map("c-map", { scrollWheelZoom: true }).setView([20.95, -157.4], 7);
@@ -3115,7 +3118,7 @@
         const days = currentMapDay === "all" ? [1,2,3,4,5,6,7,8,9] : [Number(currentMapDay)];
         const allPoints = [];
         days.forEach((day) => {
-          const dayPoints = DATA.filter((r) => r.Day === day && r.lat && r.lng);
+          const dayPoints = DATA.filter((r) => r.Day === day && r.lat && r.lng && (window.AB_MODE === "a" || r.fix));
           dayPoints.forEach((r) => {
             const m = L.circleMarker([r.lat, r.lng], {
               color: DAY_COLORS[day], fillColor: DAY_COLORS[day],
@@ -3143,13 +3146,12 @@
 
       // ===== Hierarchical 탭 (메인 + 버티컬 서브) =====
       const SUB_TO_MAIN = {
-        overview:"summary",
-        calendar:"trip", planab:"trip", schedule:"trip", map:"trip", details:"trip",
-        stay:"prep", food:"prep", budget:"prep", packing:"prep",
+        stay:"prep", food:"prep", budget:"prep", packing:"prep", guide:"prep",
         data:"system", tech:"system"
       };
       const MAIN_FIRST_SUB = {
-        summary:null, trip:"calendar", prep:"stay", system:"data"
+        summary:null, trip:null, map:null,
+        prep:"stay", system:"data"
       };
 
       function activateMain(mainName) {
@@ -3163,6 +3165,9 @@
         const hasActive = document.querySelector(`#main-${mainName} .subtab-panel.active`);
         if (!hasActive && MAIN_FIRST_SUB[mainName]) {
           activateSubtab(MAIN_FIRST_SUB[mainName]);
+        }
+        if (mainName === "map") {
+          setTimeout(() => { initMap(); if (leafletMap) leafletMap.invalidateSize(); }, 50);
         }
       }
 
@@ -3184,8 +3189,9 @@
         document.querySelectorAll(".subtab-panel").forEach((p) => {
           p.classList.toggle("active", p.id === `sub-${name}`);
         });
-        if (name === "map") {
-          setTimeout(() => { initMap(); if (leafletMap) leafletMap.invalidateSize(); }, 50);
+        if (name === "guide") {
+          renderTips();
+          renderDetails();
         }
       }
 
@@ -3199,57 +3205,71 @@
       // 주요 지침 카드 + 캘린더 셀 → 해당 탭 점프
       document.querySelectorAll(".must-item[data-jump]").forEach((el) => {
         el.addEventListener("click", () => {
-          activateSubtab(el.dataset.jump);
+          const jump = el.dataset.jump;
+          if (["summary","trip","map","prep","system"].includes(jump)) {
+            activateMain(jump);
+          } else {
+            activateSubtab(jump);
+          }
           window.scrollTo({ top: 0, behavior: "smooth" });
         });
       });
 
-      // 🔒 Lock + 📋 Reserved 토글 (delegated)
-      document.getElementById("c-timeline").addEventListener("click", (e) => {
-        const lockBtn = e.target.closest(".lock-btn[data-lock-id]");
-        if (lockBtn) { toggleLock(parseInt(lockBtn.dataset.lockId, 10)); return; }
-        const resBtn = e.target.closest(".res-btn[data-res-id]");
-        if (resBtn) { toggleReserved(parseInt(resBtn.dataset.resId, 10)); return; }
-      });
+      // 🔒 Lock + 📋 Reserved 토글 (delegated — c-timeline은 prep/data 탭에서도 없으므로 null 체크)
+      const cTimeline = document.getElementById("c-timeline");
+      if (cTimeline) {
+        cTimeline.addEventListener("click", (e) => {
+          const lockBtn = e.target.closest(".lock-btn[data-lock-id]");
+          if (lockBtn) { toggleLock(parseInt(lockBtn.dataset.lockId, 10)); return; }
+          const resBtn = e.target.closest(".res-btn[data-res-id]");
+          if (resBtn) { toggleReserved(parseInt(resBtn.dataset.resId, 10)); return; }
+        });
 
-      // 📖 일정 탭 자세히 보기 토글 (delegated)
-      document.getElementById("c-timeline").addEventListener("click", (e) => {
-        const btn = e.target.closest(".expand-btn");
-        if (!btn) return;
-        const detail = btn.nextElementSibling;
-        if (!detail || !detail.classList.contains("item-detail")) return;
-        const isHidden = detail.hasAttribute("hidden");
-        if (isHidden) {
-          detail.removeAttribute("hidden");
-          btn.classList.add("expanded");
-          btn.innerHTML = '<span class="arrow">▶</span> 접기';
-        } else {
-          detail.setAttribute("hidden", "");
-          btn.classList.remove("expanded");
-          btn.innerHTML = '<span class="arrow">▶</span> 자세히 보기';
-        }
-      });
-      // 전체 펼치기 / 전체 접기
-      document.getElementById("c-expand-all").addEventListener("click", () => {
-        document.querySelectorAll("#c-timeline .expand-btn").forEach((btn) => {
+        // 📖 일정 탭 자세히 보기 토글 (delegated)
+        cTimeline.addEventListener("click", (e) => {
+          const btn = e.target.closest(".expand-btn");
+          if (!btn) return;
           const detail = btn.nextElementSibling;
-          if (detail && detail.hasAttribute("hidden")) {
+          if (!detail || !detail.classList.contains("item-detail")) return;
+          const isHidden = detail.hasAttribute("hidden");
+          if (isHidden) {
             detail.removeAttribute("hidden");
             btn.classList.add("expanded");
             btn.innerHTML = '<span class="arrow">▶</span> 접기';
-          }
-        });
-      });
-      document.getElementById("c-collapse-all").addEventListener("click", () => {
-        document.querySelectorAll("#c-timeline .expand-btn").forEach((btn) => {
-          const detail = btn.nextElementSibling;
-          if (detail && !detail.hasAttribute("hidden")) {
+          } else {
             detail.setAttribute("hidden", "");
             btn.classList.remove("expanded");
             btn.innerHTML = '<span class="arrow">▶</span> 자세히 보기';
           }
         });
-      });
+      }
+      // 전체 펼치기 / 전체 접기
+      const cExpandAll = document.getElementById("c-expand-all");
+      if (cExpandAll) {
+        cExpandAll.addEventListener("click", () => {
+          document.querySelectorAll("#c-timeline .expand-btn").forEach((btn) => {
+            const detail = btn.nextElementSibling;
+            if (detail && detail.hasAttribute("hidden")) {
+              detail.removeAttribute("hidden");
+              btn.classList.add("expanded");
+              btn.innerHTML = '<span class="arrow">▶</span> 접기';
+            }
+          });
+        });
+      }
+      const cCollapseAll = document.getElementById("c-collapse-all");
+      if (cCollapseAll) {
+        cCollapseAll.addEventListener("click", () => {
+          document.querySelectorAll("#c-timeline .expand-btn").forEach((btn) => {
+            const detail = btn.nextElementSibling;
+            if (detail && !detail.hasAttribute("hidden")) {
+              detail.setAttribute("hidden", "");
+              btn.classList.remove("expanded");
+              btn.innerHTML = '<span class="arrow">▶</span> 자세히 보기';
+            }
+          });
+        });
+      }
 
       // 환율 입력
       document.getElementById("rate").addEventListener("input", (e) => {
@@ -3622,6 +3642,36 @@
         }).join("");
       }
 
+      function renderABTimeline() {
+        const el = document.getElementById("c-ab-timeline");
+        if (!el) return;
+        const mode = window.AB_MODE;
+        const tagIcon = { fixed:"🔴", rec:"", opt:"🟢" };
+        el.innerHTML = PLAN_AB.map(d => {
+          const plan = mode === "a" ? d.a : d.b;
+          const items = (plan.items || []).map(it => {
+            const dimmed = it.tag === "opt" ? "opacity:0.5" : "";
+            const bg = it.tag === "fixed" ? "background:rgba(239,68,68,0.06);" : "";
+            return `<div style="display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);${bg}${dimmed}">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);min-width:48px">${it.t || ""}</div>
+              <div style="flex:1">
+                <span style="font-weight:600">${tagIcon[it.tag]||""} ${it.p}</span>
+                ${it.n ? `<div style="font-size:12px;color:var(--muted);margin-top:2px">${it.n}</div>` : ""}
+              </div>
+            </div>`;
+          }).join("");
+          return `<div style="margin-bottom:28px">
+            <div style="font-size:15px;font-weight:800;padding:10px 14px;background:var(--bg-2);border-radius:10px;border-left:4px solid var(--primary);margin-bottom:4px;display:flex;gap:10px;align-items:center">
+              <span style="color:var(--primary)">Day ${d.day}</span>
+              <span>${d.date}</span>
+              <span style="color:var(--muted);font-size:13px;font-weight:500">— ${d.label}</span>
+              <span style="margin-left:auto;font-size:12px;font-weight:600;color:${mode==='a'?'var(--warn)':'var(--camp)'}">${plan.title||""}</span>
+            </div>
+            <div style="padding:0 4px">${items}</div>
+          </div>`;
+        }).join("");
+      }
+
       const CL_KEY = "hawaii-checklist-v1";
       function getChecked() { try { return JSON.parse(localStorage.getItem(CL_KEY)||"[]"); } catch{return[];} }
       function setChecked(a) { try { localStorage.setItem(CL_KEY, JSON.stringify(a)); } catch{} }
@@ -3760,7 +3810,7 @@
       loadAppliedAdj();
       renderChecklist();
       renderCampShop();
-      renderPlanAB();
+      // renderPlanAB() 제거됨 — 일정 탭이 PLAN_AB 기반 AB 타임라인으로 교체됨
 
       // 🔄 페이지 로드 시 Sheet에서 자동 fetch (있으면 override)
       (async () => {
@@ -3794,6 +3844,10 @@
       renderRoadmap();
       renderCalendar();
       renderTable();
+      // v3.1 — AB 모드 초기 상태 + AB 타임라인 렌더
+      document.getElementById("ab-btn-a").classList.toggle("active", window.AB_MODE === "a");
+      document.getElementById("ab-btn-b").classList.toggle("active", window.AB_MODE === "b");
+      renderABTimeline();
     </script>
   </body>
 </html>

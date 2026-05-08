@@ -5,18 +5,14 @@ setlocal
 set GIT="C:\Users\JEON\AppData\Local\GitHubDesktop\app-3.5.2\resources\app\git\cmd\git.exe"
 set REPO="C:\Users\JEON\projects\wedding_2026"
 
-set SRC1="C:\Users\JEON\projects\personal-dashboard.html"
-set DST1="C:\Users\JEON\projects\wedding_2026\hawaii.html"
+set SRC1="C:\Users\JEON\projects\hawaii-trip-dashboard.html"
+set DST1="C:\Users\JEON\projects\wedding_2026\hawaii-trip-dashboard.html"
 
-set SRC2="C:\Users\JEON\projects\hawaii-trip-dashboard.html"
-set DST2="C:\Users\JEON\projects\wedding_2026\hawaii-trip-dashboard.html"
-
-echo === Sync personal-dashboard.html -^> hawaii.html ===
-copy /Y %SRC1% %DST1%
-if errorlevel 1 goto :error
+set SRC2="C:\Users\JEON\projects\wedding_2026\wedding-dashboard.html"
+set DST2="C:\Users\JEON\projects\wedding_2026\wedding-dashboard.html"
 
 echo === Sync hawaii-trip-dashboard.html ===
-copy /Y %SRC2% %DST2%
+copy /Y %SRC1% %DST1%
 if errorlevel 1 goto :error
 
 cd /d %REPO%
@@ -40,8 +36,9 @@ if errorlevel 1 goto :error
 echo.
 echo ====================================================
 echo  Done! Live in 1-2 min:
-echo  https://jemmajeon.github.io/wedding_2026/hawaii.html
+echo  https://jemmajeon.github.io/wedding_2026/
 echo  https://jemmajeon.github.io/wedding_2026/hawaii-trip-dashboard.html
+echo  https://jemmajeon.github.io/wedding_2026/wedding-dashboard.html
 echo ====================================================
 goto :end
 
