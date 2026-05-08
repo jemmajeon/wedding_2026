@@ -812,6 +812,27 @@
       .shop-section-title { font-size:13.5px; font-weight:700; margin:0 0 10px; padding:8px 14px; border-radius:8px; border-left:4px solid; }
       .shop-section-title.korea { background:#d1fae5; color:#065f46; border-color:#10b981; }
       .shop-section-title.usa { background:#ffedd5; color:#9a3412; border-color:#f97316; }
+      /* ⚡ 조율 시스템 */
+      .adj-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:999px; font-size:11.5px; font-weight:700; border:1.5px solid var(--gold); color:var(--gold); background:var(--gold-soft); cursor:pointer; font-family:inherit; margin-left:8px; transition:all .15s; }
+      .adj-badge:hover { background:var(--gold); color:#fff; }
+      .adj-badge.applied { border-color:var(--camp); color:var(--camp); background:var(--camp-soft); cursor:default; }
+      .adj-panel { display:none; margin:10px 0 4px; padding:14px 16px; background:var(--gold-soft); border:1.5px solid var(--gold); border-radius:12px; font-size:13px; }
+      .adj-panel.open { display:block; animation:fadeIn .2s ease; }
+      .adj-issue { color:#854d0e; font-weight:600; margin-bottom:8px; }
+      .adj-compare { display:grid; grid-template-columns:1fr auto 1fr; gap:8px; align-items:center; margin:10px 0; }
+      .adj-box { padding:8px 12px; border-radius:8px; font-size:12.5px; line-height:1.5; }
+      .adj-box.current { background:#fee2e2; border:1px solid #fca5a5; }
+      .adj-box.rec { background:#d1fae5; border:1px solid #6ee7b7; }
+      .adj-box .adj-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:3px; }
+      .adj-box .adj-val { font-weight:700; color:var(--ink); }
+      .adj-box .adj-sub { font-size:11px; color:var(--muted); margin-top:2px; }
+      .adj-arrow { font-size:20px; color:var(--gold); text-align:center; }
+      .adj-actions { display:flex; gap:8px; margin-top:10px; align-items:center; flex-wrap:wrap; }
+      .adj-apply-btn { padding:6px 16px; border-radius:8px; background:var(--camp); color:#fff; font-weight:700; font-size:12.5px; border:none; cursor:pointer; font-family:inherit; }
+      .adj-apply-btn:disabled { background:var(--muted); cursor:default; }
+      .adj-link { font-size:12px; color:var(--primary); text-decoration:none; }
+      .adj-link:hover { text-decoration:underline; }
+      .adj-close { padding:4px 10px; border-radius:6px; font-size:11.5px; font-weight:600; border:1px solid var(--line-strong); background:var(--surface); color:var(--muted); cursor:pointer; font-family:inherit; }
       /* 🆚 A/B 플랜 비교 */
       .ab-day-block { margin-bottom: 28px; }
       .ab-day-header { font-size: 15px; font-weight: 800; padding: 10px 16px; background: var(--bg-2); border-radius: 10px; margin-bottom: 12px; border-left: 4px solid var(--primary); display:flex; align-items:center; gap:10px; }
@@ -2540,14 +2561,32 @@
           const block = document.createElement("div");
           block.className = "day-block";
           block.style.borderLeftColor = DAY_COLORS[day] || "#0e7c5a";
+          const adj = ADJUSTMENTS[day];
+          const appliedDays = getAppliedAdj().map(Number);
+          const isAdjApplied = appliedDays.includes(day);
           block.innerHTML = `
-            <h3>Day ${day} <span class="day-date">· ${first.날짜} (${first.요일}) · ${first.섬}</span></h3>
+            <h3>Day ${day} <span class="day-date">· ${first.날짜} (${first.요일}) · ${first.섬}</span>${adj ? `<button class="adj-badge${isAdjApplied?' applied':''}" onclick="toggleAdjPanel(${day})">${isAdjApplied?'✅ 조율 적용됨':'⚡ 조율 가능'}</button>` : ''}</h3>
             <div class="day-meta">
               <span class="pill sea">${first.섬}</span>
               ${sleeps.length ? `<span class="pill sleep">🛏️ ${sleeps.join(" → ")}</span>` : ""}
               <span class="pill">${items.length}건</span>
               ${items.some((i) => i.fix) ? `<span class="pill fix">FIX 포함</span>` : `<span class="pill verified">검증</span>`}
             </div>
+            ${adj ? `<div class="adj-panel${isAdjApplied?'':''}" id="adj-panel-${day}">
+              <div class="adj-issue">⚠️ ${adj.issue}</div>
+              ${adj.urgency ? `<div style="font-size:11.5px;color:var(--warn);font-weight:600;margin-bottom:8px">${adj.urgency}</div>` : ''}
+              <div class="adj-compare">
+                <div class="adj-box current"><div class="adj-label">현재</div><div class="adj-val">${adj.current.label}</div><div class="adj-sub">${adj.current.sub}</div></div>
+                <div class="adj-arrow">→</div>
+                <div class="adj-box rec"><div class="adj-label">추천</div><div class="adj-val">${adj.rec.label}</div><div class="adj-sub">${adj.rec.sub}</div></div>
+              </div>
+              <div class="adj-actions">
+                <button class="adj-apply-btn" onclick="applyAdj(${day})" ${isAdjApplied?'disabled':''} id="adj-apply-${day}">${isAdjApplied?'✅ 적용 완료':'교체 적용'}</button>
+                <a href="${adj.rec.url}" target="_blank" rel="noopener" class="adj-link">예약처 →</a>
+                ${isAdjApplied ? `<button class="adj-close" onclick="revertAdj(${day})" style="margin-left:auto">↺ 원복</button>` : ''}
+                <button class="adj-close" onclick="toggleAdjPanel(${day})" style="margin-left:auto">닫기</button>
+              </div>
+            </div>` : ''}
           `;
           items.forEach((r) => {
             const it = document.createElement("div");
@@ -3331,6 +3370,67 @@
         {where:"usa",item:"오리발 (스노클링)",timing:"Day 1~2 또는 현지 대여",walmart:"$15~30",wl:"https://www.walmart.com/search?q=snorkel+fins+adult",rei:"$25~60",rl:"https://www.rei.com/c/fins",note:"Hanauma Bay 대여 $12~15가 가장 저렴 (1회 사용 시)"},
       ];
 
+      // ⚡ 조율 시스템
+      const ADJ_KEY = "hawaii-adj-applied-v1";
+      function getAppliedAdj() { try { return JSON.parse(localStorage.getItem(ADJ_KEY)||"[]"); } catch{return[];} }
+      function setAppliedAdj(a) { try { localStorage.setItem(ADJ_KEY, JSON.stringify(a)); } catch{} }
+
+      const ADJUSTMENTS = {
+        3: {
+          issue: "텐트 사이트는 전기·온수 없음. 캐빈($100/박)으로 바꾸면 전기+온수+욕실 완비.",
+          urgency: "⚠️ 90일 전 오픈 = 4/15 이미 열림. 즉시 확인!",
+          current:  { label: "텐트 사이트", sub: "$20/박 · 전기X · 냉수샤워" },
+          rec:      { label: "Wai'ānapanapa 캐빈", sub: "$100/박 · 전기O · 온수O · 6인 캐빈", url: "https://explore.ehawaii.gov" },
+          newSleep: "Wai'ānapanapa 캐빈",
+          changes: [{ time:"17:30", fields:{ 장소:"Wai'ānapanapa SP 캐빈 체크인 🏡", 카테고리:"🛏️ 숙박", 비용:"$100", 메모:"전기+온수+욕실. 6인 캐빈(2인 이용). 키친·란아이 포함. ⚠️ 입장 예약 별도 필요", lat:20.7867, lng:-156.0014, url:"https://explore.ehawaii.gov" } }]
+        },
+        4: {
+          issue: "텐탈로·텐트 전기 없음. 캐빈은 36인 단체 전용. 전기+온수 원하면 Kaanapali 호텔로 전환.",
+          urgency: "성수기 7월 호텔 가격 $350~600/박. 조기 예약 권장.",
+          current:  { label: "Camp Olowalu 텐탈로", sub: "$130~180/박 · 전기X · 온수O (캠프 공용)" },
+          rec:      { label: "Sheraton Maui / Hyatt Regency", sub: "$350~600/박 · 전기O · 온수O · Black Rock 앞", url: "https://www.marriott.com/hotels/travel/hnmsi-sheraton-maui-resort-and-spa/" },
+          newSleep: "Kaanapali 호텔",
+          changes: [{ time:"14:30", fields:{ 장소:"Kaanapali 호텔 체크인 (Sheraton/Hyatt)", 카테고리:"🛏️ 숙박", 비용:"$$$$", 메모:"Black Rock 스노클링 바로 앞. 전기·온수·리조트 풀장. Sheraton Maui 또는 Hyatt Regency Maui 중 선택.", lat:20.9417, lng:-156.6975, url:"https://www.google.com/maps/search/?api=1&query=Sheraton+Maui+Resort+Kaanapali" } }]
+        },
+        6: {
+          issue: "Malaekahana 2023년 이후 공사 재개장 불확실. 2026년 3월에도 예약 취소 사례 있음.",
+          urgency: "⚠️ 지금 당장 malaekahana.net 또는 explore.ehawaii.gov 운영 여부 확인 필수.",
+          current:  { label: "Malaekahana Campground", sub: "유르트 $90~150/박 · 운영 불확실" },
+          rec:      { label: "Camp Mokuleia (North Shore)", sub: "캐빈 $80~150/인 · 전기O · 온수O · North Shore", url: "https://www.campmokuleia.org" },
+          newSleep: "Camp Mokuleia",
+          changes: [{ time:"21:30", fields:{ 장소:"Camp Mokuleia 체크인 🏡", 카테고리:"🛏️ 숙박", 비용:"$160~300", 메모:"전기+온수. 노스쇼어 직결. 캐빈형. campmokuleia.org 예약. 단체 위주지만 2인 예약 문의 가능.", lat:21.5739, lng:-158.1456, url:"https://www.campmokuleia.org" } }]
+        }
+      };
+
+      function applyAdjToData(day) {
+        const adj = ADJUSTMENTS[day];
+        if (!adj) return;
+        DATA.forEach(r => { if (r.Day === day) r.숙박 = adj.newSleep; });
+        adj.changes.forEach(ch => {
+          const item = DATA.find(r => r.Day === day && r.시간 === ch.time);
+          if (item) Object.assign(item, ch.fields);
+        });
+      }
+      function applyAdj(day) {
+        applyAdjToData(day);
+        const applied = getAppliedAdj();
+        if (!applied.includes(day)) { applied.push(day); setAppliedAdj(applied); }
+        rerenderAll();
+      }
+      function revertAdj(day) {
+        const applied = getAppliedAdj().filter(d => d !== day);
+        setAppliedAdj(applied);
+        // DATA 재초기화 후 나머지 재적용
+        location.reload();
+      }
+      function toggleAdjPanel(day) {
+        const panel = document.getElementById(`adj-panel-${day}`);
+        if (panel) panel.classList.toggle("open");
+      }
+      function loadAppliedAdj() {
+        getAppliedAdj().forEach(day => applyAdjToData(Number(day)));
+      }
+
       // 🆚 A/B 플랜 데이터  tag: fixed=🔴고정 / rec=🟡권장 / opt=🟢선택(빼도됨)
       const TAG = { fixed:"🔴", rec:"🟡", opt:"🟢" };
       const PLAN_AB = [
@@ -3657,6 +3757,7 @@
       if (loadOverrides()) showOverrideStatus("✅ 이전 편집 복원됨");
       loadLocks();
       loadReserved();
+      loadAppliedAdj();
       renderChecklist();
       renderCampShop();
       renderPlanAB();
