@@ -198,6 +198,13 @@
       margin-bottom:14px; transition:box-shadow .2s;
     }
     .rsv-hawaii-link:hover { box-shadow:0 2px 12px rgba(166,124,46,.2); }
+    .rsv-booked-btn {
+      padding:4px 10px; border-radius:999px; font-size:11px; font-weight:700;
+      border:1px solid var(--line); background:var(--surface); color:var(--muted);
+      cursor:pointer; font-family:inherit; transition:all .2s; white-space:nowrap;
+    }
+    .rsv-booked-btn:hover { border-color:var(--green); color:var(--green); }
+    .rsv-booked-btn.done { background:var(--green-soft); color:var(--green); border-color:var(--green-soft); }
     .rsv-cal-btn {
       padding:4px 10px; border-radius:999px;
       background:var(--rose-soft); color:var(--rose-strong);
@@ -914,10 +921,14 @@
     </a>
 
     <div class="card rsv-table-wrap">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+        <span style="font-size:13px;color:var(--muted)">구글시트 <code style="font-size:11px">1nmbZgOjq...</code> 와 동기화</span>
+        <button class="rsv-cal-btn" style="padding:7px 16px;font-size:13px" onclick="openAddRsvModal()">+ 예약 추가</button>
+      </div>
       <table>
         <thead>
           <tr>
-            <th>날짜</th><th>예약 항목</th><th>예약 오픈 긴급도</th><th>상태</th><th>예약 링크</th><th>캘린더</th>
+            <th>날짜</th><th>예약 항목</th><th>예약 오픈 긴급도</th><th>완료</th><th>예약 링크</th><th>캘린더</th>
           </tr>
         </thead>
         <tbody id="rsv-tbody">
@@ -1315,7 +1326,7 @@ function renderBudget(data) {
 function renderReservations(data) {
   const tbody = document.getElementById('rsv-tbody');
   if (!data || data.error) {
-    tbody.innerHTML = `<tr><td colspan="6"><p class="error-msg">${data?.error ?? '데이터 없음'}</p></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="7"><p class="error-msg">${data?.error ?? '데이터 없음'}</p></td></tr>`;
     return;
   }
   tbody.innerHTML = (data.items ?? []).map(it => {
@@ -1340,15 +1351,61 @@ function renderReservations(data) {
     const calBtn = !it.booked
       ? `<button class="rsv-cal-btn" onclick="openRsvToCal('${esc(it.tripDate)}','${esc(it.name)}')">+ 캘린더</button>`
       : '';
+    const bookedToggle = it._row
+      ? `<button class="rsv-booked-btn${it.booked?' done':''}" onclick="toggleBooked(${it._row},${it._bookedCol},${it.booked})">${it.booked ? '✓ 완료' : '완료 표시'}</button>`
+      : '';
     return `<tr>
       <td><span class="rsv-sub">${esc(it.tripDate?.slice(5))}</span></td>
       <td><span class="rsv-name">${esc(it.name)}</span><br><span class="rsv-sub">${esc(it.source)}</span></td>
       <td>${urgBadge}<br><span class="${urgCls}" style="font-size:11px">${urgLabel}</span></td>
-      <td>${it.booked ? `<span class="tag tag-done">완료</span>` : `<span class="tag tag-pending">미예약</span>`}</td>
+      <td>${bookedToggle || (it.booked ? `<span class="tag tag-done">완료</span>` : `<span class="tag tag-pending">미예약</span>`)}</td>
       <td>${link}</td>
       <td>${calBtn}</td>
     </tr>`;
   }).join('');
+}
+
+// ── 예약 시트 쓰기 ────────────────────────────────────
+async function toggleBooked(row, col, current) {
+  if (!honeyTabName) { showToast('Google 연결 후 사용 가능합니다.'); return; }
+  const newVal = current ? 'FALSE' : 'TRUE';
+  const colLetter = String.fromCharCode(64 + col); // 1→A, 6→F
+  const range = `${honeyTabName}!${colLetter}${row}`;
+  try {
+    await sheetReq('PUT',
+      `https://sheets.googleapis.com/v4/spreadsheets/${HONEY_ID}/values/${encodeURIComponent(range)}?valueInputOption=RAW`,
+      { values: [[newVal]] }
+    );
+    showToast(current ? '미예약으로 변경했습니다.' : '예약 완료로 표시했습니다.');
+    fetchSheetData();
+  } catch(e) { showToast('업데이트 실패: ' + e.message); }
+}
+
+function openAddRsvModal() {
+  const m = document.getElementById('rsv-add-modal');
+  if (m) { ['rsv-add-date','rsv-add-name','rsv-add-lead','rsv-add-url','rsv-add-source'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; }); m.classList.add('open'); }
+  else showToast('모달을 찾을 수 없습니다.');
+}
+
+function closeAddRsvModal() { document.getElementById('rsv-add-modal')?.classList.remove('open'); }
+
+async function saveNewRsv() {
+  const date   = document.getElementById('rsv-add-date')?.value.trim();
+  const name   = document.getElementById('rsv-add-name')?.value.trim();
+  const lead   = document.getElementById('rsv-add-lead')?.value.trim() || '0';
+  const url    = document.getElementById('rsv-add-url')?.value.trim()  || '';
+  const source = document.getElementById('rsv-add-source')?.value.trim() || '';
+  if (!date || !name) { showToast('날짜와 항목명은 필수입니다.'); return; }
+  if (!honeyTabName) { showToast('Google 연결 후 사용 가능합니다.'); return; }
+  try {
+    await sheetReq('POST',
+      `https://sheets.googleapis.com/v4/spreadsheets/${HONEY_ID}/values/${encodeURIComponent(honeyTabName+'!A:F')}:append?valueInputOption=RAW&insertDataOption=INSERT_ROWS`,
+      { values: [[date, name, lead, url, source, 'FALSE']] }
+    );
+    closeAddRsvModal();
+    showToast('예약 항목이 추가되었습니다.');
+    fetchSheetData();
+  } catch(e) { showToast('추가 실패: ' + e.message); }
 }
 
 function openRsvToCal(tripDate, name) {
@@ -1431,6 +1488,7 @@ const SHARED_ATTENDEES = ['jemmajihyejeon@gmail.com', 'hyunggu@gmail.com'];
 const GC_SCOPE      = 'https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/spreadsheets profile email';
 const TASKS_SHEET   = '태스크';
 const TASK_COLS     = ['id','title','status','isBlog','dueDate','note'];
+let honeyTabName    = null; // 시트 탭 이름 (자동 감지)
 const SHEET_ID      = '1ovPyDUAsS3yq9xw3r1NAjSNqjV2Bz6b5_BHjgms3jIM';
 const HONEY_ID      = '1nmbZgOjqGVgeq24JMTlF1LjK9s4XtgYD8ro7MAMcvmE';
 const MONTHS_KO     = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
@@ -2154,10 +2212,14 @@ async function fetchSheetData() {
     const clTab = tabs.find(t => t.includes('체크리스트'));
     const bdTab = tabs.find(t => t.includes('원장'));
 
+    // 신혼여행 시트 탭 이름 자동 감지
+    const honeyMeta = await gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${HONEY_ID}?fields=sheets.properties`);
+    honeyTabName = honeyMeta?.sheets?.[0]?.properties?.title || 'Sheet1';
+
     const fetches = [
       clTab ? gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(clTab)}`) : Promise.resolve(null),
       bdTab ? gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(bdTab)}`) : Promise.resolve(null),
-      gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${HONEY_ID}/values/A:Z`),
+      gFetch(`https://sheets.googleapis.com/v4/spreadsheets/${HONEY_ID}/values/${encodeURIComponent(honeyTabName+'!A:Z')}`),
     ];
 
     const [clData, bdData, rsvData] = await Promise.all(fetches);
@@ -2230,7 +2292,8 @@ function parseReservations(rows) {
   if (!rows || rows.length < 2) return DEFAULT_RESERVATIONS;
   const hdr   = rows[0];
   const today = new Date(); today.setHours(0,0,0,0);
-  const items = rows.slice(1).map(row => {
+  const bookedColIdx = hdr.findIndex(h => h.trim() === 'booked');
+  const items = rows.slice(1).map((row, idx) => {
     const obj = {};
     hdr.forEach((h, i) => { obj[h.trim()] = (row[i] || '').trim(); });
     const tripDate  = obj['trip_date'] || '';
@@ -2245,6 +2308,8 @@ function parseReservations(rows) {
     return {
       tripDate, name: obj['name'] || '', source: obj['source'] || '',
       url: obj['url'] || '', booked, openDate, daysUntilOpen,
+      _row: idx + 2,
+      _bookedCol: bookedColIdx >= 0 ? bookedColIdx + 1 : 6,
     };
   }).filter(it => it.name);
   return { items };
@@ -2262,6 +2327,22 @@ renderCountdown();
 renderReservations(DEFAULT_RESERVATIONS);
 document.getElementById('lastUpdated').textContent = 'Google 캘린더 탭에서 연결하면 시트 데이터로 갱신됩니다.';
 </script>
+
+<!-- 예약 추가 모달 -->
+<div class="ev-overlay" id="rsv-add-modal" onclick="if(event.target===this)closeAddRsvModal()">
+  <div class="ev-modal">
+    <h3>예약 항목 추가</h3>
+    <div class="ev-field"><label class="ev-label">여행 날짜 *</label><input type="date" class="ev-input" id="rsv-add-date"></div>
+    <div class="ev-field"><label class="ev-label">항목명 *</label><input class="ev-input" id="rsv-add-name" placeholder="예: Diamond Head 트레일"></div>
+    <div class="ev-field"><label class="ev-label">예약 오픈 선행일수 (lead_days)</label><input type="number" class="ev-input" id="rsv-add-lead" placeholder="예: 30 (30일 전 오픈)" min="0"></div>
+    <div class="ev-field"><label class="ev-label">예약 링크 URL</label><input class="ev-input" id="rsv-add-url" placeholder="https://..."></div>
+    <div class="ev-field"><label class="ev-label">출처 / 비고</label><input class="ev-input" id="rsv-add-source" placeholder="예: recreation.gov, 전화 예약 등"></div>
+    <div class="fa">
+      <button class="ev-btn-cancel" onclick="closeAddRsvModal()">취소</button>
+      <button class="ev-btn-save" onclick="saveNewRsv()">시트에 추가</button>
+    </div>
+  </div>
+</div>
 
 <!-- Task Modal -->
 <div class="tm-overlay" id="tm-overlay" onclick="if(event.target===this)closeTM()">
