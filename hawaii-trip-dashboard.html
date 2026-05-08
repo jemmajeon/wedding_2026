@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>하와이 신혼여행 · v3.2</title>
+    <title>하와이 신혼여행 · v4.0</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
@@ -775,7 +775,40 @@
         background: var(--camp); color: #fff; border-color: var(--camp);
       }
       .lock-btn.locked:hover { background: var(--camp); }
-      .item.locked { background: linear-gradient(to right, rgba(16,185,129,0.05), transparent 30%); }
+      .item.locked { background: linear-gradient(to right, rgba(16,185,129,0.07), transparent 40%); }
+      .item:not(.locked) { border-left: 2px solid var(--gold-soft); padding-left: 10px; background: rgba(249,115,22,0.025); }
+
+      /* Day 확정 진행률 */
+      .day-progress-wrap { margin: 10px 0 6px; display:flex; align-items:center; gap:10px; }
+      .day-progress-bar { flex:1; height:5px; background:var(--line); border-radius:3px; overflow:hidden; }
+      .day-progress-fill { height:100%; background:var(--camp); border-radius:3px; transition:width .5s ease; }
+      .day-progress-text { font-size:11px; font-weight:700; color:var(--muted); white-space:nowrap; }
+      .day-progress-text.done { color:var(--camp); }
+
+      /* A/B 결정 버튼 */
+      .day-choice-btns { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:8px; padding:10px 12px; background:var(--bg-2); border-radius:var(--radius); }
+      .day-choice-label { font-size:12px; color:var(--muted); font-weight:600; }
+      .day-choice-btn {
+        padding:5px 14px; border-radius:999px; font-size:12px; font-weight:700;
+        cursor:pointer; border:1.5px solid var(--line); background:var(--surface);
+        color:var(--muted); transition:all .2s; font-family:inherit;
+      }
+      .day-choice-btn:hover { border-color:var(--primary); color:var(--primary); }
+      .day-choice-btn.is-a { background:var(--primary); color:#fff; border-color:var(--primary); }
+      .day-choice-btn.is-b { background:var(--accent); color:#fff; border-color:var(--accent); }
+      .day-chosen-badge { font-size:12px; font-weight:700; }
+
+      /* 확정 모아보기 */
+      .confirmed-item-row { display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); font-size:13px; }
+      .confirmed-item-row:last-child { border-bottom:none; }
+      .confirmed-time { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); min-width:52px; }
+      .confirmed-place { flex:1; font-weight:600; }
+      .conf-cal-btn { padding:3px 10px; border-radius:999px; background:var(--camp-soft); color:var(--camp); border:none; cursor:pointer; font-size:11px; font-weight:700; font-family:inherit; white-space:nowrap; transition:all .2s; }
+      .conf-cal-btn:hover { background:var(--camp); color:#fff; }
+
+      /* Map 확정만 보기 토글 */
+      .map-confirmed-toggle { padding:6px 14px; border-radius:999px; font-size:12px; font-weight:700; cursor:pointer; border:1.5px solid var(--line); background:var(--surface); color:var(--muted); transition:all .2s; font-family:inherit; }
+      .map-confirmed-toggle.on { background:var(--camp); color:#fff; border-color:var(--camp); }
       .res-btn {
         padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
         background: var(--surface); border: 1.5px solid var(--line-strong); color: var(--muted);
@@ -1147,7 +1180,7 @@
     <div class="wrap">
       <header>
         <div class="header-left">
-          <p class="eyebrow"><span class="version">v3.2</span>검증 완료 · 2026.05 기준</p>
+          <p class="eyebrow"><span class="version">v4.0</span>검증 완료 · 2026.05 기준</p>
           <h1>하와이 신혼여행</h1>
           <p class="subtitle">KE053 · 8박 9일 · 2026.07.12–07.20 · 마우이 + 오아후 · 호텔 4박 + 캠핑 4박</p>
         </div>
@@ -1166,7 +1199,7 @@
           <button class="main-tab-btn" role="tab" aria-selected="false" data-main="trip">🗓️ 일정</button>
           <button class="main-tab-btn" role="tab" aria-selected="false" data-main="map">🗺️ 지도</button>
           <button class="main-tab-btn" role="tab" aria-selected="false" data-main="prep">📋 준비</button>
-          <button class="main-tab-btn" role="tab" aria-selected="false" data-main="ref">📖 참고</button>
+          <button class="main-tab-btn" role="tab" aria-selected="false" data-main="ref" onclick="setTimeout(initRefMap,80)">📖 참고</button>
           <button class="main-tab-btn" role="tab" aria-selected="false" data-main="system">⚙️ 시스템</button>
         </nav>
         <div class="ab-switch" id="ab-switch">
@@ -1178,141 +1211,8 @@
       <!-- ════════ 📊 개요 ════════ -->
       <div class="main-panel active" id="main-summary">
         <section class="grid">
-          <article class="card full rate-chart-card">
-            <h2 class="section-title">💱 USD/KRW 환율 — 최근 3개월 일별 흐름</h2>
-            <div class="rate-stats">
-              <div class="rate-stat"><div class="rs-label">현재</div><div class="rs-val rs-current" id="rs-current">—</div></div>
-              <div class="rate-stat"><div class="rs-label">3개월 고점</div><div class="rs-val rs-high" id="rs-high">—</div></div>
-              <div class="rate-stat"><div class="rs-label">3개월 저점</div><div class="rs-val rs-low" id="rs-low">—</div></div>
-              <div class="rate-stat"><div class="rs-label">3개월 변동</div><div class="rs-val" id="rs-change">—</div></div>
-            </div>
-            <div class="rate-chart-wrap"><canvas id="c-rate-chart"></canvas></div>
-            <p class="claude-note" id="rs-note" style="margin-top:6px">환율 데이터 로딩 중...</p>
-          </article>
-          <article class="card full must-have-card">
-            <h2 class="section-title">✅ 핵심 체크포인트</h2>
 
-            <div class="must-section">
-              <h4>🔥 핵심 필수 (사용자 강조)</h4>
-              <div class="must-grid">
-                <div class="must-item must-critical" data-jump="schedule">
-                  <span class="must-check">⭐</span>
-                  <div class="must-body">
-                    <strong>Hanauma Bay 스노쿨링</strong>
-                    <span class="must-loc">"필수야!" · Day 7 09:30 → 일정 탭</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-                <div class="must-item must-critical" data-jump="stay">
-                  <span class="must-check">⭐</span>
-                  <div class="must-body">
-                    <strong>캠핑 4박 (중간 배치)</strong>
-                    <span class="must-loc">Day 3·4·5·6 → 숙박 탭</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-                <div class="must-item must-critical" data-jump="stay">
-                  <span class="must-check">⭐</span>
-                  <div class="must-body">
-                    <strong>전기·샤워 캠핑장 위주</strong>
-                    <span class="must-loc">🟢 Camp Olowalu + Malaekahana → 숙박 탭</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-                <div class="must-item must-critical" data-jump="stay">
-                  <span class="must-check">⭐</span>
-                  <div class="must-body">
-                    <strong>호텔 근처 대안</strong>
-                    <span class="must-loc">13곳 (Paia/Kahului 5 + Waikiki 8) → 숙박 탭</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="must-section">
-              <h4>📍 데이터 · UI 요구</h4>
-              <div class="must-grid">
-                <div class="must-item" data-jump="schedule">
-                  <span class="must-check">✅</span>
-                  <div class="must-body">
-                    <strong>별점 ★/5 + 대체 옵션</strong>
-                    <span class="must-loc">전체 일정 적용 → 일정·상세 탭</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-                <div class="must-item" data-jump="budget">
-                  <span class="must-check">✅</span>
-                  <div class="must-body">
-                    <strong>환율 자동 변환 (1USD = ₩1,475 기본)</strong>
-                    <span class="must-loc">헤더 입력 → 비용 탭 즉시 갱신</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-                <div class="must-item" data-jump="map">
-                  <span class="must-check">✅</span>
-                  <div class="must-body">
-                    <strong>URL 클릭 + 지도 좌표</strong>
-                    <span class="must-loc">전 항목 Google Maps 좌표 → 지도 탭</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="must-section">
-              <h4>📂 정보 카테고리</h4>
-              <div class="must-grid">
-                <div class="must-item" data-jump="food">
-                  <span class="must-check">✅</span>
-                  <div class="must-body">
-                    <strong>음식점 · 디저트 · 마트</strong>
-                    <span class="must-loc">46곳 + H Mart 한식 자재 → 먹거리 탭</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-                <div class="must-item" data-jump="details">
-                  <span class="must-check">✅</span>
-                  <div class="must-body">
-                    <strong>첫 하와이 가이드 (상세 정보)</strong>
-                    <span class="must-loc">12 팁 + 47 장소 디테일 → 상세 정보 탭</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-                <div class="must-item" data-jump="overview">
-                  <span class="must-check">✅</span>
-                  <div class="must-body">
-                    <strong>2026.05 기준 예약 데드라인</strong>
-                    <span class="must-loc">🚨 늦음 / 🟠 5/13 / 🟢 6~7월 → 한눈에 하단</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="must-section">
-              <h4>🔧 운영 / 검증</h4>
-              <div class="must-grid">
-                <div class="must-item" data-jump="overview">
-                  <span class="must-check">✅</span>
-                  <div class="must-body">
-                    <strong>8박 9일 (e-티켓 KE053/054 기준)</strong>
-                    <span class="must-loc">7/12 ICN 21:05 → 7/20 HNL 13:05 → 한눈에 항공</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-                <div class="must-item" data-jump="data">
-                  <span class="must-check">✅</span>
-                  <div class="must-body">
-                    <strong>사실관계 검증 + 정정 17건</strong>
-                    <span class="must-loc">Diamond Head 휴무 거짓·Star Noodle 새 주소 등 → 데이터 탭</span>
-                  </div>
-                  <span class="must-arrow">→</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
+          <!-- 1. 여행 요약 KPI -->
           <article class="card full">
             <h2 class="section-title">여행 요약</h2>
             <div class="kpis" id="c-kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:14px"></div>
@@ -1324,40 +1224,88 @@
               <div class="muted" style="font-size:12px;text-align:right">환율 변경 → 자동 갱신</div>
             </div>
           </article>
+
+          <!-- 2. 예약 데드라인 (가장 긴급) -->
           <article class="card full">
-            <h2 class="section-title">✈️ 항공 스케줄 <span class="accent">— e-티켓 확인됨</span></h2>
-            <div id="c-flights"></div>
-          </article>
-          <article class="card full">
-            <h2 class="section-title">🚨 예약 데드라인 <span class="accent">— 2026.05.01 기준</span></h2>
+            <h2 class="section-title">🚨 예약 데드라인 <span class="accent">— 2026.05 기준</span></h2>
             <div id="c-actions"></div>
             <p class="claude-note">
               🚨 늦음 / 🔴 즉시 / 🟠 정확한 시점 (캘린더 알림 필수) / 🟢 6월~7월 진행. <strong>5/13 화요일 07:00 HST = Haleakalā 일출 60일 전 오픈</strong>, 매진 5분 안.
             </p>
           </article>
+
+          <!-- 3. 출발 전 로드맵 -->
           <article class="card full">
             <h2 class="section-title">🗺️ 출발 전 로드맵</h2>
             <div id="c-roadmap"></div>
           </article>
+
+          <!-- 4. 항공 스케줄 -->
+          <article class="card full">
+            <h2 class="section-title">✈️ 항공 스케줄 <span class="accent">— e-티켓 확인됨</span></h2>
+            <div id="c-flights"></div>
+          </article>
+
+          <!-- 5. 트립 캘린더 -->
           <article class="card full">
             <h2 class="section-title">📆 트립 캘린더 — 8박 9일</h2>
             <div id="c-calendar"></div>
-            <p class="claude-note">각 셀 클릭 → 타임라인 탭으로 이동.</p>
+            <p class="claude-note">각 셀 클릭 → 일정 탭으로 이동.</p>
           </article>
+
+          <!-- 확정 일정 모아보기 -->
+          <article class="card full" id="confirmed-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+              <h2 class="section-title" style="margin:0">✅ 확정된 일정</h2>
+            </div>
+            <div id="c-confirmed-panel"></div>
+          </article>
+
+          <!-- 6. 환율 차트 (참고) -->
+          <article class="card full rate-chart-card">
+            <h2 class="section-title">💱 USD/KRW 환율 — 최근 3개월</h2>
+            <div class="rate-stats">
+              <div class="rate-stat"><div class="rs-label">현재</div><div class="rs-val rs-current" id="rs-current">—</div></div>
+              <div class="rate-stat"><div class="rs-label">3개월 고점</div><div class="rs-val rs-high" id="rs-high">—</div></div>
+              <div class="rate-stat"><div class="rs-label">3개월 저점</div><div class="rs-val rs-low" id="rs-low">—</div></div>
+              <div class="rate-stat"><div class="rs-label">3개월 변동</div><div class="rs-val" id="rs-change">—</div></div>
+            </div>
+            <div class="rate-chart-wrap"><canvas id="c-rate-chart"></canvas></div>
+            <p class="claude-note" id="rs-note" style="margin-top:6px">환율 데이터 로딩 중...</p>
+          </article>
+
         </section>
-      </section>
       </div><!-- /main-summary -->
 
       <!-- ════════ 🗓️ 일정 ════════ -->
       <div class="main-panel" id="main-trip">
-        <div id="c-ab-timeline"></div>
+
+        <!-- 여행 캘린더 -->
+        <section style="margin-bottom:32px;padding-bottom:28px;border-bottom:1px solid var(--line)">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+            <h2 style="font-size:18px;font-weight:800;margin:0">여행 캘린더</h2>
+            <span style="font-size:13px;color:var(--muted)">2026.07.12 – 07.20</span>
+            <div style="margin-left:auto;display:flex;gap:8px">
+              <button id="hcal-btn" onclick="hCalConnect()" style="padding:8px 18px;border-radius:999px;background:var(--primary);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit">Google 캘린더 연결</button>
+            </div>
+          </div>
+          <p id="hcal-err" style="color:var(--warn);font-size:13px;margin-bottom:12px;display:none"></p>
+          <div id="hcal-body">
+            <p style="color:var(--muted);font-size:14px">캘린더 연결 후 여행 기간 일정이 표시됩니다.</p>
+          </div>
+        </section>
+
+        <div id="c-timeline"></div>
       </div><!-- /main-trip -->
 
       <!-- ════════ 🗺️ 지도 ════════ -->
       <div class="main-panel" id="main-map">
         <section class="grid">
           <article class="card full">
-            <div class="map-controls" id="c-map-controls"></div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <div class="map-controls" id="c-map-controls" style="flex:1"></div>
+              <button class="map-confirmed-toggle" id="map-conf-toggle" onclick="toggleMapConfirmed()">✅ 확정만 보기</button>
+            </div>
             <div id="c-map"></div>
             <div class="map-legend" id="c-map-legend"></div>
             <p class="claude-note">상단 A/B 전역 토글 연동 — A안: 전체 동선, B안: 확정 스팟만.</p>
@@ -1495,23 +1443,211 @@
 
       <!-- ════════ 📖 참고 ════════ -->
       <div class="main-panel" id="main-ref">
-        <div style="max-width:900px;margin:0 auto">
+        <div style="max-width:1100px;margin:0 auto">
 
           <!-- 출처 배너 -->
-          <div style="background:var(--primary-soft);border:1px solid var(--primary);border-radius:var(--radius);padding:14px 18px;margin-bottom:28px;display:flex;align-items:center;gap:12px">
-            <span style="font-size:20px">📝</span>
-            <div>
-              <div style="font-size:13px;font-weight:700;color:var(--primary-strong)">2022년 마우이 여행 후기 기반 (MileMoa) — 2026 팩트체크 완료</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:2px">가격·예약 정책은 변경될 수 있으니 출발 전 공식 사이트에서 재확인 권장</div>
+          <div style="background:var(--primary-soft);border:1px solid var(--primary);border-radius:var(--radius);padding:12px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <span style="font-size:18px">📝</span>
+            <div style="flex:1;min-width:200px">
+              <div style="font-size:13px;font-weight:700;color:var(--primary-strong)">2022년 5월 마우이 여행 후기 기반 · 2026 팩트체크 완료</div>
+              <div style="font-size:12px;color:var(--muted)">출처: <a href="https://www.milemoa.com/bbs/board.php?bo_table=board&wr_id=9476936" target="_blank" rel="noopener" style="color:var(--primary);font-weight:600">MileMoa — visa 님 후기 →</a></div>
             </div>
           </div>
 
-          <!-- 팩트체크 범례 -->
-          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px;font-size:12px">
-            <span style="display:flex;align-items:center;gap:4px"><span style="color:#3a7d5c;font-weight:800">🟢</span> 2026 동일/확인</span>
-            <span style="display:flex;align-items:center;gap:4px"><span style="color:#c07a20;font-weight:800">🟡</span> 변경됨</span>
-            <span style="display:flex;align-items:center;gap:4px"><span style="color:#c0522e;font-weight:800">🔴</span> 주의 필요</span>
+          <!-- 팩트체크 범례 + 지도 + 타임라인 (새 버전) -->
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;font-size:12px">
+            <span>🟢 2026 동일</span><span>🟡 변경됨</span><span>🔴 주의</span>
           </div>
+
+          <!-- 지도 + 팩트체크 2단 -->
+          <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;margin-bottom:20px" id="ref-grid">
+            <div class="card" style="padding:0;overflow:hidden">
+              <div style="padding:12px 16px 10px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+                <div style="font-size:14px;font-weight:700">🗺️ 2022 동선 지도</div>
+                <div style="display:flex;gap:8px;font-size:11px;flex-wrap:wrap">
+                  <span><span style="display:inline-block;width:10px;height:4px;background:#e26d3f;border-radius:2px;vertical-align:middle"></span> 할레아칼라</span>
+                  <span><span style="display:inline-block;width:10px;height:4px;background:#0e7c5a;border-radius:2px;vertical-align:middle"></span> 로드투하나</span>
+                  <span><span style="display:inline-block;width:10px;height:4px;background:#6366f1;border-radius:2px;vertical-align:middle"></span> 해변·스팟</span>
+                </div>
+              </div>
+              <div id="ref-map" style="height:460px;width:100%"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="card">
+                <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">2026 팩트체크</div>
+                <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+                  <div style="padding:8px 10px;background:var(--bg-2);border-radius:8px"><strong>🌋 할레아칼라 입장료</strong><br>🟡 <s>$5</s> → <strong>$35/vehicle</strong> (7일 패스, 2024+)</div>
+                  <div style="padding:8px 10px;background:var(--bg-2);border-radius:8px"><strong>⬛ Waiʻānapanapa</strong><br>🟡 <s>$10/차+$5/인</s> → <strong>$10/인</strong><br>🔴 사전 예약 <strong>필수</strong> (매진 잦음)</div>
+                  <div style="padding:8px 10px;background:var(--bg-2);border-radius:8px"><strong>📋 예약 사이트</strong><br>🟡 → <a href="https://gostateparks.hawaii.gov" target="_blank" style="color:var(--primary)">gostateparks.hawaii.gov</a></div>
+                  <div style="padding:8px 10px;background:#e8f5ee;border-radius:8px;border:1px solid #a8d9c0"><strong>🐢 Ho'okipa 거북이</strong><br>🟢 오후 5-7시 수면 타임 여전히 유효</div>
+                  <div style="padding:8px 10px;background:var(--bg-2);border-radius:8px"><strong>🏨 Grand Wailea</strong><br>🟡 Waldorf Astoria 리브랜딩<br>Hilton 혜택 정책 재확인 필요</div>
+                </div>
+              </div>
+              <div class="card">
+                <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px">🚗 운전 핵심</div>
+                <div style="font-size:12px;display:flex;flex-direction:column;gap:5px">
+                  <div>규정속도 -5mph 유지 (멀미 예방)</div>
+                  <div>코너 <strong>진입 전</strong> 감속 필수</div>
+                  <div>Shaka Maui 앱 오프라인 다운로드</div>
+                  <div style="color:var(--warn);font-weight:600">⚠️ 야간 하산 시 졸음 극도 주의</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <style>@media(max-width:800px){#ref-grid{grid-template-columns:1fr!important}}</style>
+
+          <!-- Day 1 타임라인 -->
+          <div class="day-block" style="border-left-color:#e26d3f;margin-bottom:14px">
+            <h3>Day 1 <span class="day-date">· 일요일 · 마우이</span></h3>
+            <div class="day-meta">
+              <span class="pill">🌋 할레아칼라 일출</span>
+              <span class="pill">🛣️ 로드 투 하나 전구간</span>
+              <span class="pill">약 16시간 코스</span>
+            </div>
+            <div class="item"><div class="time">03:40</div><div>
+              <div class="item-place">🏨 Grand Wailea 출발</div>
+              <div class="item-memo">외투 필수. 없으면 호텔에 비치타월 요청 (흔쾌히 줌). 매표소 대기 10분 감안해서 여유 있게 출발.</div>
+            </div></div>
+            <div class="item"><div class="time">06:00</div><div>
+              <div class="item-place"><a href="https://www.recreation.gov/timed-entry/10288923" target="_blank" rel="noopener">📍 할레아칼라 매표소</a></div>
+              <div class="meta"><span class="pill check">예약 필수 ($1)</span><span class="pill">입장료 $35/vehicle</span></div>
+              <div class="item-memo">60일 전 + 2일 전 07:00 HST 오픈. 매표소 줄 10분 지체. 비지터센터까지 25분 추가 운전.</div>
+            </div></div>
+            <div class="item"><div class="time">06:15</div><div>
+              <div class="item-place">📍 Pa Ka'oao — 일출 감상 ⭐</div>
+              <div class="meta"><span class="pill sun">일출</span><span class="pill">비지터센터 도보 5분 위</span></div>
+              <div class="item-memo">비지터센터보다 강추 — 사람 적고 뷰 좋음. 기온 5°C 이하, 구름 위 일출이 압도적.</div>
+            </div></div>
+            <div class="item"><div class="time">07:00</div><div>
+              <div class="item-place">📍 Red Hill Summit (10,023ft / 해발 3,055m)</div>
+              <div class="meta"><span class="pill">차로 2-3분</span></div>
+              <div class="item-memo">Summit Building 내부에서 추위 피할 수 있음. 1만 피트 팻말 인증샷 명소.</div>
+            </div></div>
+            <div class="item"><div class="time">08:30</div><div>
+              <div class="item-place">🍔 McDonald's 아침 (로컬 메뉴)</div>
+              <div class="item-memo">Local Deluxe Platter (스팸+포르투갈 소세지+밥+스크램블) + Saimin(하와이 전통 국수). 간단하게 때우기 좋음.</div>
+            </div></div>
+            <div class="item"><div class="time">09:30</div><div>
+              <div class="item-place">🛣️ Road to Hana 시작 (북쪽 코스)</div>
+              <div class="meta"><span class="pill">Shaka Maui 앱 오프라인 필수</span></div>
+              <div class="item-memo">신호 없는 구간 많음. 앱을 출발 전 미리 다운로드해야 가이드 동작.</div>
+            </div></div>
+            <div class="item"><div class="time">10:00</div><div>
+              <div class="item-place">📍 Twin Falls</div>
+              <div class="meta"><span class="pill">왕복 30분</span></div>
+              <div class="item-memo">폭포 자체는 평범. 코코넛 음료는 <strong>나올 때</strong> 구매 추천 (들어갈 때 사면 내내 무거움).</div>
+            </div></div>
+            <div class="item"><div class="time">10:45</div><div>
+              <div class="item-place">📍 Waikamoi Ridge Trail — 유칼립투스 숲</div>
+              <div class="item-memo">주차 제한. 사람 나오기를 5분 기다려야 할 수도. 거대한 유칼립투스 숲이 인상적.</div>
+            </div></div>
+            <div class="item"><div class="time">11:30</div><div>
+              <div class="item-place">📍 Keʻanae Peninsula</div>
+              <div class="item-memo">반환점 결정 기준 뷰포인트. 파도 강한 바위 위 올라가지 말 것 (위험). 이쯤부터 배가 고파짐.</div>
+            </div></div>
+            <div class="item"><div class="time">12:30</div><div>
+              <div class="item-place">⭐ Halfway to Hana — 점심 강추</div>
+              <div class="meta"><span class="pill check">카드 가능</span><span class="pill sun">강추</span></div>
+              <div class="item-memo">망고 쉐이브드 아이스 + 샌드위치. 컨디션 체크 포인트 — 여기서 계속 갈지 되돌아갈지 결정.</div>
+            </div></div>
+            <div class="item"><div class="time">13:30</div><div>
+              <div class="item-place">📍 Nahiku Marketplace</div>
+              <div class="meta"><span class="pill">현금만</span><span class="pill">바베큐 오후 2:30 마감</span></div>
+              <div class="item-memo">바베큐 마지막 서빙이면 45분 대기. 퍽퍽할 수 있음. Hana Harvest가 나을 수도.</div>
+            </div></div>
+            <div class="item"><div class="time">14:30</div><div>
+              <div class="item-place">📍 Hana Bay Beach Park — 종착</div>
+              <div class="item-memo">검은 모래 해변. 로컬 분위기. 근처 Hana-Maui Resort 구경도 가능.</div>
+            </div></div>
+            <div class="item"><div class="time">18:30</div><div>
+              <div class="item-place">🌅 Grand Wailea 귀환 · 선셋</div>
+              <div class="item-memo">숙소 해변의 선셋이 압도적. 바쁘게 다니다 보면 놓치기 쉬우니 꼭 챙길 것.</div>
+            </div></div>
+          </div>
+
+          <!-- 기타 스팟 -->
+          <div class="day-block" style="border-left-color:#6366f1;margin-bottom:14px">
+            <h3>기타 추천 <span class="day-date">· 마우이 전역</span></h3>
+            <div class="day-meta"><span class="pill">🤿 스노클링</span><span class="pill">🐢 바다거북</span><span class="pill">🌟 별보기</span></div>
+            <div class="item"><div class="time">종일</div><div>
+              <div class="item-place">📍 Napali Bay — 스노클링 ⭐⭐⭐</div>
+              <div class="item-memo">물고기 많음 (검정색 위주). 라이프재킷 추천. 주차 제한 있음. 마스크 렌즈 종류에 따라 30분 이상 어지러울 수 있음.</div>
+            </div></div>
+            <div class="item"><div class="time">종일</div><div>
+              <div class="item-place">📍 Wailea Beach — 스노클링 ⭐⭐</div>
+              <div class="item-memo">Grand Wailea 바로 앞. 날씨 따라 물속 탁함. 접근성 좋음.</div>
+            </div></div>
+            <div class="item"><div class="time">오후 5-7시</div><div>
+              <div class="item-place">⭐ Ho'okipa Beach — 바다거북 수면 타임 ⭐⭐⭐⭐⭐</div>
+              <div class="meta"><span class="pill sun">강추</span></div>
+              <div class="item-memo">해변 오른쪽 끝에서 거북이 10마리+ 수면. 물개도 간혹 출몰. 공항 근처라 귀국 전 마지막 코스로 최적.</div>
+            </div></div>
+            <div class="item"><div class="time">새벽 1시</div><div>
+              <div class="item-place">🌟 할레아칼라 별보기 (마지막 밤)</div>
+              <div class="item-memo">정상까지 안 가도 매표소 앞에서 충분히 아름다운 별하늘. ⚠️ 내려오는 고속도로에서 졸음 극도 주의.</div>
+            </div></div>
+          </div>
+
+          <!-- 숙소 팁 -->
+          <div class="card" style="margin-bottom:14px">
+            <div style="font-size:14px;font-weight:800;margin-bottom:12px">🏨 숙소 팁 (2026)</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;font-size:12px">
+              <div style="padding:10px;background:var(--bg-2);border-radius:8px"><strong>Grand Wailea (Waldorf Astoria)</strong><br>🟡 리브랜딩 → Hilton 정책 재확인<br>🔴 발렛 $65/박, 셀프파킹 없음<br>💡 식당 이용 시 발렛 1일 면제 요청 가능</div>
+              <div style="padding:10px;background:var(--bg-2);border-radius:8px"><strong>Andaz Maui</strong><br>🟢 포인트 숙박 시 리조트피 면제 (일반 멤버 포함)<br>🟢 발렛 $45/박<br>💡 식당 이용 시 밸리데이트 요청</div>
+            </div>
+          </div>
+
+          <!-- JS: 참고 지도 초기화 -->
+          <script>
+          var refMapInited = false;
+          function initRefMap() {
+            if (refMapInited || typeof L === 'undefined') return;
+            refMapInited = true;
+            var rm = L.map('ref-map', {scrollWheelZoom: false}).setView([20.85, -156.25], 10);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom:18, attribution:'&copy; OpenStreetMap'
+            }).addTo(rm);
+
+            var orange = {color:'#e26d3f',fillColor:'#e26d3f',fillOpacity:.85,radius:8,weight:2};
+            var green  = {color:'#0e7c5a',fillColor:'#0e7c5a',fillOpacity:.85,radius:8,weight:2};
+            var indigo = {color:'#6366f1',fillColor:'#6366f1',fillOpacity:.85,radius:8,weight:2};
+
+            var hana_route = [
+              [20.6889,-156.4419],[20.7097,-156.2536],[20.7129,-156.2526]
+            ];
+            var road_route = [
+              [20.8491,-156.3454],[20.8989,-156.2313],[20.9231,-156.1986],
+              [20.8993,-156.1528],[20.8683,-156.0977],[20.7981,-156.0461],
+              [20.7742,-156.0035],[20.7581,-155.9896]
+            ];
+
+            L.polyline([[20.6889,-156.4419],[20.7097,-156.2536],[20.7129,-156.2526]],{color:'#e26d3f',weight:3,opacity:.7,dashArray:'6 8'}).addTo(rm);
+            L.polyline([[20.8491,-156.3454],[20.8989,-156.2313],[20.9231,-156.1986],[20.8993,-156.1528],[20.8683,-156.0977],[20.7981,-156.0461],[20.7742,-156.0035],[20.7581,-155.9896]],{color:'#0e7c5a',weight:3,opacity:.7,dashArray:'6 8'}).addTo(rm);
+
+            var pts = [
+              {ll:[20.6889,-156.4419],s:orange,n:'🏨 Grand Wailea',m:'베이스캠프. 03:40 출발'},
+              {ll:[20.7097,-156.2536],s:orange,n:'🌋 할레아칼라 비지터센터',m:'Pa Ka\'oao(도보 5분 위) 추천'},
+              {ll:[20.7129,-156.2526],s:orange,n:'🏔 Red Hill Summit (10,023ft)',m:'해발 3,055m'},
+              {ll:[20.8491,-156.3454],s:green,n:'🍔 McDonald\'s',m:'로컬 메뉴: Local Deluxe Platter'},
+              {ll:[20.8989,-156.2313],s:green,n:'🌊 Twin Falls',m:'코코넛 음료는 나올 때 구매'},
+              {ll:[20.9231,-156.1986],s:green,n:'🌿 Waikamoi Ridge Trail',m:'유칼립투스 숲. 주차 제한'},
+              {ll:[20.8993,-156.1528],s:green,n:'🪨 Keʻanae Peninsula',m:'반환점 기준 뷰포인트'},
+              {ll:[20.8683,-156.0977],s:green,n:'⭐ Halfway to Hana',m:'망고 쉐이브드 아이스 강추. 카드 가능'},
+              {ll:[20.7981,-156.0461],s:green,n:'🍖 Nahiku Marketplace',m:'현금만. 바베큐 오후 2:30 마감'},
+              {ll:[20.7742,-156.0035],s:green,n:'⬛ Waiʻānapanapa SP',m:'흑사 해변. 사전 예약 필수. $10/인'},
+              {ll:[20.7581,-155.9896],s:green,n:'🏖 Hana Bay Beach Park',m:'종착점'},
+              {ll:[20.9289,-156.6841],s:indigo,n:'🤿 Napali Bay',m:'스노클링 ⭐⭐⭐'},
+              {ll:[20.9413,-156.3447],s:indigo,n:'🐢 Ho\'okipa Beach',m:'바다거북 오후 5-7시 ⭐⭐⭐⭐⭐'},
+            ];
+            pts.forEach(function(p){
+              L.circleMarker(p.ll,p.s).bindPopup('<div style="font-family:\'Pretendard Variable\',sans-serif"><strong>'+p.n+'</strong><br><span style="font-size:12px;color:#6b6b6b">'+p.m+'</span></div>').addTo(rm);
+            });
+          }
+          </script>
+
+          <!-- 출처 -->
+          <div style="text-align:center;font-size:12px;color:var(--muted);padding:12px 0;border-top:1px solid var(--line-strong)">
+          <div style="display:none">
 
           <!-- 1. 할레아칼라 -->
           <div class="card" style="margin-bottom:20px">
@@ -1680,9 +1816,8 @@
           </div>
 
           <!-- 출처 -->
-          <div style="text-align:center;font-size:12px;color:var(--muted);padding:16px 0;border-top:1px solid var(--line-strong)">
-            원본 출처: <a href="https://www.milemoa.com/bbs/board/9476936" target="_blank" rel="noopener" style="color:var(--primary)">MileMoa — 2022년 5월 마우이 여행 후기 (visa 님)</a><br>
-            2026 팩트체크: 공원 입장료 $35/차 (2024+), 와이아나파나파 예약 필수화, 예약 사이트 변경
+          원본: <a href="https://www.milemoa.com/bbs/board.php?bo_table=board&wr_id=9476936" target="_blank" rel="noopener" style="color:var(--primary)">MileMoa · 2022년 5월 마우이 여행 후기 (visa 님)</a>
+          · 2026 팩트체크: 할레아칼라 $35/차, 와이아나파나파 예약필수·$10/인
           </div>
 
         </div>
@@ -1692,10 +1827,95 @@
       <div class="main-panel" id="main-system">
         <div class="vlayout">
           <nav class="vtabs">
-            <button class="vtab-btn" aria-selected="true"  data-subtab="data">🔑 데이터</button>
-            <button class="vtab-btn" aria-selected="false" data-subtab="tech">🔧 기술</button>
+            <button class="vtab-btn" aria-selected="true"  data-subtab="must">✅ 필수항목</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="data">🔑 데이터</button>
+            <button class="vtab-btn" aria-selected="false" data-subtab="tech">🔧 기술·개선</button>
           </nav>
           <div class="vcontent">
+
+      <!-- ✅ 필수항목 -->
+      <div class="subtab-panel" id="sub-must">
+        <section class="grid">
+          <article class="card full must-have-card">
+            <h2 class="section-title">⭐ 반드시 해야 할 것</h2>
+            <div class="must-section">
+              <h4>🔥 핵심 필수</h4>
+              <div class="must-grid">
+                <div class="must-item must-critical" data-jump="schedule">
+                  <span class="must-check">⭐</span>
+                  <div class="must-body"><strong>Hanauma Bay 스노쿨링</strong><span class="must-loc">"필수야!" · Day 7 09:30 → 일정 탭</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item must-critical" data-jump="stay">
+                  <span class="must-check">⭐</span>
+                  <div class="must-body"><strong>캠핑 4박 (중간 배치)</strong><span class="must-loc">Day 3·4·5·6 → 준비 탭 숙박</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item must-critical" data-jump="stay">
+                  <span class="must-check">⭐</span>
+                  <div class="must-body"><strong>전기·샤워 캠핑장 위주</strong><span class="must-loc">Camp Olowalu + Malaekahana → 준비 탭</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+              </div>
+            </div>
+            <div class="must-section">
+              <h4>🚨 예약 긴급 순위</h4>
+              <div class="must-grid">
+                <div class="must-item must-critical" data-jump="overview">
+                  <span class="must-check">🚨</span>
+                  <div class="must-body"><strong>Haleakalā 일출 예약</strong><span class="must-loc">5/13 07:00 HST 오픈 — 5분 안 매진</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="overview">
+                  <span class="must-check">🔴</span>
+                  <div class="must-body"><strong>Hanauma Bay 예약</strong><span class="must-loc">→ 개요 탭 데드라인</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="overview">
+                  <span class="must-check">🔴</span>
+                  <div class="must-body"><strong>USS Arizona Memorial</strong><span class="must-loc">무료 티켓 · 매진 위험 → 개요 탭</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="stay">
+                  <span class="must-check">🟠</span>
+                  <div class="must-body"><strong>캠핑장 예약 (3곳)</strong><span class="must-loc">6~7월 → 준비 탭 숙박</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="food">
+                  <span class="must-check">🟠</span>
+                  <div class="must-body"><strong>La Mer / 신혼 디너 예약</strong><span class="must-loc">21일 전 → 먹거리 탭</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+              </div>
+            </div>
+            <div class="must-section">
+              <h4>📋 출발 전 준비</h4>
+              <div class="must-grid">
+                <div class="must-item" data-jump="schedule">
+                  <span class="must-check">✅</span>
+                  <div class="must-body"><strong>렌트카 예약 확정</strong><span class="must-loc">Costco vs Discount Hawaii 비교 → 일정 탭</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="guide">
+                  <span class="must-check">✅</span>
+                  <div class="must-body"><strong>스노클 장비 준비</strong><span class="must-loc">Amazon 구매 추천 → 준비 탭 가이드</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="guide">
+                  <span class="must-check">✅</span>
+                  <div class="must-body"><strong>트래블카드·환전</strong><span class="must-loc">현금 필요 식당 있음 → 준비 탭 가이드</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+                <div class="must-item" data-jump="schedule">
+                  <span class="must-check">✅</span>
+                  <div class="must-body"><strong>Shaka Maui 앱 다운로드</strong><span class="must-loc">로드 투 하나 오프라인 필수</span></div>
+                  <span class="must-arrow">→</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        </section>
+      </div>
 
       <!-- 🔑 데이터 -->
       <div class="subtab-panel" id="sub-data">
@@ -1913,15 +2133,62 @@
             </ul>
           </article>
 
-          <article class="card full" style="margin-top:16px">
-            <h2 class="section-title">📅 구글 캘린더 연동 계획</h2>
-            <ul style="font-size:14px;color:var(--ink-2);line-height:2">
-              <li>PLAN_AB 데이터 → ICS 파일 생성 → 구글 캘린더 가져오기</li>
-              <li>확정 일정(fix:true)만 먼저 등록 → A/B 결정 후 선택 안 추가</li>
-              <li>n8n 워크플로로 자동화 가능: webhook → ICS 생성 → Gmail 발송</li>
-              <li>각 이벤트에 예약 링크·메모 포함</li>
-            </ul>
-            <p class="claude-note">ICS 내보내기 버튼은 v3.2에서 구현 예정.</p>
+          <article class="card full">
+            <h2 class="section-title">📊 기능 현황</h2>
+            <div class="tech-grid">
+              <div class="tech-item">
+                <div class="tech-cat" style="background:var(--camp-soft);color:var(--camp)">✅ 완료</div>
+                <h4>Google 캘린더 연동</h4>
+                <p>일정 탭 상단에 여행 캘린더 통합. 개인·공용 두 계정 동시 연결. 일정 추가·수정·삭제 가능.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat" style="background:var(--camp-soft);color:var(--camp)">✅ 완료</div>
+                <h4>참고 탭 (MileMoa 후기)</h4>
+                <p>2022 마우이 여행 후기 기반, 2026 팩트체크. 지도 동선 + 타임라인 + 팩트체크 카드.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat" style="background:var(--camp-soft);color:var(--camp)">✅ 완료</div>
+                <h4>대시보드 허브 연결</h4>
+                <p>결혼준비 대시보드 ↔ 하와이 대시보드 상단 네비게이션 연결. UTM 태깅 준비.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat" style="background:var(--gold-soft);color:var(--gold)">🔄 계획</div>
+                <h4>ICS 내보내기</h4>
+                <p>확정 일정(fix:true) → ICS 파일 생성 → 구글 캘린더 가져오기. n8n 자동화 연동 가능.</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat" style="background:var(--gold-soft);color:var(--gold)">🔄 계획</div>
+                <h4>환율 실시간 API</h4>
+                <p>현재 수동 입력 방식 → 실시간 환율 API 연동 (n8n webhook 경유).</p>
+              </div>
+              <div class="tech-item">
+                <div class="tech-cat" style="background:var(--gold-soft);color:var(--gold)">🔄 계획</div>
+                <h4>하와이 날씨 위젯</h4>
+                <p>여행 기간(7/12~7/20) 마우이·오아후 예보 카드. OpenWeatherMap API.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card full">
+            <h2 class="section-title">🔢 v4.0 변경 로그</h2>
+            <div class="changelog">
+              <h4>🚀 v4.0 (2026.05) — 캘린더 연동 + UX 재정비</h4>
+              <ul>
+                <li>✅ <strong>Google 캘린더 연동 완료</strong> — 일정 탭 상단 여행 캘린더, 개인·공용 2계정 동시, 일정 추가·수정·삭제</li>
+                <li>📖 <strong>참고 탭 신설</strong> — MileMoa 2022 마우이 후기 기반, 지도+타임라인+2026 팩트체크</li>
+                <li>🗺️ <strong>개요 탭 로드맵 재구성</strong> — 핵심 체크포인트 제거, 요약→데드라인→로드맵→항공→캘린더→환율 순서</li>
+                <li>⚙️ <strong>시스템 탭 개편</strong> — 필수항목 서브탭 신설, 기능 현황 카드 추가</li>
+                <li>🔗 대시보드 허브 연결 (결혼준비 ↔ 하와이 네비게이션)</li>
+              </ul>
+              <h4>🚀 v3.2 — v3.0 히스토리</h4>
+              <ul>
+                <li>v3.2: 탭 구조 개편 + 전역 A/B 모드 토글. 메인탭 5개.</li>
+                <li>v3.1: A/B 플랜 비교 + 탭 구조 개편</li>
+                <li>v3.0: 지도 독립 main panel, 로드맵·달력 추가</li>
+                <li>v2.x: SaaS 팔레트, Lock 시스템, CSV Export, Sheet 동기화</li>
+                <li>v1.x: 별점, 대체옵션, 먹거리 탭, 숙박 탭, 환율 자동변환</li>
+              </ul>
+            </div>
           </article>
         </section>
       </div>
@@ -1931,20 +2198,6 @@
       </div><!-- /main-system -->
     </div>
 
-    <!-- 하와이 캘린더 섹션 -->
-    <section style="margin-top:48px;padding-top:32px;border-top:1px solid var(--line)">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
-        <h2 style="font-size:20px;font-weight:800;margin:0">여행 캘린더</h2>
-        <span style="font-size:13px;color:var(--muted)">2026.07.12 – 07.20</span>
-        <div style="margin-left:auto;display:flex;gap:8px">
-          <button id="hcal-btn" onclick="hCalConnect()" style="padding:8px 18px;border-radius:999px;background:var(--primary);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit">Google 캘린더 연결</button>
-        </div>
-      </div>
-      <p id="hcal-err" style="color:var(--warn);font-size:13px;margin-bottom:12px;display:none"></p>
-      <div id="hcal-body">
-        <p style="color:var(--muted);font-size:14px">캘린더 연결 후 여행 기간 일정이 표시됩니다.</p>
-      </div>
-    </section>
 
     <!-- 캘린더 이벤트 모달 -->
     <div id="hev-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center" onclick="if(event.target===this)hCloseModal()">
@@ -2203,6 +2456,83 @@
         saveLocks();
         rerenderAll();
         sendToN8n(row, row.locked ? "confirmed" : "unconfirmed");
+      }
+
+      // ── A/B Day 확정 시스템 ──────────────────────────
+      const DAY_CHOICE_KEY = 'hv_day_choices_v1';
+      let mapConfirmedOnly = false;
+
+      function getDayChoices() { try { return JSON.parse(localStorage.getItem(DAY_CHOICE_KEY)||'{}'); } catch { return {}; } }
+      function saveDayChoices(c) { localStorage.setItem(DAY_CHOICE_KEY, JSON.stringify(c)); }
+
+      function lockAllForDay(day, choice) {
+        const choices = getDayChoices(); choices[day] = choice; saveDayChoices(choices);
+        DATA.filter(r => r.Day === day).forEach(r => { r.locked = true; });
+        saveLocks();
+        if (choice === 'b' && ADJUSTMENTS && ADJUSTMENTS[day]) applyAdj(day);
+        rerenderAll();
+      }
+
+      function toggleMapConfirmed() {
+        mapConfirmedOnly = !mapConfirmedOnly;
+        const btn = document.getElementById('map-conf-toggle');
+        if (btn) btn.classList.toggle('on', mapConfirmedOnly);
+        renderMap();
+      }
+
+      function undayChoice(day) {
+        const choices = getDayChoices(); delete choices[day]; saveDayChoices(choices);
+        DATA.filter(r => r.Day === day).forEach(r => { r.locked = false; });
+        saveLocks();
+        rerenderAll();
+      }
+
+      // ── 확정 모아보기 ────────────────────────────────
+      function renderConfirmedPanel() {
+        const el = document.getElementById('c-confirmed-panel');
+        if (!el) return;
+        const confirmed = DATA.filter(r => r.locked);
+        if (!confirmed.length) {
+          el.innerHTML = '<p class="muted" style="font-size:13px;padding:16px 0">아직 확정된 일정이 없습니다. 일정 탭에서 항목을 확정하세요.</p>';
+          return;
+        }
+        const byDay = {};
+        confirmed.forEach(r => { (byDay[r.Day] = byDay[r.Day]||[]).push(r); });
+        let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+          <span style="font-size:13px;color:var(--muted)">${confirmed.length}개 항목 확정됨</span>
+        </div>`;
+        const TRIP_D = {1:'2026-07-12',2:'2026-07-13',3:'2026-07-14',4:'2026-07-15',5:'2026-07-16',6:'2026-07-17',7:'2026-07-18',8:'2026-07-19',9:'2026-07-20'};
+        Object.keys(byDay).map(Number).sort((a,b)=>a-b).forEach(day => {
+          const items = byDay[day];
+          html += `<div style="margin-bottom:14px">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--line)">Day ${day} · ${items[0].날짜} (${items[0].섬})</div>
+            ${items.map(r => {
+              const timeClean = r.시간.replace(/\s*(KST|HST).*/i,'');
+              const dateStr = TRIP_D[day]||'';
+              const endH = String((parseInt(timeClean)||9)+1).padStart(2,'0');
+              const endTime = endH+':00';
+              return `<div class="confirmed-item-row">
+                <span class="confirmed-time">${r.시간}</span>
+                <span class="confirmed-place">${r.장소}</span>
+                <button class="conf-cal-btn" onclick="addConfirmedToCalendar('${dateStr}','${timeClean}','${endTime}',${JSON.stringify(r.장소)},${JSON.stringify(r.메모||'')})">+ 캘린더</button>
+              </div>`;
+            }).join('')}
+          </div>`;
+        });
+        el.innerHTML = html;
+      }
+
+      function addConfirmedToCalendar(date, startTime, endTime, placeName, memo) {
+        if (!date||!startTime) return;
+        document.getElementById('hev-ttl').textContent = '일정 등록';
+        document.getElementById('hev-title').value = '[하와이] ' + placeName;
+        document.getElementById('hev-date').value = date;
+        document.getElementById('hev-start').value = startTime.slice(0,5)||'09:00';
+        document.getElementById('hev-end').value = endTime.slice(0,5)||'10:00';
+        document.getElementById('hev-desc').value = memo||'';
+        document.getElementById('hev-cat-s').checked = true; hOnCatChange();
+        document.getElementById('hev-del').style.display='none';
+        document.getElementById('hev-overlay').style.display='flex';
       }
 
       function loadReserved() {
@@ -2687,6 +3017,7 @@
         renderTable();
         renderMap();
         renderABTimeline();
+        renderConfirmedPanel();
       }
 
       // ===== 시간대 변환 (KST ↔ HST) =====
@@ -2829,8 +3160,26 @@
           const adj = ADJUSTMENTS[day];
           const appliedDays = getAppliedAdj().map(Number);
           const isAdjApplied = appliedDays.includes(day);
+          // 확정 진행률
+          const _locked = items.filter(r => r.locked).length;
+          const _total = items.length;
+          const _pct = _total ? Math.round(_locked/_total*100) : 0;
+          const _choices = getDayChoices();
+          const _choice = _choices[day];
           block.innerHTML = `
             <h3>Day ${day} <span class="day-date">· ${first.날짜} (${first.요일}) · ${first.섬}</span>${adj ? `<button class="adj-badge${isAdjApplied?' applied':''}" onclick="toggleAdjPanel(${day})">${isAdjApplied?'✅ 조율 적용됨':'⚡ 조율 가능'}</button>` : ''}</h3>
+            <div class="day-progress-wrap">
+              <div class="day-progress-bar"><div class="day-progress-fill" style="width:${_pct}%"></div></div>
+              <span class="day-progress-text${_pct===100?' done':''}">${_locked}/${_total} 확정${_pct===100?' 🎉':''}</span>
+            </div>
+            ${adj ? `<div class="day-choice-btns">
+              ${_choice
+                ? `<span class="day-chosen-badge">${_choice==='a'?'🅰️ A안':'🅱️ B안'} 확정됨</span>
+                   <button class="day-choice-btn" onclick="undayChoice(${day})" style="font-size:11px;margin-left:auto">↺ 변경</button>`
+                : `<span class="day-choice-label">플랜 확정:</span>
+                   <button class="day-choice-btn" onclick="lockAllForDay(${day},'a')">🅰️ A안 확정</button>
+                   <button class="day-choice-btn" onclick="lockAllForDay(${day},'b')">🅱️ B안 확정</button>`}
+            </div>` : ''}
             <div class="day-meta">
               <span class="pill sea">${first.섬}</span>
               ${sleeps.length ? `<span class="pill sleep">🛏️ ${sleeps.join(" → ")}</span>` : ""}
@@ -2869,14 +3218,14 @@
                   ${r.비용 && r.비용 !== "-" ? `<span class="pill">${r.비용}</span>` : ""}
                   ${r.fix ? `<span class="pill fix">FIX</span>` : ""}
                   ${starHTML(r.rating)}
-                  <button class="lock-btn ${r.locked ? "locked" : ""}" data-lock-id="${r.__id}" type="button">${r.locked ? "✅ 확정됨" : "🔓 미확정"}</button>
+                  <button class="lock-btn ${r.locked ? "locked" : ""}" data-lock-id="${r.__id}" type="button">${r.locked ? "✅ 확정됨" : "→ 확정하기"}</button>
                   ${r.예약 ? `<button class="res-btn ${r.reserved ? "reserved" : ""}" data-res-id="${r.__id}" type="button">${r.reserved ? "✅ 예약완료" : "📋 예약필요"}</button>` : ""}
                 </div>
                 ${r.메모 ? `<div class="item-memo">${r.메모}</div>` : ""}
                 ${altHTML(r.alt)}
                 ${detail ? `
-                  <button class="expand-btn" type="button"><span class="arrow">▶</span> 자세히 보기</button>
-                  <div class="item-detail ${detailCls}" hidden>${detail.body}</div>
+                  <button class="expand-btn open" type="button"><span class="arrow">▼</span> 상세 정보</button>
+                  <div class="item-detail ${detailCls}">${detail.body}</div>
                 ` : ""}
               </div>
             `;
@@ -3383,11 +3732,19 @@
         const days = currentMapDay === "all" ? [1,2,3,4,5,6,7,8,9] : [Number(currentMapDay)];
         const allPoints = [];
         days.forEach((day) => {
-          const dayPoints = DATA.filter((r) => r.Day === day && r.lat && r.lng && (window.AB_MODE === "a" || r.fix));
+          const dayPoints = DATA.filter((r) => {
+            if (r.Day !== day || !r.lat || !r.lng) return false;
+            if (mapConfirmedOnly && !r.locked) return false;
+            return window.AB_MODE === "a" || r.fix;
+          });
           dayPoints.forEach((r) => {
+            const isConf = !!r.locked;
             const m = L.circleMarker([r.lat, r.lng], {
-              color: DAY_COLORS[day], fillColor: DAY_COLORS[day],
-              fillOpacity: 0.85, radius: 7, weight: 2
+              color: isConf ? DAY_COLORS[day] : '#999',
+              fillColor: isConf ? DAY_COLORS[day] : '#bbb',
+              fillOpacity: isConf ? 0.92 : 0.35,
+              radius: isConf ? 10 : 6,
+              weight: isConf ? 3 : 1
             }).addTo(leafletMap);
             m.bindPopup(`
               <div style="font-family:'Pretendard Variable',sans-serif;min-width:200px">
@@ -3412,11 +3769,11 @@
       // ===== Hierarchical 탭 (메인 + 버티컬 서브) =====
       const SUB_TO_MAIN = {
         stay:"prep", food:"prep", budget:"prep", packing:"prep", guide:"prep",
-        data:"system", tech:"system"
+        data:"system", tech:"system", must:"system"
       };
       const MAIN_FIRST_SUB = {
         summary:null, trip:null, map:null,
-        prep:"stay", system:"data"
+        prep:"stay", system:"must"
       };
 
       function activateMain(mainName) {
@@ -3490,7 +3847,7 @@
           if (resBtn) { toggleReserved(parseInt(resBtn.dataset.resId, 10)); return; }
         });
 
-        // 📖 일정 탭 자세히 보기 토글 (delegated)
+        // 📖 일정 탭 상세 정보 토글 (delegated)
         cTimeline.addEventListener("click", (e) => {
           const btn = e.target.closest(".expand-btn");
           if (!btn) return;
@@ -3499,12 +3856,10 @@
           const isHidden = detail.hasAttribute("hidden");
           if (isHidden) {
             detail.removeAttribute("hidden");
-            btn.classList.add("expanded");
-            btn.innerHTML = '<span class="arrow">▶</span> 접기';
+            btn.innerHTML = '<span class="arrow">▼</span> 상세 정보 접기';
           } else {
             detail.setAttribute("hidden", "");
-            btn.classList.remove("expanded");
-            btn.innerHTML = '<span class="arrow">▶</span> 자세히 보기';
+            btn.innerHTML = '<span class="arrow">▶</span> 상세 정보 보기';
           }
         });
       }
@@ -3516,8 +3871,7 @@
             const detail = btn.nextElementSibling;
             if (detail && detail.hasAttribute("hidden")) {
               detail.removeAttribute("hidden");
-              btn.classList.add("expanded");
-              btn.innerHTML = '<span class="arrow">▶</span> 접기';
+              btn.innerHTML = '<span class="arrow">▼</span> 상세 정보 접기';
             }
           });
         });
@@ -3529,8 +3883,7 @@
             const detail = btn.nextElementSibling;
             if (detail && !detail.hasAttribute("hidden")) {
               detail.setAttribute("hidden", "");
-              btn.classList.remove("expanded");
-              btn.innerHTML = '<span class="arrow">▶</span> 자세히 보기';
+              btn.innerHTML = '<span class="arrow">▶</span> 상세 정보 보기';
             }
           });
         });
