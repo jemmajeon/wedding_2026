@@ -1137,6 +1137,13 @@
     </style>
   </head>
   <body>
+<style>.dash-nav{position:sticky;top:0;z-index:100;background:rgba(246,248,251,0.94);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(8px)}.dash-nav-inner{max-width:1320px;margin:0 auto;padding:0 28px;display:flex;overflow-x:auto;scrollbar-width:none}.dash-nav-inner::-webkit-scrollbar{display:none}.dash-tab{display:inline-block;padding:11px 16px;font-size:13px;font-weight:600;white-space:nowrap;color:#64748b;text-decoration:none;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif}.dash-tab:hover{color:#0f172a}.dash-tab.on{color:#6366f1;border-bottom-color:#6366f1}</style>
+<nav class="dash-nav"><div class="dash-nav-inner">
+  <a class="dash-tab" href="file:///C:/Users/JEON/.claude/skills-dashboard.html">스킬 아키텍처</a>
+  <a class="dash-tab" href="./wedding-dashboard.html">결혼 준비</a>
+  <a class="dash-tab on" href="./hawaii-trip-dashboard.html">하와이 여행</a>
+  <a class="dash-tab" href="file:///C:/Users/JEON/projects/finance/dashboard.html">재무</a>
+</div></nav>
     <div class="wrap">
       <header>
         <div class="header-left">
@@ -1728,6 +1735,76 @@
       </div><!-- /main-system -->
     </div>
 
+    <!-- 하와이 캘린더 섹션 -->
+    <section style="margin-top:48px;padding-top:32px;border-top:1px solid var(--line)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+        <h2 style="font-size:20px;font-weight:800;margin:0">여행 캘린더</h2>
+        <span style="font-size:13px;color:var(--muted)">2026.07.12 – 07.20</span>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button id="hcal-btn" onclick="hCalConnect()" style="padding:8px 18px;border-radius:999px;background:var(--primary);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit">Google 캘린더 연결</button>
+        </div>
+      </div>
+      <p id="hcal-err" style="color:var(--warn);font-size:13px;margin-bottom:12px;display:none"></p>
+      <div id="hcal-body">
+        <p style="color:var(--muted);font-size:14px">캘린더 연결 후 여행 기간 일정이 표시됩니다.</p>
+      </div>
+    </section>
+
+    <!-- 캘린더 이벤트 모달 -->
+    <div id="hev-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center" onclick="if(event.target===this)hCloseModal()">
+      <div style="background:#fff;border-radius:16px;padding:26px;width:92%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,.15)">
+        <h3 id="hev-ttl" style="font-size:17px;font-weight:800;margin:0 0 18px">새 일정</h3>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px">카테고리</label>
+          <div style="display:flex;gap:10px">
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px">
+              <input type="radio" name="hev-cat" id="hev-cat-p" value="personal" onchange="hOnCatChange()" checked style="accent-color:var(--primary)"> 개인
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px">
+              <input type="radio" name="hev-cat" id="hev-cat-s" value="shared" onchange="hOnCatChange()" style="accent-color:var(--primary)"> 공통
+            </label>
+          </div>
+        </div>
+        <div id="hev-att-field" style="margin-bottom:12px;display:none">
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px">참조자</label>
+          <div id="hev-att-chips" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px"></div>
+          <div style="display:flex;gap:6px">
+            <input id="hev-att-inp" placeholder="이메일 추가…" style="flex:1;padding:7px 10px;border:1px solid #ddd;border-radius:10px;font-size:13px;outline:none;font-family:inherit"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();hAddAtt();}">
+            <button onclick="hAddAtt()" style="padding:7px 12px;border-radius:999px;background:var(--primary);color:#fff;font-size:12px;font-weight:700;border:none;cursor:pointer">추가</button>
+          </div>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px">제목 *</label>
+          <input id="hev-title" placeholder="일정 제목" style="width:100%;padding:8px 11px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-family:inherit;outline:none" onkeydown="if(event.key==='Enter')hSaveEv()">
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px">날짜</label>
+          <input type="date" id="hev-date" style="width:100%;padding:8px 11px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-family:inherit;outline:none">
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <div style="flex:1">
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px">시작</label>
+            <input type="time" id="hev-start" value="09:00" style="width:100%;padding:8px 11px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-family:inherit;outline:none">
+          </div>
+          <div style="flex:1">
+            <label style="display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px">종료</label>
+            <input type="time" id="hev-end" value="10:00" style="width:100%;padding:8px 11px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-family:inherit;outline:none">
+          </div>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px">메모</label>
+          <textarea id="hev-desc" rows="2" placeholder="메모" style="width:100%;padding:8px 11px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-family:inherit;outline:none;resize:vertical"></textarea>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;padding-top:14px;border-top:1px solid #eee;margin-top:4px">
+          <button onclick="hCloseModal()" style="padding:9px 16px;border-radius:999px;border:1px solid #ddd;background:none;font-size:14px;cursor:pointer;font-family:inherit">취소</button>
+          <button id="hev-del" onclick="hDeleteEv()" style="display:none;padding:9px 16px;border-radius:999px;border:1px solid var(--warn);color:var(--warn);background:none;font-size:14px;cursor:pointer;font-family:inherit">삭제</button>
+          <button onclick="hSaveEv()" style="padding:9px 22px;border-radius:999px;background:var(--primary);color:#fff;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit">저장</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
     <script>
@@ -3840,6 +3917,189 @@
       document.getElementById("ab-btn-a").classList.toggle("active", window.AB_MODE === "a");
       document.getElementById("ab-btn-b").classList.toggle("active", window.AB_MODE === "b");
       renderABTimeline();
+
+      // ── 하와이 캘린더 ──────────────────────────────
+      const H_CLIENT_ID = '751405816735-eagv33qod0gccql90ik3olkrm97du6dp.apps.googleusercontent.com';
+      const H_SCOPE     = 'https://www.googleapis.com/auth/calendar profile email';
+      const H_TRIP_START = '2026-07-12', H_TRIP_END = '2026-07-21';
+      const SHARED_ATT  = ['jemmajihyejeon@gmail.com','hyunggu@gmail.com'];
+      let hTC = null, hAccounts = [], hEvents = [], hEditId = null, hAttendees = [];
+
+      function hInitGC() {
+        if (!window.google?.accounts?.oauth2) { setTimeout(hInitGC, 150); return; }
+        hTC = google.accounts.oauth2.initTokenClient({
+          client_id: H_CLIENT_ID, scope: H_SCOPE,
+          callback: async (resp) => {
+            if (resp.error) { hErr('인증 실패: ' + resp.error); return; }
+            const token = resp.access_token;
+            const ui = await hFetch(token,'https://www.googleapis.com/oauth2/v2/userinfo').catch(()=>null)
+              || await hFetch(token,`https://www.googleapis.com/oauth2/v2/tokeninfo?access_token=${encodeURIComponent(token)}`).catch(()=>null);
+            if (!ui?.email) { hErr('계정 조회 실패'); return; }
+            const cl = await hFetch(token,'https://www.googleapis.com/calendar/v3/users/me/calendarList?maxResults=30').catch(()=>({items:[]}));
+            const existing = hAccounts.findIndex(a=>a.email===ui.email);
+            const acct = { email:ui.email, name:ui.name||ui.email, token, calendars:(cl?.items||[]) };
+            if (existing>=0) hAccounts[existing]=acct; else hAccounts.push(acct);
+            localStorage.setItem('gc_accounts_v2', JSON.stringify(hAccounts));
+            hRenderCalendar();
+          }
+        });
+        // 웨딩 대시보드와 localStorage 공유
+        try { hAccounts = JSON.parse(localStorage.getItem('gc_accounts_v2')||'[]'); } catch { hAccounts=[]; }
+        if (hAccounts.length) hRenderCalendar();
+      }
+
+      function hCalConnect() {
+        if (!hTC) { hErr('Google 라이브러리 로딩 중'); return; }
+        hTC.requestAccessToken({ prompt: hAccounts.length ? 'select_account' : '' });
+      }
+
+      async function hRenderCalendar() {
+        document.getElementById('hcal-btn').textContent = hAccounts.length > 1 ? '계정 추가' : '계정 추가';
+        document.getElementById('hcal-body').innerHTML = '<p style="color:var(--muted);font-size:13px">일정 불러오는 중…</p>';
+        const allEvs = [];
+        for (const acct of hAccounts) {
+          for (const cal of acct.calendars) {
+            try {
+              const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.id)}/events?`+
+                `timeMin=${encodeURIComponent(new Date(H_TRIP_START).toISOString())}&timeMax=${encodeURIComponent(new Date(H_TRIP_END).toISOString())}`+
+                `&singleEvents=true&orderBy=startTime&maxResults=100`;
+              const d = await hFetch(acct.token, url);
+              (d?.items||[]).forEach(ev => allEvs.push({...ev,_col:cal.backgroundColor||'#6366f1',_acct:acct.email,_calId:cal.id}));
+            } catch {}
+          }
+        }
+        hEvents = allEvs.sort((a,b)=>(a.start.dateTime||a.start.date).localeCompare(b.start.dateTime||b.start.date));
+        hRenderGrid();
+      }
+
+      const H_DAYS = ['일','월','화','수','목','금','토'];
+      function hRenderGrid() {
+        const days = [];
+        for (let i=0;i<9;i++) { const d=new Date(H_TRIP_START); d.setDate(d.getDate()+i); days.push(d); }
+        const today = new Date(); today.setHours(0,0,0,0);
+        let html = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">`;
+        days.forEach(d => {
+          const ds = hFmt(d), isT = d.getTime()===today.getTime();
+          const dayEvs = hEvents.filter(ev=>{
+            const s=ev.start.date||ev.start.dateTime?.slice(0,10);
+            if(ev.start.date){const e2=new Date(ev.end.date);e2.setDate(e2.getDate()-1);return s<=ds&&hFmt(e2)>=ds;}
+            return s===ds;
+          });
+          const dayNum = (d.getTime()-new Date(H_TRIP_START).getTime())/86400000+1;
+          html += `<div style="background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer" onclick="hOpenNew('${ds}')">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+              <div style="width:32px;height:32px;border-radius:50%;background:${isT?'var(--primary)':'var(--bg-2)'};color:${isT?'#fff':'var(--ink)'};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px">${d.getDate()}</div>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:var(--muted)">${H_DAYS[d.getDay()]} · Day ${dayNum}</div>
+                <div style="font-size:11px;color:var(--muted)">${d.getMonth()+1}/${d.getDate()}</div>
+              </div>
+            </div>
+            ${dayEvs.map(ev=>{
+              const aDay=!!ev.start.date, t=aDay?'종일':ev.start.dateTime?.slice(11,16);
+              const rec=ev.recurringEventId?'↻ ':'';
+              return `<div style="background:${ev._col}22;color:${ev._col};padding:3px 8px;border-radius:6px;font-size:12px;font-weight:600;margin-bottom:3px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"
+                onclick="event.stopPropagation();hOpenEdit(event,'${ev.id}')">${rec}${t} ${ev.summary||''}</div>`;
+            }).join('')}
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">+ 일정 추가</div>
+          </div>`;
+        });
+        html += '</div>';
+        document.getElementById('hcal-body').innerHTML = html;
+      }
+
+      function hOpenNew(ds) {
+        hEditId=null;
+        document.getElementById('hev-ttl').textContent='새 일정';
+        document.getElementById('hev-title').value='';
+        document.getElementById('hev-date').value=ds;
+        document.getElementById('hev-start').value='09:00';
+        document.getElementById('hev-end').value='10:00';
+        document.getElementById('hev-desc').value='';
+        document.getElementById('hev-del').style.display='none';
+        document.getElementById('hev-cat-p').checked=true;
+        hAttendees=[]; hOnCatChange();
+        const o=document.getElementById('hev-overlay'); o.style.display='flex';
+        setTimeout(()=>document.getElementById('hev-title').focus(),50);
+      }
+
+      function hOpenEdit(e,id) {
+        e.stopPropagation();
+        const ev=hEvents.find(x=>x.id===id); if(!ev) return;
+        hEditId=id;
+        document.getElementById('hev-ttl').textContent='일정 수정';
+        document.getElementById('hev-title').value=ev.summary||'';
+        document.getElementById('hev-date').value=ev.start.date||ev.start.dateTime?.slice(0,10);
+        if(ev.start.dateTime){document.getElementById('hev-start').value=ev.start.dateTime.slice(11,16);document.getElementById('hev-end').value=ev.end.dateTime.slice(11,16);}
+        document.getElementById('hev-desc').value=ev.description||'';
+        document.getElementById('hev-del').style.display='inline-block';
+        hAttendees=(ev.attendees||[]).map(a=>a.email); hOnCatChange();
+        const o=document.getElementById('hev-overlay'); o.style.display='flex';
+      }
+
+      function hOnCatChange() {
+        const isShared=document.getElementById('hev-cat-s')?.checked;
+        const field=document.getElementById('hev-att-field');
+        if(isShared&&!hAttendees.length) hAttendees=[...SHARED_ATT];
+        field.style.display=isShared?'block':'none';
+        hRenderChips();
+      }
+
+      function hRenderChips() {
+        const el=document.getElementById('hev-att-chips'); if(!el) return;
+        el.innerHTML=hAttendees.map(e=>`<span style="display:inline-flex;align-items:center;gap:5px;background:#ffe0e8;color:#a0284a;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:600">${e}<button onclick="hRemAtt('${e}')" style="background:none;border:none;cursor:pointer;color:#a0284a;font-size:12px;padding:0">✕</button></span>`).join('');
+      }
+
+      function hAddAtt() {
+        const inp=document.getElementById('hev-att-inp');
+        const e=(inp?.value||'').trim().toLowerCase();
+        if(!e||!e.includes('@')) return;
+        if(!hAttendees.includes(e)) hAttendees.push(e);
+        inp.value=''; hRenderChips();
+      }
+
+      function hRemAtt(e) { hAttendees=hAttendees.filter(x=>x!==e); hRenderChips(); }
+      function hCloseModal() { document.getElementById('hev-overlay').style.display='none'; }
+
+      async function hSaveEv() {
+        const title=document.getElementById('hev-title').value.trim(); if(!title) return;
+        const date=document.getElementById('hev-date').value;
+        const desc=document.getElementById('hev-desc').value.trim();
+        const s=document.getElementById('hev-start').value, en=document.getElementById('hev-end').value;
+        const body={summary:title,...(desc&&{description:desc}),
+          start:{dateTime:`${date}T${s}:00`,timeZone:'Pacific/Honolulu'},
+          end:{dateTime:`${date}T${en}:00`,timeZone:'Pacific/Honolulu'}};
+        if(hAttendees.length) body.attendees=hAttendees.map(e=>({email:e}));
+        const acct=hAccounts[0]; if(!acct) return;
+        const url=`https://www.googleapis.com/calendar/v3/calendars/primary/events${hEditId?'/'+hEditId:''}`;
+        try {
+          const res=await fetch(url,{method:hEditId?'PATCH':'POST',headers:{Authorization:'Bearer '+acct.token,'Content-Type':'application/json'},body:JSON.stringify(body)});
+          if(!res.ok) throw new Error('HTTP '+res.status);
+          hCloseModal(); hRenderCalendar();
+        } catch(err) { alert('저장 실패: '+err.message); }
+      }
+
+      async function hDeleteEv() {
+        if(!hEditId||!confirm('삭제하시겠습니까?')) return;
+        const ev=hEvents.find(x=>x.id===hEditId);
+        const acct=hAccounts.find(a=>a.email===ev?._acct)||hAccounts[0];
+        try {
+          await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(ev?._calId||'primary')}/events/${hEditId}`,
+            {method:'DELETE',headers:{Authorization:'Bearer '+acct.token}});
+          hCloseModal(); hRenderCalendar();
+        } catch(err) { alert('삭제 실패: '+err.message); }
+      }
+
+      async function hFetch(token,url) {
+        const res=await fetch(url,{headers:{Authorization:'Bearer '+token}});
+        if(!res.ok) throw new Error('HTTP '+res.status); return res.json();
+      }
+
+      function hErr(msg) {
+        const el=document.getElementById('hcal-err'); if(el){el.textContent=msg;el.style.display='block';}
+      }
+      function hFmt(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+
+      window.addEventListener('load', () => setTimeout(hInitGC, 300));
     </script>
   </body>
 </html>
