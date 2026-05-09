@@ -787,12 +787,19 @@
 <body>
 <style>.dash-nav{position:sticky;top:0;z-index:100;background:rgba(252,250,245,0.94);border-bottom:1px solid #ebe6d8;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.dash-nav-inner{max-width:1320px;margin:0 auto;padding:0 28px;display:flex;overflow-x:auto;scrollbar-width:none}.dash-nav-inner::-webkit-scrollbar{display:none}.dash-tab{display:inline-block;padding:11px 16px;font-size:13px;font-weight:600;white-space:nowrap;color:#6b6b6b;text-decoration:none;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif}.dash-tab:hover{color:#111}.dash-tab.on{color:#0e7c5a;border-bottom-color:#0e7c5a}</style>
 <nav class="dash-nav"><div class="dash-nav-inner">
-  <a class="dash-tab" href="file:///C:/Users/JEON/.claude/skills-dashboard.html">스킬 아키텍처</a>
   <a class="dash-tab on" href="./wedding-dashboard.html">결혼 준비</a>
-  <a class="dash-tab" href="./hawaii-trip-dashboard.html" target="_blank" rel="noopener">하와이 여행</a>
-  <a class="dash-tab" href="file:///C:/Users/JEON/projects/finance/dashboard.html">재무</a>
-  <a class="dash-tab" href="http://localhost:8000/personal-2026/index.html">🔒 개인 허브</a>
+  <a class="dash-tab" href="./hawaii-trip-dashboard.html">하와이 여행</a>
 </div></nav>
+<script>
+(function(){
+  if(!location.hostname.includes('github.io'))return;
+  var src='wedding';
+  var base='https://jemmajeon.github.io/blog/go/?';
+  document.querySelectorAll('a[data-to]').forEach(function(a){
+    a.href=base+'to='+a.dataset.to+'&utm_source='+src+'&utm_medium=nav';
+  });
+})();
+</script>
 <a href="index.html" style="position:fixed;top:16px;left:16px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border:1px solid rgba(0,0,0,0.10);border-radius:999px;font-size:12px;font-weight:700;color:#334155;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,0.08);transition:box-shadow 0.15s,background 0.15s" onmouseover="this.style.background='#fff';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)'" onmouseout="this.style.background='rgba(255,255,255,0.92)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'">
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
   홈
@@ -875,6 +882,7 @@
     <button class="tab-btn" onclick="goTab('budget',this)">예산</button>
     <button class="tab-btn" onclick="goTab('reservations',this)">예약</button>
     <button class="tab-btn" onclick="goTab('calendar',this)">캘린더 &amp; 태스크</button>
+    <button class="tab-btn" onclick="goTab('ref',this)">📖 참고</button>
     <button class="tab-btn" onclick="goTab('links',this)">링크 &amp; UTM</button>
     <button class="tab-btn" onclick="goTab('system',this)">시스템</button>
   </nav>
@@ -1038,6 +1046,99 @@
   </div><!-- /pane-calendar -->
 
   <!-- 링크 & UTM -->
+  <!-- 📖 참고 탭 -->
+  <div class="tab-panel" id="pane-ref">
+
+    <div class="card" style="margin-bottom:20px;background:var(--gold-soft);border-color:var(--gold)">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span style="font-size:22px">💬</span>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--gold-strong)">동료·지인 추천 정보 + 업체 진행 현황</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">경험자들의 팁과 업체별 진행 상황을 정리한 참고 자료입니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 1: 스드메 업체 현황 -->
+    <div class="card" style="margin-bottom:16px">
+      <p class="section-title">💄 스드메 — 업체 진행 현황</p>
+
+      <div style="border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:14px;font-weight:700">모베터쉬크 <span style="font-size:11px;color:var(--muted);font-weight:400">(드레스)</span></span>
+          <span style="font-size:11px;padding:2px 9px;border-radius:999px;background:var(--green-soft);color:var(--green);font-weight:700">협의 완료</span>
+        </div>
+        <ul style="font-size:13px;color:var(--ink-2);line-height:2.1;margin:0;padding-left:18px">
+          <li>촬영용 블랙 → <strong>베이지 교체 성공</strong> (추가금 5만원으로 협의 완료)</li>
+          <li>베이지 기준으로 수선 예정 → <strong style="color:var(--warn)">본식 당일 착용 전 재피팅 필수!</strong></li>
+          <li>당일 예복 15만원 취소 건 → 추후 별도 협의 가능 (급하지 않음)</li>
+        </ul>
+      </div>
+
+      <div style="border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:14px;font-weight:700">폴라리스 <span style="font-size:11px;color:var(--muted);font-weight:400">(신랑 예복·키높이)</span></span>
+          <span style="font-size:11px;padding:2px 9px;border-radius:999px;background:var(--warn-soft);color:var(--warn);font-weight:700">확인 필요</span>
+        </div>
+        <ul style="font-size:13px;color:var(--ink-2);line-height:2.1;margin:0;padding-left:18px">
+          <li>키높이는 <strong>폴라리스에서 별도 대여</strong> (모베터쉬크와 무관)</li>
+          <li>신랑 키높이 <strong>270</strong>으로 준비 예정</li>
+          <li style="color:var(--warn)">⚠️ 신부 핸드폰 번호 잘못 기재됨 → <strong>수정 요청 필요</strong></li>
+        </ul>
+      </div>
+
+      <div style="border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:14px;font-weight:700">꾸띠원 <span style="font-size:11px;color:var(--muted);font-weight:400">(메이크업)</span></span>
+          <span style="font-size:11px;padding:2px 9px;border-radius:999px;background:var(--rose-soft);color:var(--rose-strong);font-weight:700">취소 후 재예약</span>
+        </div>
+        <ul style="font-size:13px;color:var(--ink-2);line-height:2.1;margin:0;padding-left:18px">
+          <li>5/13 예약 취소 (메이크업 원장 교체 문제 → 말 바꾸기 이슈)</li>
+          <li>타 업체 <strong>재예약 완료</strong> — 새 예약처 정보 저장 필요</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 섹션 2: 예식장 -->
+    <div class="card" style="margin-bottom:16px">
+      <p class="section-title">🏛️ 예식장 — 호암교수회관</p>
+
+      <div style="border:1px solid var(--gold);border-radius:var(--radius);padding:14px 16px;background:var(--gold-soft)">
+        <div style="font-size:13px;font-weight:700;color:var(--gold-strong);margin-bottom:10px">💰 블로그 홍보 혜택 — 대관료 20만원 할인</div>
+        <div style="font-size:13px;color:var(--ink-2);line-height:2.1">
+          <div>네이버 블로그 예약글 <strong>2개 발행 예정</strong> (2026.05.20)</div>
+          <div style="margin-top:6px;padding:10px 12px;background:var(--surface);border-radius:8px">
+            <div>① <strong>서울대 호암교수회관을 계약한 이유?</strong> — 5/20 00:00 발행</div>
+            <div>② <strong>호암교수회관 웨딩홀 방문 후기</strong> (분위기, 단독홀, 층고, 버진로드) — 5/20 01:00 발행</div>
+          </div>
+          <div style="margin-top:8px;color:var(--warn);font-weight:600">⚠️ 발행 후 링크 저장 → 이메일 발송 → 20만원 할인 적용</div>
+          <div style="margin-top:4px;font-size:12px;color:var(--muted)">발행된 블로그 링크:</div>
+          <div style="margin-top:4px;font-size:12px;color:var(--muted);padding:6px 10px;background:var(--surface);border-radius:6px">① <span id="blog-link-1">발행 후 여기에 저장</span></div>
+          <div style="margin-top:4px;font-size:12px;color:var(--muted);padding:6px 10px;background:var(--surface);border-radius:6px">② <span id="blog-link-2">발행 후 여기에 저장</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 섹션 3: 예물·예단 팁 (추후 채움) -->
+    <div class="card" style="margin-bottom:16px">
+      <p class="section-title">💍 예물·예단</p>
+      <div style="color:var(--muted);font-size:13px;padding:16px 0;text-align:center">동료 추천 팁 추가 예정</div>
+    </div>
+
+    <!-- 섹션 4: 신혼여행 팁 (추후 채움) -->
+    <div class="card" style="margin-bottom:16px">
+      <p class="section-title">✈️ 신혼여행</p>
+      <div style="color:var(--muted);font-size:13px;padding:16px 0;text-align:center">동료 추천 팁 추가 예정</div>
+    </div>
+
+    <!-- 섹션 5: 기타 체크리스트 (추후 채움) -->
+    <div class="card" style="margin-bottom:16px">
+      <p class="section-title">📋 기타 체크리스트</p>
+      <div style="color:var(--muted);font-size:13px;padding:16px 0;text-align:center">동료 추천 팁 추가 예정</div>
+    </div>
+
+  </div><!-- /pane-ref -->
+
   <div class="tab-panel" id="pane-links">
 
     <p class="section-title">UTM 링크 생성기</p>
@@ -1993,6 +2094,24 @@ const SEED_TASKS = [
     note:'본식 당일 한복 착용' },
   { id:'hanbok-return', title:'[베틀한복] 반납', status:'todo', isBlog:false, dueDate:'2026-07-12',
     note:'주차장 뒷편 반납 (아무때나 가능)' },
+  // 모베터쉬크 (드레스/스드메)
+  { id:'mobetter-fitting', title:'[모베터쉬크] 본식 당일 드레스 재피팅', status:'todo', isBlog:false, dueDate:'2026-07-11',
+    note:'베이지 기준으로 수선 → 당일 입기 전 반드시 재피팅 확인. 베이지 추가금 5만원 협의 완료.' },
+  { id:'mobetter-suit', title:'[모베터쉬크] 예복 15만원 취소 협의', status:'idea', isBlog:false, dueDate:'',
+    note:'당일 예복 15만원 취소 건. 나중에 딜 가능 — 급하지 않음.' },
+  // 폴라리스 (신랑 예복/신발)
+  { id:'polaris-shoes', title:'[폴라리스] 키높이 270 대여 확인', status:'todo', isBlog:false, dueDate:'2026-07-11',
+    note:'키높이는 폴라리스에서 대여 (모베터쉬크 별개). 270 사이즈로 준비해둔다고 함.' },
+  { id:'polaris-phone', title:'[폴라리스] 신부 연락처 수정 요청', status:'todo', isBlog:false, dueDate:'',
+    note:'신부 핸드폰 번호가 잘못 기재됨 (없는 번호로 등록). 수정 요청 필요.' },
+  // 꾸띠원 (메이크업)
+  { id:'coutiwon-rebooking', title:'[꾸띠원] 새 예약처 재확인', status:'todo', isBlog:false, dueDate:'2026-05-13',
+    note:'5/13 예약 취소 후 딴 곳 재예약 완료. 새 예약처 정보 확인 및 저장 필요. (꾸띠원은 말 바꾸기 이슈 있었음)' },
+  // 호암교수회관 블로그 홍보 혜택
+  { id:'hoam-blog-email', title:'[호암교수회관] 블로그 링크 이메일 발송', status:'todo', isBlog:false, dueDate:'2026-05-21',
+    note:'네이버 블로그 예약글 2개 발행 후 (5/20 00:00, 01:00) 링크 포함해서 이메일 발송 → 대관료 20만원 할인 혜택. 반드시 링크 따로 보관할 것.' },
+  { id:'hoam-blog-link', title:'[호암교수회관] 블로그 링크 저장', status:'todo', isBlog:true, dueDate:'2026-05-20',
+    note:'발행된 두 글의 URL 저장 필요:\n1. 서울대 호암교수회관 웨딩홀 방문 후기 (5/20 01:00)\n2. 서울대 호암교수회관을 계약한 이유? (5/20 00:00)' },
 ];
 (function seedTasks() {
   let changed = false;

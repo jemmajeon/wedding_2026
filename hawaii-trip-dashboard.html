@@ -1,4 +1,4 @@
-﻿<!doctype html>
+﻿﻿<!doctype html>
 <html lang="ko">
   <head>
     <meta charset="utf-8" />
@@ -1174,11 +1174,19 @@
   <body>
 <style>.dash-nav{position:sticky;top:0;z-index:100;background:rgba(246,248,251,0.94);border-bottom:1px solid #e2e8f0;backdrop-filter:blur(8px)}.dash-nav-inner{max-width:1320px;margin:0 auto;padding:0 28px;display:flex;overflow-x:auto;scrollbar-width:none}.dash-nav-inner::-webkit-scrollbar{display:none}.dash-tab{display:inline-block;padding:11px 16px;font-size:13px;font-weight:600;white-space:nowrap;color:#64748b;text-decoration:none;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif}.dash-tab:hover{color:#0f172a}.dash-tab.on{color:#6366f1;border-bottom-color:#6366f1}</style>
 <nav class="dash-nav"><div class="dash-nav-inner">
-  <a class="dash-tab" href="file:///C:/Users/JEON/.claude/skills-dashboard.html">스킬 아키텍처</a>
   <a class="dash-tab" href="./wedding-dashboard.html">결혼 준비</a>
   <a class="dash-tab on" href="./hawaii-trip-dashboard.html">하와이 여행</a>
-  <a class="dash-tab" href="file:///C:/Users/JEON/projects/finance/dashboard.html">재무</a>
 </div></nav>
+<script>
+(function(){
+  if(!location.hostname.includes('github.io'))return;
+  const src='hawaii';
+  const base='https://jemmajeon.github.io/blog/go/?';
+  document.querySelectorAll('a[data-to]').forEach(function(a){
+    a.href=base+'to='+a.dataset.to+'&utm_source='+src+'&utm_medium=nav';
+  });
+})();
+</script>
     <div class="wrap">
       <header>
         <div class="header-left">
@@ -1893,6 +1901,11 @@
             <div class="must-section">
               <h4>📋 출발 전 준비</h4>
               <div class="must-grid">
+                <div class="must-item must-critical">
+                  <span class="must-check">🛂</span>
+                  <div class="must-body"><strong>ESTA 승인 신청</strong><span class="must-loc">출발 72h 전 필수 · esta.cbp.dhs.gov · $21 · 미승인 시 탑승 불가</span></div>
+                  <a href="https://esta.cbp.dhs.gov" target="_blank" rel="noopener" style="flex-shrink:0;align-self:center;font-size:11.5px;color:var(--accent);text-decoration:none;white-space:nowrap">신청 →</a>
+                </div>
                 <div class="must-item" data-jump="schedule">
                   <span class="must-check">✅</span>
                   <div class="must-body"><strong>렌트카 예약 확정</strong><span class="must-loc">Costco vs Discount Hawaii 비교 → 일정 탭</span></div>
