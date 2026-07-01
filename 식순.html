@@ -1,0 +1,1374 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="security-level" content="2">
+<script src="../personal-2026/shared/security-policy.js" defer></script>
+<title>식순 — 지혜 & 형구 (2026-07-11)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fdf8f5;--surface:#fff;--surface-2:#f7f0eb;
+  --ink:#1a1412;--ink-2:#2e2422;--muted:#7a6b68;
+  --line:#ede4df;--line-strong:#d9ccc7;
+  --rose:#b85567;--rose-soft:#f5dde3;--rose-strong:#8a3247;
+  --gold:#a67c2e;--gold-soft:#f5eacc;--gold-strong:#7a5a1a;
+  --green:#3a7d5c;--green-soft:#d4ece1;
+  --warn:#c0522e;--warn-soft:#fce4d8;
+  --radius:14px;
+}
+body{background:var(--bg);color:var(--ink);font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;font-size:15px;line-height:1.65;
+  background-image:radial-gradient(900px 500px at 0% 0%,rgba(184,85,103,.06),transparent 55%),radial-gradient(800px 600px at 100% 10%,rgba(166,124,46,.06),transparent 55%);background-attachment:fixed;}
+
+/* priv-bar */
+.priv-bar{position:sticky;top:0;z-index:200;background:rgba(245,243,255,.96);border-bottom:1px solid #ddd6fe;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 24px;font-family:inherit;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.priv-bar a{font-size:11px;font-weight:600;color:#7c3aed;text-decoration:none}
+.priv-bar .sep{color:#c4b5fd;margin:0 4px}
+.priv-bar .cur{font-size:13px;font-weight:800;color:#4c1d95}
+.priv-bar .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.sitemap-btn{font-size:11px;font-weight:700;color:#7c3aed;background:rgba(124,92,252,.08);border:1px solid #c4b5fd;border-radius:999px;padding:3px 12px;cursor:pointer;font-family:inherit}
+
+/* global sitemap (priv-bar 직후 collapsible) */
+.global-sitemap{max-width:1160px;margin:0 auto;padding:0 24px;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease,border-color .3s ease;background:rgba(245,243,255,.4);border-bottom:1px solid transparent;}
+.global-sitemap[data-open="true"]{max-height:70vh;overflow-y:auto;padding:14px 24px 20px;border-bottom:1px solid #ddd6fe;}
+.sm-section{margin-bottom:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px}
+.sm-section h4{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:8px}
+.sm-section ul{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:6px 14px}
+.sm-section li{font-size:12.5px;color:var(--ink-2)}
+.sm-section a{color:var(--rose-strong);text-decoration:none;font-weight:600}
+.sm-section a:hover{text-decoration:underline}
+.sm-section .d{color:var(--muted);font-size:11px;margin-left:4px}
+
+.wrap{max-width:1160px;margin:0 auto;padding:32px 24px 96px}
+
+header{margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--rose-soft);color:var(--rose-strong);border-radius:999px;padding:4px 12px;margin-bottom:10px}
+h1{font-size:clamp(26px,3vw,36px);font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
+.lede{font-size:13px;color:var(--muted)}
+.dday{font-family:"JetBrains Mono",monospace;font-size:clamp(24px,3.5vw,36px);font-weight:800;color:var(--rose);text-align:right}
+.dday-sub{font-size:11px;color:var(--muted);text-align:right;margin-top:2px}
+
+/* 식순 대시보드 전용: 버티컬(Level 1, 좌측 세로) → 호라이즌(Level 2, 콘텐츠 상단 가로) */
+.dashboard-layout{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:start;}
+@media(max-width:900px){.dashboard-layout{grid-template-columns:1fr;gap:12px;}}
+
+/* Level 1: 버티컬 메인 nav (좌측 세로) */
+.main-vnav{position:sticky;top:56px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;gap:4px;}
+@media(max-width:900px){.main-vnav{position:static;flex-direction:row;flex-wrap:wrap;overflow-x:auto;}}
+.vbtn{padding:14px 18px;font-size:15px;font-weight:800;color:var(--muted);background:none;border:none;border-radius:10px;cursor:pointer;font-family:inherit;text-align:left;transition:background .15s,color .15s;display:inline-flex;align-items:center;gap:10px;white-space:nowrap;}
+.vbtn:hover{background:var(--surface-2);color:var(--ink)}
+.vbtn.on{background:var(--rose);color:#fff;box-shadow:0 2px 8px rgba(184,85,103,.25);}
+.vbtn .vbtn-sub{display:block;font-size:11px;font-weight:600;color:inherit;opacity:.7;margin-top:2px;letter-spacing:.04em;}
+
+/* Level 2: 호라이즌 서브 nav (콘텐츠 영역 상단 가로) */
+.main-content{min-width:0;}
+.sub-hnav{display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:24px;overflow-x:auto;scrollbar-width:none;position:sticky;top:56px;background:var(--bg);z-index:40;}
+.sub-hnav::-webkit-scrollbar{display:none}
+.hbtn{padding:13px 18px;font-size:13.5px;font-weight:700;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;font-family:inherit;transition:color .15s,border-color .15s;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;}
+.hbtn:hover{color:var(--ink)}
+.hbtn.on{color:var(--rose);border-bottom-color:var(--rose)}
+
+.tab-panel{display:none;animation:fadeIn .2s ease}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+section{margin-bottom:32px;scroll-margin-top:24px}
+section h2{font-size:20px;font-weight:800;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:8px}
+section h3{font-size:15px;font-weight:700;margin:22px 0 10px;color:var(--ink-2)}
+section h4{font-size:13px;font-weight:700;margin:14px 0 6px;color:var(--ink-2)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 22px;margin-bottom:14px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:14px}
+.kv{display:flex;gap:14px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.kv:last-child{border-bottom:none}
+.kv-k{font-weight:700;color:var(--muted);min-width:120px;flex-shrink:0;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.kv-v{color:var(--ink-2);flex:1}
+.kv-v strong{color:var(--ink)}
+
+/* 큐시트 */
+.cue-table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.cue-table th{text-align:left;padding:10px 14px;background:var(--surface-2);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line)}
+.cue-table td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+.cue-table tr:last-child td{border-bottom:none}
+.cue-table tr:hover td{background:var(--surface-2)}
+.cue-time{font-family:"JetBrains Mono",monospace;font-weight:700;color:var(--rose);white-space:nowrap}
+.cue-dur{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--muted)}
+.cue-actor{font-size:12px;color:var(--muted)}
+.cue-row-highlight{background:var(--gold-soft)!important}
+.cue-row-highlight td{background:transparent!important}
+
+/* 인물 카드 */
+.person-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.person-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.person-card .role{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:4px}
+.person-card .name{font-size:15px;font-weight:700;margin-bottom:4px}
+.person-card .desc{font-size:12px;color:var(--muted);line-height:1.6}
+
+/* 축사 옵션 */
+.speech-option{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--radius);padding:18px 22px;margin-bottom:14px}
+.speech-option h4{font-size:14px;font-weight:800;color:var(--rose);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.speech-option .meta{font-size:11px;color:var(--muted);font-weight:500;margin-left:8px}
+.speech-text{font-size:13.5px;color:var(--ink-2);line-height:1.85;background:var(--surface-2);padding:14px 16px;border-radius:8px;white-space:pre-line}
+
+/* 음악 */
+.song-section{margin-bottom:22px}
+.song-section-h{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--rose);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.song-section-h .badge-cnt{font-size:11px;font-weight:700;background:var(--rose-soft);color:var(--rose-strong);border-radius:999px;padding:2px 9px}
+.song-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
+.song-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px}
+.song-card .s-title{font-size:14.5px;font-weight:800;color:var(--ink);margin-bottom:2px}
+.song-card .s-artist{font-size:12px;color:var(--muted);margin-bottom:8px}
+.song-card .s-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.song-card .s-time{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;background:var(--gold-soft);color:var(--gold-strong);padding:3px 9px;border-radius:5px}
+.song-card .s-mood{font-size:11px;font-weight:700;background:var(--rose-soft);color:var(--rose-strong);border-radius:999px;padding:3px 9px}
+.song-card .s-lyric{font-size:12px;color:var(--ink-2);background:var(--surface-2);padding:8px 10px;border-radius:6px;border-left:3px solid var(--rose);line-height:1.6;font-style:italic;margin-bottom:6px}
+.song-card .s-note{font-size:11.5px;color:var(--muted);line-height:1.55}
+.song-card.recommended{border-color:var(--rose);background:linear-gradient(180deg,var(--rose-soft),transparent 30%)}
+.song-card.recommended .s-title::after{content:" ⭐";font-size:13px}
+
+/* 호암 옵션 */
+.option-box{background:var(--surface);border:1px solid var(--gold);border-radius:var(--radius);padding:14px 18px;margin-bottom:10px}
+.option-box .o-name{font-size:14px;font-weight:800;color:var(--gold-strong);margin-bottom:4px}
+.option-box .o-price{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--ink);font-weight:700}
+.option-box .o-desc{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* tag */
+.tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:6px}
+.tag-todo{background:var(--warn-soft);color:var(--warn)}
+.tag-done{background:var(--green-soft);color:var(--green)}
+.tag-info{background:var(--rose-soft);color:var(--rose-strong)}
+
+footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);text-align:center}
+footer code{font-family:"JetBrains Mono",monospace;background:var(--surface-2);padding:1px 6px;border-radius:4px}
+</style>
+</head>
+<body>
+
+<div class="priv-bar">
+  <a href="file:///C:/Users/JEON/projects/personal-2026/index.html">🔒 개인 허브</a>
+  <span class="sep">›</span>
+  <a href="file:///C:/Users/JEON/projects/wedding_2026/wedding-dashboard.html">💍 결혼 준비</a>
+  <span class="sep">›</span>
+  <span class="cur">🎬 식순</span>
+  <div class="right">
+    <button class="sitemap-btn" onclick="toggleSitemap()">🗺 사이트맵 <span id="sm-arr">▾</span></button>
+  </div>
+</div>
+
+<!-- 글로벌 사이트맵 -->
+<div id="global-sitemap" class="global-sitemap" data-open="false">
+  <div class="sm-section">
+    <h4>🔗 상위 허브 / 자매 페이지</h4>
+    <ul>
+      <li><a href="file:///C:/Users/JEON/projects/personal-2026/index.html">개인 허브 (메인)</a><span class="d">L1 본인 전용</span></li>
+      <li><a href="file:///C:/Users/JEON/projects/wedding_2026/wedding-dashboard.html">웨딩 대시보드</a><span class="d">L2 양가 공통 진행</span></li>
+      <li><a href="file:///C:/Users/JEON/projects/wedding_2026/hawaii-trip-dashboard.html">하와이 신혼여행</a><span class="d">L2</span></li>
+    </ul>
+  </div>
+  <div class="sm-section">
+    <h4>📎 인용 자료</h4>
+    <ul>
+      <li><a href="file:///C:/Users/JEON/projects/wedding_2026/SNU_호암교수회관_2026-03-20/예식당일%20진행%20안내사항.pdf">호암 예식진행 안내사항.pdf</a><span class="d">12 항목 (4/21 메일)</span></li>
+      <li><a href="file:///C:/Users/JEON/projects/wedding_2026/SNU_호암교수회관_2026-03-20/예식식순.hwp">호암 예식식순.hwp</a><span class="d">표준 식순 (자동 추출 실패)</span></li>
+      <li><a href="file:///C:/Users/JEON/projects/wedding_2026/SNU_호암교수회관_2026-03-20/예식계약%20체크리스트.hwp">예식계약 체크리스트.hwp</a><span class="d">7/3 회신 마감</span></li>
+      <li><a href="file:///C:/Users/JEON/projects/wedding_2026/SNU_호암교수회관_2026-03-20/7월11일%2017시예식%20계약서.pdf">7/11 17시 계약서.pdf</a></li>
+      <li><span style="color:var(--muted)">호암 4/21 첨부 추가옵션.jpg</span><span class="d">사회자·축가 가격표 (위치 확인 필요)</span></li>
+    </ul>
+  </div>
+  <div class="sm-section">
+    <h4>📔 정책 / 메모리</h4>
+    <ul>
+      <li><a href="file:///C:/Users/JEON/projects/personal-2026/기본지침서.html">기본지침서</a><span class="d">5단계 보안 정책</span></li>
+      <li><a href="file:///C:/Users/JEON/.claude/projects/C--Users-JEON/memory/project_wedding_2026.md">project_wedding_2026.md</a></li>
+    </ul>
+  </div>
+  <div class="sm-section">
+    <h4>📞 호암 연락처</h4>
+    <ul>
+      <li>예약실: 1688-7745(ARS)[3번] / <a href="mailto:hoam@snu.ac.kr">hoam@snu.ac.kr</a></li>
+      <li>주소: 서울 관악구 관악로 1, 서울대학교 호암교수회관</li>
+    </ul>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header>
+  <div>
+    <div class="badge">CEREMONY PROGRAM · 2026.07.11 17:00</div>
+    <h1>🎬 식순 · 지혜 & 형구</h1>
+    <p class="lede">2026-07-11(토) 17:00 · 호암교수회관 단독홀</p>
+  </div>
+  <div>
+    <div class="dday" id="dday">D-10</div>
+    <div class="dday-sub">본식까지</div>
+  </div>
+</header>
+
+<!-- 식순 대시보드 전용: 버티컬(좌측) → 호라이즌(상단) -->
+<div class="dashboard-layout">
+
+  <!-- Level 1: 버티컬 메인 nav -->
+  <aside class="main-vnav">
+    <button class="vbtn on" data-group="progress" onclick="goGroup('progress',this)">
+      📋 진행<span class="vbtn-sub">개요 · 타임라인 · 인물 · 동선</span>
+    </button>
+    <button class="vbtn"    data-group="content"  onclick="goGroup('content',this)">
+      🎤 콘텐츠<span class="vbtn-sub">축사 · 음악</span>
+    </button>
+    <button class="vbtn"    data-group="hoam"     onclick="goGroup('hoam',this)">
+      💰 호암 운영<span class="vbtn-sub">유료 · 시식 · 답례품</span>
+    </button>
+  </aside>
+
+  <!-- Level 2: 우측 콘텐츠 영역 (각 그룹의 호라이즌 sub-nav + 패널) -->
+  <div class="main-content">
+    <!-- 그룹별 sub-hnav (호라이즌) -->
+    <nav class="sub-hnav" id="hnav-progress">
+      <button class="hbtn on" onclick="goSubTab('progress','tab-overview',this)">📋 개요</button>
+      <button class="hbtn"    onclick="goSubTab('progress','tab-timeline',this)">⏱️ 타임라인</button>
+      <button class="hbtn"    onclick="goSubTab('progress','tab-cast',this)">🎤 등장 인물</button>
+      <button class="hbtn"    onclick="goSubTab('progress','tab-flow',this)">🚶 동선·자리</button>
+    </nav>
+    <nav class="sub-hnav" id="hnav-content" style="display:none">
+      <button class="hbtn on" onclick="goSubTab('content','tab-speech',this)">📝 축사 옵션</button>
+      <button class="hbtn"    onclick="goSubTab('content','tab-music',this)">🎵 음악·BGM</button>
+    </nav>
+    <nav class="sub-hnav" id="hnav-hoam" style="display:none">
+      <button class="hbtn on" onclick="goSubTab('hoam','tab-options',this)">💰 유료 옵션</button>
+      <button class="hbtn"    onclick="goSubTab('hoam','tab-tasting',this)">🍽 시식 예약</button>
+      <button class="hbtn"    onclick="goSubTab('hoam','tab-gifts',this)">🎁 답례품</button>
+      <button class="hbtn"    onclick="goSubTab('hoam','tab-reply',this)">📧 7/3 답장</button>
+    </nav>
+
+    <!-- 선택된 패널이 이리로 이동 -->
+    <div id="panel-current"></div>
+  </div>
+
+</div>
+
+<!-- 9개 panel pool (JS가 panel-current로 이동시킴) -->
+<div id="panels-pool" style="display:none">
+
+<!-- ═══ 탭 1: 개요 ═══ -->
+<div class="tab-panel active" id="tab-overview">
+  <section>
+    <h2>📋 기본 정보</h2>
+    <div class="card">
+      <div class="kv"><span class="kv-k">예식일</span><span class="kv-v"><strong>2026년 7월 11일 (토) 17:00</strong></span></div>
+      <div class="kv"><span class="kv-k">예식장</span><span class="kv-v">호암교수회관 단독홀 · 서울 관악구 관악로 1</span></div>
+      <div class="kv"><span class="kv-k">신랑</span><span class="kv-v">정형구</span></div>
+      <div class="kv"><span class="kv-k">신부</span><span class="kv-v">전지혜</span></div>
+      <div class="kv"><span class="kv-k">보증 인원</span><span class="kv-v">250~270 (3/13 메일 협의) <span class="tag tag-todo">최종 확정 7/3</span></span></div>
+      <div class="kv"><span class="kv-k">사회자</span><span class="kv-v">호암 유료 옵션 (직접 섭외 X)</span></div>
+      <div class="kv"><span class="kv-k">축가</span><span class="kv-v">호암 유료 옵션</span></div>
+      <div class="kv"><span class="kv-k">주례</span><span class="kv-v">미정 — 양가 부친 축사로 대체 가능 <span class="tag tag-todo">결정 필요</span></span></div>
+      <div class="kv"><span class="kv-k">꽃 장식</span><span class="kv-v">없음 (호암에 회신함)</span></div>
+      <div class="kv"><span class="kv-k">스튜디오</span><span class="kv-v">그날의기억 (더델라) · 작가 전영우</span></div>
+      <div class="kv"><span class="kv-k">한복</span><span class="kv-v">베틀한복 (7/10 픽업, 7/12 반납)</span></div>
+      <div class="kv"><span class="kv-k">신랑 예복</span><span class="kv-v">폴라리스 · 키높이 270</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>⏰ 도착 시간 (호암 안내 기준)</h2>
+    <div class="card-grid">
+      <div class="card" style="margin-bottom:0">
+        <h4 style="margin-top:0">🕒 1시간 전 (16:00)</h4>
+        <p style="font-size:13px;color:var(--ink-2)">신랑 · 신부 · 양가 혼주</p>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <h4 style="margin-top:0">🕒 30분 전 (16:30)</h4>
+        <p style="font-size:13px;color:var(--ink-2)">사회자 · 주례 (호암 옵션이라 사회자는 호암 측이 직접 배정)</p>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <h4 style="margin-top:0">🕒 본식 시작 (17:00)</h4>
+        <p style="font-size:13px;color:var(--ink-2)">개식 → 예식 20분 → 원판 사진 20분 → 식사·피로연 → 폐백 30분</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>📌 식 전체 흐름 (호암 PDF 12 항목 요약)</h2>
+    <div class="card">
+      <ol style="padding-left:22px;font-size:13.5px;color:var(--ink-2);line-height:1.9">
+        <li><strong>예식 20분</strong> — 입장 / 화촉 / 혼인서약 / 축사 / 축가 / 양가 인사 / 행진</li>
+        <li><strong>원판 사진 8컷 20분</strong> — 양가 가족 / 친구 / 직장 / 단체 컷</li>
+        <li><strong>식사 + 피로연장 하객 인사</strong> — 피로연장 2시간 이내</li>
+        <li><strong>폐백 30분</strong> — 가장 마지막. 폐백 의상은 호암 준비, 수모님은 드레스 업체와 별도 협의 필요</li>
+      </ol>
+      <div style="margin-top:14px;padding:10px 12px;background:var(--warn-soft);border-radius:8px;font-size:12.5px;color:var(--warn)">
+        ⚠️ 결혼식장 1시간 / 피로연장 2시간 이내 사용. 비용 정산은 본관 1층 레스토랑 수납원에게 (현금/카드 가능, 세금계산서는 현금만).
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 탭 2: 타임라인 ═══ -->
+<div class="tab-panel" id="tab-timeline">
+  <section>
+    <h2>⏱️ 본식 큐시트 — 예식 20분 (17:00~17:20)</h2>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">사용자 결정 입장 방식: 양가 어머니 → 양가 아버지 → 신랑·신부 함께 입장. 시간은 추정치, 호암 사회자가 최종 조율.</p>
+    <table class="cue-table">
+      <thead><tr><th style="width:90px">시간</th><th style="width:60px">분</th><th>장면</th><th style="width:140px">담당</th></tr></thead>
+      <tbody>
+        <tr><td class="cue-time">17:00</td><td class="cue-dur">0:30</td><td>개식 선언</td><td class="cue-actor">사회자 (호암)</td></tr>
+        <tr><td class="cue-time">17:00</td><td class="cue-dur">1:00</td><td>양가 어머니 입장 (각각) → 화촉 점화</td><td class="cue-actor">양가 어머니</td></tr>
+        <tr><td class="cue-time">17:02</td><td class="cue-dur">1:00</td><td>양가 아버지 입장 (각각)</td><td class="cue-actor">양가 아버지</td></tr>
+        <tr class="cue-row-highlight"><td class="cue-time">17:03</td><td class="cue-dur">1:30</td><td><strong>신랑·신부 함께 입장</strong> (행진곡)</td><td class="cue-actor">정형구 · 전지혜</td></tr>
+        <tr><td class="cue-time">17:05</td><td class="cue-dur">0:30</td><td>맞절 / 하객 인사</td><td class="cue-actor">신랑·신부</td></tr>
+        <tr><td class="cue-time">17:05</td><td class="cue-dur">2:00</td><td>혼인 서약 (사회자 진행)</td><td class="cue-actor">신랑·신부 / 사회자</td></tr>
+        <tr class="cue-row-highlight"><td class="cue-time">17:07</td><td class="cue-dur">2:00</td><td><strong>신부 측 부친 축사</strong> (전지혜 부친)</td><td class="cue-actor">신부 부친</td></tr>
+        <tr class="cue-row-highlight"><td class="cue-time">17:09</td><td class="cue-dur">2:00</td><td><strong>신랑 측 부친 축사</strong> (정형구 부친)</td><td class="cue-actor">신랑 부친</td></tr>
+        <tr><td class="cue-time">17:11</td><td class="cue-dur">3:00</td><td>축가 (호암 유료)</td><td class="cue-actor">호암 축가팀</td></tr>
+        <tr><td class="cue-time">17:14</td><td class="cue-dur">2:00</td><td>양가 부모 인사 / 하객 답례</td><td class="cue-actor">양가 부모</td></tr>
+        <tr><td class="cue-time">17:16</td><td class="cue-dur">2:00</td><td>신랑·신부 인사 / 하객 답례</td><td class="cue-actor">신랑·신부</td></tr>
+        <tr class="cue-row-highlight"><td class="cue-time">17:18</td><td class="cue-dur">2:00</td><td><strong>행진곡 → 퇴장</strong></td><td class="cue-actor">신랑·신부</td></tr>
+        <tr><td class="cue-time">17:20</td><td class="cue-dur">—</td><td>예식 종료 / 원판 사진 8컷 (20분)</td><td class="cue-actor">스튜디오 (더델라)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>📸 원판 사진 + 폐백 (17:20 이후)</h2>
+    <div class="card">
+      <div class="kv"><span class="kv-k">17:20~17:40</span><span class="kv-v">원판 사진 8컷 (양가 가족 / 친구 / 직장 / 단체)</span></div>
+      <div class="kv"><span class="kv-k">17:40~</span><span class="kv-v">식사 + 피로연장 하객 인사 (피로연장 2시간 이내)</span></div>
+      <div class="kv"><span class="kv-k">마지막 순서</span><span class="kv-v">폐백 30분 (호암 의상 제공 / 수모님 드레스 업체와 별도 협의 필요) <span class="tag tag-todo">수모 협의</span></span></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 탭 3: 등장 인물 ═══ -->
+<div class="tab-panel" id="tab-cast">
+  <section>
+    <h2>🎤 본식 등장 인물</h2>
+    <div class="person-grid">
+      <div class="person-card">
+        <div class="role">신랑</div>
+        <div class="name">정형구</div>
+        <div class="desc">키높이 270 (폴라리스) · 예복 폴라리스</div>
+      </div>
+      <div class="person-card">
+        <div class="role">신부</div>
+        <div class="name">전지혜</div>
+        <div class="desc">드레스 모베터쉬크 (베이지) · 본식 재피팅 필수</div>
+      </div>
+      <div class="person-card">
+        <div class="role">신랑 부친</div>
+        <div class="name">정형구 부친</div>
+        <div class="desc">입장 (각자 따로) + 축사 2분 + 양가 부모 인사</div>
+      </div>
+      <div class="person-card">
+        <div class="role">신랑 모친</div>
+        <div class="name">정형구 모친</div>
+        <div class="desc">입장 → 화촉 점화 + 양가 부모 인사</div>
+      </div>
+      <div class="person-card">
+        <div class="role">신부 부친</div>
+        <div class="name">전지혜 부친</div>
+        <div class="desc">입장 (각자 따로) + 축사 2분 + 양가 부모 인사</div>
+      </div>
+      <div class="person-card">
+        <div class="role">신부 모친</div>
+        <div class="name">전지혜 모친</div>
+        <div class="desc">입장 → 화촉 점화 + 양가 부모 인사</div>
+      </div>
+      <div class="person-card" style="border-color:var(--gold);background:var(--gold-soft)">
+        <div class="role">사회자</div>
+        <div class="name">호암 유료 옵션</div>
+        <div class="desc">호암 측 배정 · 30분 전 도착 · 가격 확인 필요</div>
+      </div>
+      <div class="person-card" style="border-color:var(--gold);background:var(--gold-soft)">
+        <div class="role">축가</div>
+        <div class="name">호암 유료 옵션</div>
+        <div class="desc">호암 측 배정 · 예식 중반 3분 · 가격 확인 필요</div>
+      </div>
+      <div class="person-card" style="border-color:var(--warn);background:var(--warn-soft)">
+        <div class="role">주례</div>
+        <div class="name">미정</div>
+        <div class="desc">양가 부친 축사로 대체 가능. 호암에 회신 시 명시 필요</div>
+      </div>
+      <div class="person-card">
+        <div class="role">사진·영상</div>
+        <div class="name">그날의기억 (더델라)</div>
+        <div class="desc">작가 전영우 · della9457@naver.com</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>📋 호암에 회신할 인물 정보 (7/3 마감)</h2>
+    <div class="card" style="background:var(--warn-soft);border-color:var(--warn)">
+      <ul style="padding-left:22px;font-size:13px;color:var(--ink-2);line-height:1.9">
+        <li>주례 진행 여부 — 양가 부친 축사로 대체할지 결정</li>
+        <li>혼인서약서 진행 여부 (사회자가 진행하는 표준 vs 신랑신부 자작)</li>
+        <li>축가 선곡 / 사회자 멘트 톤 (밝게 / 차분히)</li>
+        <li>수모님 (폐백 도우미) 협의 — 드레스 업체(모베터쉬크?) 확인</li>
+        <li>포토테이블 액자 사진 준비 (큰액자 2 + 소액자 5~7)</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 탭 4: 축사 옵션 ═══ -->
+<div class="tab-panel" id="tab-speech">
+  <section>
+    <h2>📝 축사 가이드 (양가 부친 각 2분)</h2>
+    <div class="card" style="background:var(--gold-soft);border-color:var(--gold);margin-bottom:18px">
+      <div class="kv"><span class="kv-k">분량</span><span class="kv-v">각 2분 (120초 기준) / 600~720자</span></div>
+      <div class="kv"><span class="kv-k">톤</span><span class="kv-v">정중 + 20% 유머 (따뜻함 우선)</span></div>
+      <div class="kv"><span class="kv-k">추천 키워드</span><span class="kv-v">신부 측: "귀염둥이" / 신랑 측: 며느리 환영</span></div>
+      <div class="kv"><span class="kv-k">금지 표현</span><span class="kv-v">"잡혀 산다" 류 신랑 디스 금지</span></div>
+    </div>
+
+    <h3>신부 측 부친 축사 (전지혜 부친) — 3안</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">톤 = 정중·따뜻함 + 20% 유머. "우리 집 귀염둥이" 정서.</p>
+
+    <div class="speech-option">
+      <h4>A안 — 회상·귀염둥이 (700자 · 2분 30초) <span class="meta">어린 시절 일화 풍부, 회상 톤 강함</span></h4>
+      <div class="speech-text">와주신 모든 분께, 진심으로 감사 인사 올립니다.
+
+오늘 아침에 우리 지혜 어릴 적 사진을 또 꺼내봤습니다. 자전거 처음 배운다고 넘어지면서도 깔깔 웃던 모습, 학교 입학식 날 가방 메고 씩씩하게 들어가던 뒷모습 — 우리 집 귀염둥이가 그렇게 자라서, 오늘 신부로 이 자리에 서 있네요.
+
+부모 마음이라는 게 참 묘합니다. 다 키워 보낸다는 걸 알면서도, 막상 그날이 오면 가슴 한쪽이 비어버립니다. 우리 집에 늘 환한 웃음 하나가 자리 잡고 있었는데, 오늘 그 자리가 살짝 비는 것 같아 — 자꾸 눈가가 뜨거워집니다.
+
+그런데 그 빈자리를 우리 형구 군이 채워줄 사람이라는 걸, 처음 만난 날 알 수 있었습니다. 단정하고, 진중하고, 무엇보다 우리 지혜를 보는 눈빛이 따뜻한 사람이었습니다.
+
+형구 군, 우리 지혜는 겉으로는 야무져 보여도 속으로는 다정함이 많은 아이입니다. 그 다정함 잘 알아봐 주고, 지켜주는 사람이 되어주세요. 그게 부모로서 드리는 단 하나의 부탁입니다.
+
+사돈 어른 두 분, 이렇게 좋은 아들 길러주시고 우리 가족과 인연을 맺어주셔서 진심으로 감사드립니다.
+
+지혜야, 우리 귀염둥이. 행복해라. 그게 부모한테 가장 큰 선물이다.
+
+오늘 자리 빛내 주신 모든 분께 다시 한번 깊이 감사드립니다.</div>
+    </div>
+
+    <div class="speech-option">
+      <h4>B안 — 정서·고백형 (680자 · 2분 20초) <span class="meta">"잠 설쳤다" 자조 + 식탁 일화, 감정 짙음</span></h4>
+      <div class="speech-text">귀한 발걸음 해주신 여러분, 감사합니다.
+
+며칠 잠을 설쳤습니다. 우리 집 막내 귀염둥이를 시집보낸다는 게, 머리로는 알면서도 가슴이 자꾸 묘하게 떨립니다.
+
+우리 지혜는 어릴 때부터 웃음이 많은 아이였습니다. 집에 들어오면 늘 가장 먼저 인사하고, 식탁 자리에 앉으면 그날 있었던 일 하나하나 다 풀어놓던 아이였습니다. 그 웃음과 그 수다가 오늘부터는 우리 집 식탁이 아니라 다른 식탁에 있을 거라 생각하니 — 부모 마음이 참 복잡합니다.
+
+그래도 한 가지 안심이 됩니다. 우리 지혜 옆에 형구 군이 있다는 것. 처음 봤을 때부터 단정하고 진중한 사람이라는 게 느껴졌습니다. 우리 귀염둥이가 사람 보는 눈은 있구나, 그날 안심했습니다.
+
+사돈 어른 두 분, 진심으로 감사드립니다. 이렇게 좋은 아들 길러주시고, 우리 가족과 인연 맺어주셔서 — 저희가 더 든든해졌습니다.
+
+형구 군, 우리 지혜의 그 웃음을 지켜주세요. 화려한 것보다 평범한 매일이 더 어렵다고 합니다. 그 평범한 매일을 두 사람이 함께 따뜻하게 채워가시기를 바랍니다.
+
+지혜야, 우리 귀염둥이. 행복해라. 그게 아빠 평생의 바람이다.
+
+자리 함께해 주신 모든 분, 진심으로 감사드립니다.</div>
+    </div>
+
+    <div class="speech-option">
+      <h4>C안 (개정 V2) — 회상+구체적 유머 (570자 · 2분) <span class="meta">명백한 웃음 3포인트 강화</span></h4>
+      <div class="speech-text">바쁘신 주말 자리해 주신 모든 분께 감사드립니다.
+
+며칠 잠을 설쳤습니다. 우리 집 귀염둥이를 보낸다는 게, 머리로는 알면서도 가슴이 자꾸 묘하게 떨립니다.
+
+어린 시절 사진을 꺼내봤는데, 자전거 배우며 넘어져도 까르르 웃던 모습, 입학식 날 씩씩하게 들어가던 뒷모습 — 그런 우리 지혜가 오늘 신부로 이 자리에 서 있네요. 부모 마음이라는 게 정말 우습습니다. (웃음) 우리 집 최근 몇 년 얘기를 하자면, 지혜가 형구를 데려온 이후로 우리 집 밥상에서 저의 발언권이 한 자리 줄어들었습니다. 처음엔 농담이라 생각했는데, 이제는 현실이 됐네요. (웃음)
+
+그래도 그 한 자리가 이렇게 따뜻하게 채워져서, 부모로서 이보다 안심인 게 없습니다. 우리 지혜를 보는 형구 군의 눈빛에서 진심이 느껴지거든요.
+
+형구 군, 우리 지혜 옆에서 그 웃음과 다정함을 잘 지켜주세요. 사돈 어른 두 분께도 진심으로 감사드립니다.
+
+지혜야, 우리 귀염둥이. 행복해라. 그게 부모의 가장 큰 바람이다.
+
+자리 빛내 주신 모든 분께 다시 한번 감사드립니다.</div>
+    </div>
+  </section>
+
+    <h3>신랑 측 부친 축사 (정형구 부친) — 3안 (확장판)</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">톤 = 정중·따뜻함 + 20% 유머. 며느리 환영 + 아들 당부 + 사돈 감사.</p>
+
+    <div class="speech-option">
+      <h4>A안 — 며느리 환영·회상형 (710자 · 2분 30초) <span class="meta">시댁 솔직함 + 첫 만남 일화</span></h4>
+      <div class="speech-text">귀한 시간 내주신 모든 분께 진심으로 감사 인사 올립니다.
+
+우리 형구가 지혜 씨를 처음 집에 데려온 날, 솔직히 말씀드리면 — 우리가 더 긴장했습니다. 아내와 저는 그날 아침부터 집 안 정리에 한참을 보냈고, 저녁 식탁 앞에서는 어떤 이야기를 어떻게 꺼낼까 한 번 더 점검했습니다. 아들 데려온 사람을 처음 만나는 게 부모로서 이렇게 떨리는 일인 줄, 그날 처음 알았습니다.
+
+그런데 막상 지혜 씨를 마주하니 그 모든 긴장이 한순간에 풀렸습니다. 단정하면서도 밝고, 어른들 앞에서도 자기 생각을 차분히 풀어내는 모습이 — 우리 형구가 왜 이 사람이라고 했는지 그제야 알겠더군요.
+
+우리 형구는 겉으로는 무뚝뚝해 보여도 속으로는 깊은 마음을 가진 아이입니다. 그 깊은 마음을 알아봐 주고, 끝까지 함께해 주는 사람이 지혜 씨라는 걸 — 그날 마음으로 느꼈습니다.
+
+사돈 어른 두 분, 진심으로 감사드립니다. 이렇게 귀한 따님을 우리 가족에 보내주시고, 두 집안의 인연을 맺어주셔서요. 앞으로 두 집안이 한 가족처럼 따뜻하게 지냈으면 합니다.
+
+형구야 지혜야, 결혼은 한 사람과 평생을 약속하는 일이다. 잘 살아라. 그 약속을 매일 새기며 살아라. 그것이 부모가 줄 수 있는 가장 큰 응원이다.
+
+오늘 자리 빛내 주신 모든 분께 다시 한번 깊이 감사드립니다.</div>
+    </div>
+
+    <div class="speech-option">
+      <h4>B안 — 아들 당부·20% 유머 (700자 · 2분 25초) <span class="meta">"발언권 한 자리 줄겠다" 자조 + 아들 당부</span></h4>
+      <div class="speech-text">자리 빛내 주신 모든 분께 진심으로 감사 인사 올립니다.
+
+형구가 지혜 씨를 처음 집에 데려온 그날, 아내가 저한테 그러더군요. "당신, 이제 우리 집에서 발언권 한 자리 더 줄겠다." 정말로 그렇게 됐습니다. 그 한 자리가 며느리 자리라는 것을, 그날 이후 매일 실감하고 있습니다.
+
+우리 형구는 어릴 때부터 자기 일에 묵묵한 아이였습니다. 좋아하는 일에 한 번 빠지면 끝까지 해내는 성격이고, 한 번 마음먹은 사람은 좀처럼 흔들지 않는 아이였습니다. 그런 형구가 결혼하겠다고 지혜 씨를 데려왔을 때, 저는 그 한결같음을 믿었습니다.
+
+지혜 씨를 만나고 그 믿음은 확신이 됐습니다. 단정하고, 밝고, 무엇보다 우리 형구를 보는 눈빛에서 진심이 느껴졌습니다. 사돈 어른 두 분, 이렇게 귀한 따님을 우리 가족에 보내주시고 인연 맺어주셔서 진심으로 감사드립니다.
+
+지혜야, 우리 가족이 된 걸 진심으로 환영한다. 우리 집 식구로서 늘 마음 편히 지냈으면 좋겠다. 형구가 부족한 부분이 있으면 솔직히 말해 줘라. 부모로서 같이 가르치며 살겠다.
+
+형구야, 한 가정의 가장이 된다는 건 책임이다. 그러나 그 책임을 같이 짊어질 사람이 옆에 있다는 게 가장 큰 복이다. 그 복을 매일 감사하며 살아라.
+
+두 사람의 앞날에 평안과 사랑이 늘 함께하기를 — 부모로서 기원합니다. 감사합니다.</div>
+    </div>
+
+    <div class="speech-option">
+      <h4>C안 — 짧고 깊은 (590자 · 2분) <span class="meta">"잘 데려왔다" + 며느리 환영 + 핵심만</span></h4>
+      <div class="speech-text">바쁘신 주말 자리해 주신 모든 분께 진심으로 감사드립니다.
+
+우리 형구가 지혜 씨를 데려왔을 때, 저희 부부는 한마디 했습니다. "잘 데려왔다." 우리 아이가 평생 함께할 사람을 보는 눈은 있구나, 그날 안심했습니다.
+
+지혜 씨를 보면 알 수 있습니다. 단정하고 밝고, 우리 형구를 진심으로 아끼는 마음이 눈빛에 그대로 보입니다. 우리 형구가 어떤 사람인지 누구보다 잘 아는 사람이 옆에 있다는 것 — 부모로서 그 이상 바랄 게 없습니다.
+
+사돈 어른 두 분께 깊이 감사드립니다. 이렇게 귀한 따님을 우리 가족과 인연 맺어주셔서요. 앞으로 두 집안의 인연이 깊고 길게 이어지기를 진심으로 바랍니다.
+
+지혜야, 우리 가족이 된 걸 진심으로 환영한다. 우리 집은 늘 너의 자리가 있을 거다.
+
+형구야, 한 가정의 가장이 된다는 건 책임이다. 그러나 그 책임을 같이 짊어질 사람이 옆에 있다는 게 가장 큰 복이라는 것 — 잊지 말고 매일 감사하며 살아라.
+
+두 사람의 앞날에 평안과 사랑이 늘 함께하기를 부모로서 기원합니다.
+
+자리 빛내 주신 모든 분께 다시 한번 감사드립니다.</div>
+    </div>
+
+    <div class="card" style="background:var(--rose-soft);border-color:var(--rose);margin-top:16px">
+      <p style="font-size:12.5px;color:var(--ink-2);line-height:1.8">
+        💡 <strong>조합 권장</strong>: 신부 측 A안 + 신랑 측 A안 (양쪽 회상·따뜻 톤) / 또는 신부 측 B안 + 신랑 측 B안 (양쪽 20% 유머 일관) / 신부 측 길게 + 신랑 측 C안 (균형).<br>
+        💡 신랑 측도 700자 확장 필요하면 "신랑 측 부친 축사 확장" 한 마디로 요청.
+      </p>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 탭 5: 음악·BGM ═══ -->
+<div class="tab-panel" id="tab-music">
+  <section>
+    <h2>🎵 추천 곡 10선 + 추천 구간 + 가사 포인트</h2>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:18px">2026년 한국·글로벌 결혼식 트렌드 기준. ⭐ = 가장 자주 쓰는 곡. 시간은 보통 사용되는 재생 구간 (mm:ss).</p>
+
+    <!-- 양가 부모 입장 -->
+    <div class="song-section">
+      <div class="song-section-h">🌷 양가 부모 입장 BGM <span class="badge-cnt">2곡</span></div>
+      <div class="song-grid">
+        <div class="song-card recommended">
+          <div class="s-title">River Flows in You</div>
+          <div class="s-artist">Yiruma · 피아노 솔로 (3:09)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:00 ~ 1:00</span>
+            <span class="s-mood">🕊️ 따뜻·잔잔</span>
+          </div>
+          <div class="s-lyric">가사 없음 — 0:08부터 메인 멜로디 시작 (가장 인기 부분)</div>
+          <div class="s-note">한국 결혼식 부모 입장 No.1. 어머니 → 아버지 연속 입장에도 한 곡으로 충분 (2분 채움).</div>
+        </div>
+        <div class="song-card">
+          <div class="s-title">Canon in D</div>
+          <div class="s-artist">Pachelbel · 클래식 표준 편곡 (4:35)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:00 ~ 1:30</span>
+            <span class="s-mood">🎻 클래식·격조</span>
+          </div>
+          <div class="s-lyric">가사 없음 — 4박 점진 진행, 1:00부터 변주 시작 (입장 끝나는 타이밍)</div>
+          <div class="s-note">가장 전통적·격조 있는 선택. 호암 같은 격식 있는 홀과 잘 어울림.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 신랑·신부 공동 입장 -->
+    <div class="song-section">
+      <div class="song-section-h">💕 신랑·신부 공동 입장 (메인) <span class="badge-cnt">4곡 중 1선택</span></div>
+      <div class="song-grid">
+        <div class="song-card recommended">
+          <div class="s-title">너의 모든 순간</div>
+          <div class="s-artist">성시경 · 별에서 온 그대 OST (3:26)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:00 ~ 1:25</span>
+            <span class="s-mood">💕 잔잔·감성</span>
+          </div>
+          <div class="s-lyric">"너의 모든 순간이 되고 싶어<br>오늘처럼 너의 햇살이 되고 싶어"</div>
+          <div class="s-note">한국 공동 입장 부동의 No.1. 잔잔한 피아노 인트로 → 1절 끝까지 자연스럽게 입장 타이밍 맞음. 사용자 "귀염둥이" 정서와 일치.</div>
+        </div>
+        <div class="song-card recommended">
+          <div class="s-title">출발</div>
+          <div class="s-artist">김동률 (4:27)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:35 ~ 1:50</span>
+            <span class="s-mood">🌅 희망·동행</span>
+          </div>
+          <div class="s-lyric">"우리 이제 함께 가는 거야<br>아주 멀리까진 가보고 싶어"</div>
+          <div class="s-note">사용자 입장 콘셉트("같이 입장")와 가사가 100% 일치. 1:50 후렴 폭발 직전까지 사용하면 단상 도착 타이밍 맞음.</div>
+        </div>
+        <div class="song-card">
+          <div class="s-title">A Thousand Years</div>
+          <div class="s-artist">Christina Perri · 트와일라잇 OST (4:45)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:00 ~ 1:30</span>
+            <span class="s-mood">💍 감동·깊은</span>
+          </div>
+          <div class="s-lyric">"I have died everyday waiting for you<br>I have loved you for a thousand years" (1:10~)</div>
+          <div class="s-note">글로벌 결혼식 공동 입장 No.1. 피아노 인트로 → 보컬 시작에 등장 타이밍 자주 잡음.</div>
+        </div>
+        <div class="song-card">
+          <div class="s-title">I See the Light</div>
+          <div class="s-artist">Tangled OST (Mandy Moore · Zachary Levi) (3:41)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:55 ~ 2:00</span>
+            <span class="s-mood">✨ 디즈니·사랑</span>
+          </div>
+          <div class="s-lyric">"At last I see the light<br>And it's like the fog has lifted"</div>
+          <div class="s-note">두 사람이 마주보며 걷는 듀엣 구간(0:55~)이 공동 입장에 어울림. 살짝 사랑스러운 톤 원할 때.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 혼인 서약 BGM -->
+    <div class="song-section">
+      <div class="song-section-h">📜 혼인 서약 BGM <span class="badge-cnt">1곡</span></div>
+      <div class="song-grid">
+        <div class="song-card recommended">
+          <div class="s-title">Comptine d'un autre été</div>
+          <div class="s-artist">Yann Tiersen · 아멜리에 OST (2:19)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:00 ~ 1:30 (또는 전체)</span>
+            <span class="s-mood">🕯️ 매우 잔잔</span>
+          </div>
+          <div class="s-lyric">가사 없음 — 미니멀 피아노. 사회자 멘트 묻힘 없는 정도</div>
+          <div class="s-note">아멜리에 메인 테마. 매우 잔잔해서 혼인서약 낭독 배경으로 사회자 목소리 안 가림. 2분 분량이라 한 곡으로 서약 한 사이클 마침.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 신랑·신부 퇴장 (행진곡) -->
+    <div class="song-section">
+      <div class="song-section-h">🎉 신랑·신부 퇴장 (행진곡) <span class="badge-cnt">3곡 중 1선택</span></div>
+      <div class="song-grid">
+        <div class="song-card recommended">
+          <div class="s-title">꽃길만 걷게 해줄게</div>
+          <div class="s-artist">데이브레이크 (3:38)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:00 ~ 1:00</span>
+            <span class="s-mood">🌸 밝고 경쾌</span>
+          </div>
+          <div class="s-lyric">"너랑 나랑 둘이서<br>꽃길만 걷게 해줄게"</div>
+          <div class="s-note">한국 결혼식 퇴장곡 부동의 1위. 인트로 폭발 → 1절 후렴까지 1분이면 행진·퇴장·박수 다 끝남.</div>
+        </div>
+        <div class="song-card recommended">
+          <div class="s-title">Marry You</div>
+          <div class="s-artist">Bruno Mars (3:50)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:00 ~ 1:00</span>
+            <span class="s-mood">🎉 댄스·폭발</span>
+          </div>
+          <div class="s-lyric">"It's a beautiful night, we're looking for something dumb to do<br>Hey baby, I think I wanna marry you"</div>
+          <div class="s-note">글로벌 퇴장곡 No.1. 도입 박자 → 0:35 후렴 폭발 타이밍에 신랑신부 단상 내려옴이 자연스러움.</div>
+        </div>
+        <div class="song-card">
+          <div class="s-title">A Sky Full of Stars</div>
+          <div class="s-artist">Coldplay (4:28)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:15 ~ 1:30</span>
+            <span class="s-mood">⭐ 어쿠스틱 EDM</span>
+          </div>
+          <div class="s-lyric">"'Cause you're a sky, 'cause you're a sky full of stars<br>I'm gonna give you my heart"</div>
+          <div class="s-note">피아노 → 비트 폭발 구조. 행진 길이가 짧으면 0:30~1:00 (절정만) 추천.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 추가 후보 -->
+    <div class="song-section">
+      <div class="song-section-h">🎵 추가 후보 (참고용) <span class="badge-cnt">2곡</span></div>
+      <div class="song-grid">
+        <div class="song-card">
+          <div class="s-title">Grow As We Go</div>
+          <div class="s-artist">Ben Platt (3:54)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:30 ~ 1:30</span>
+            <span class="s-mood">🌱 감성·성장</span>
+          </div>
+          <div class="s-lyric">"You don't have to change a thing<br>The world could change its mind / We can grow as we go"</div>
+          <div class="s-note">신랑·신부 입장 대안. "함께 성장하자" 가사가 결혼 메시지와 일치. 감성적 톤 선호 시.</div>
+        </div>
+        <div class="song-card">
+          <div class="s-title">Marry Me</div>
+          <div class="s-artist">Train (4:15)</div>
+          <div class="s-meta">
+            <span class="s-time">▶ 0:00 ~ 1:20</span>
+            <span class="s-mood">💍 클래식 팝</span>
+          </div>
+          <div class="s-lyric">"Marry me, today and every day<br>Marry me, if I ever get the nerve"</div>
+          <div class="s-note">A Thousand Years와 함께 영어 입장곡 양대산맥. 잔잔한 어쿠스틱 톤.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="background:var(--rose-soft);border-color:var(--rose);margin-top:18px">
+      <h3 style="margin-top:0;color:var(--rose-strong);font-size:14px">💡 사용자 추천 조합</h3>
+      <ul style="padding-left:20px;font-size:13px;color:var(--ink-2);line-height:1.9;margin-top:4px">
+        <li><strong>A. 한국 감성 풀세트</strong>: 부모 입장 = River Flows in You / 공동 입장 = <strong>김동률 출발</strong> (가사 일치) / 혼인서약 = Comptine / 퇴장 = <strong>꽃길만 걷게 해줄게</strong></li>
+        <li><strong>B. 글로벌 무난</strong>: 부모 입장 = Canon in D / 공동 입장 = <strong>A Thousand Years</strong> / 혼인서약 = Comptine / 퇴장 = <strong>Marry You</strong></li>
+        <li><strong>C. 한·영 믹스 (추천)</strong>: 부모 입장 = River Flows in You / 공동 입장 = <strong>성시경 너의 모든 순간</strong> / 혼인서약 = Comptine / 퇴장 = <strong>꽃길만 걷게 해줄게</strong></li>
+      </ul>
+      <p style="font-size:11.5px;color:var(--muted);margin-top:8px">📌 호암 사회자와 1주 전 협의 시 곡 파일 또는 유튜브 링크 + 정확한 재생 구간 (mm:ss~mm:ss) 전달.</p>
+    </div>
+  </section>
+
+  <!-- 신규: 전체 곡 데이터베이스 (85곡) -->
+  <section style="margin-top:32px">
+    <h2>🎵 음악 진행도 (7/3 최종 마감)</h2>
+    <div class="card-grid">
+      <div class="card" style="margin-bottom:0;background:var(--green-soft);border-color:var(--green)">
+        <div style="font-weight:700;color:var(--green);margin-bottom:6px">✅ 예식곡 3곡</div>
+        <div style="font-size:12px;color:var(--ink-2)">부모 입장 + 공동 입장 + 퇴장</div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div style="font-weight:700;color:var(--rose);margin-bottom:6px">⏳ 피로연 곡 50곡</div>
+        <div style="font-size:12px;color:var(--ink-2)">진행 중 (7/3 회신 必)</div>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <div style="font-weight:700;color:var(--rose);margin-bottom:6px">⏳ 폐백곡</div>
+        <div style="font-size:12px;color:var(--ink-2)">선곡 대기 중</div>
+      </div>
+    </div>
+
+    <h3>전체 곡 데이터베이스 (85곡)</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">2026년 클래식·현악곡 결혼식 배경음악 완전판. 카테고리별로 인기도 순 정렬. YouTube 링크 포함 (링크 없는 곡은 검색명 제시).</p>
+
+    <div class="card" style="background:var(--gold-soft);border-color:var(--gold);margin-bottom:18px">
+      <h4 style="margin-top:0;color:var(--gold-strong)">📊 데이터 요약</h4>
+      <ul style="padding-left:18px;font-size:13px;color:var(--ink-2);line-height:1.8;margin:0">
+        <li><strong>신랑신부 공동 입장 (25곡)</strong> — 우아하고 당당한 톤. Pachelbel Canon, Mendelssohn March 등 부동 1위 곡 포함.</li>
+        <li><strong>신랑신부 퇴장 (20곡)</strong> — 밝고 축제적 톤. 꽃길만 걷게 해줄게, Marry You 등.</li>
+        <li><strong>부모 입장 (15곡)</strong> — 중후하고 격식 있는 톤. Wagner Lohengrin Prelude 등.</li>
+        <li><strong>혼인서약 배경음 (10곡)</strong> — 잔잔하고 감정적. Debussy, Satie, Chopin 등.</li>
+        <li><strong>피로연/식사 중 BGM (15곡)</strong> — 편안하고 경쾌한 현악. 왈츠, 세레나데 등.</li>
+        <li><strong>퇴장 추가곡 (5곡)</strong> — 신의주곡 느낌. Walton, Clarke 등 현대 행진곡.</li>
+      </ul>
+    </div>
+
+    <!-- 테이블 임베드 (스크롤 테이블) -->
+    <div style="overflow-x:auto;margin-bottom:14px">
+      <table class="cue-table" style="min-width:900px">
+        <thead><tr><th style="width:50px">#</th><th>곡명</th><th style="width:120px">아티스트</th><th style="width:70px">길이</th><th style="width:100px">특징</th><th style="width:200px">링크</th></tr></thead>
+        <tbody>
+          <tr><td colspan="6" style="text-align:center;padding:12px;color:var(--muted);font-weight:700">📋 카테고리 1: 신랑신부 공동 입장 (25곡)</td></tr>
+          <tr><td>1</td><td><strong>Pachelbel's Canon in D</strong></td><td>Johann Pachelbel</td><td>5:30</td><td>우아함</td><td><a href="https://www.youtube.com/watch?v=RXeZcrLmsEk" target="_blank">YT</a></td></tr>
+          <tr><td>2</td><td><strong>Wagner - Bridal Chorus</strong></td><td>Richard Wagner</td><td>4:45</td><td>전통신부</td><td><a href="https://www.youtube.com/watch?v=5C5FOW2ekHo" target="_blank">YT</a></td></tr>
+          <tr><td>3</td><td><strong>Mendelssohn - Wedding March</strong></td><td>Felix Mendelssohn</td><td>4:20</td><td>승리감</td><td><a href="https://www.youtube.com/watch?v=BANltwJUrG0" target="_blank">YT</a></td></tr>
+          <tr><td>4</td><td><strong>Debussy - Clair de Lune</strong></td><td>Claude Debussy</td><td>4:30</td><td>몽환적</td><td><a href="https://www.youtube.com/watch?v=XV80RTZMdqM" target="_blank">YT</a></td></tr>
+          <tr><td>5</td><td><strong>Beethoven - Ode to Joy</strong></td><td>Ludwig van Beethoven</td><td>5:15</td><td>축제적</td><td><a href="https://www.youtube.com/watch?v=4YV4B_qxl78" target="_blank">YT</a></td></tr>
+          <tr><td colspan="6" style="text-align:center;padding:12px;color:var(--muted);font-weight:700;background:var(--surface-2)">… 추가 20곡 다운로드 링크 참고</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" style="background:var(--rose-soft);border-color:var(--rose)">
+      <h4 style="margin-top:0;color:var(--rose-strong)">⬇️ 완전 데이터 다운로드</h4>
+      <p style="font-size:13px;color:var(--ink-2);margin:0">
+        <strong>6개 카테고리 × 85곡 완전판 마크다운 테이블</strong><br>
+        <a href="file:///C:/Users/JEON/projects/wedding_2026/wedding_music_85songs.md" style="display:inline-block;margin-top:8px;padding:10px 16px;background:var(--rose);color:#fff;border-radius:6px;font-weight:700;text-decoration:none" target="_blank">📥 wedding_music_85songs.md 열기</a><br>
+        <span style="font-size:11px;color:var(--muted);margin-top:8px;display:block">• 각 곡별 YouTube 링크 + 길이 + 특징 + 인기도 순<br>• 엑셀·구글시트로 변환 가능 (마크다운 테이블 복사 → 스프레드시트 붙여넣기)<br>• 호암 사회자 협의용 곡 리스트로 직접 사용 가능</span>
+      </p>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 탭 9: 7/3 답장 드래프트 ═══ -->
+<div class="tab-panel" id="tab-reply">
+  <section>
+    <h2>🏛️ 호암 최종 체크리스트 (7/3 15:00 회신 마감)</h2>
+    <div class="card" style="background:var(--warn-soft);border-color:var(--warn);margin-bottom:18px">
+      <ul style="padding-left:20px;font-size:13px;color:var(--warn);font-weight:700;line-height:2">
+        <li><strong style="color:var(--ink)">도착 시간</strong> — 신부 측 14:30 / 신랑 측 14:45 / 사회자·주례 16:30</li>
+        <li><strong style="color:var(--ink)">식권 배분</strong> — 하객 250~270명 기준</li>
+        <li><strong style="color:var(--ink)">음주류 비용</strong> — 1인당 ₩4,000 (당일 결제 시 호암에서 차감 처리)</li>
+        <li><strong style="color:var(--ink)">시식 예약</strong> — 미정 시 사전 공지 필요</li>
+        <li><strong style="color:var(--ink)">원판 사진</strong> — 8컷 (양가 가족 / 친구 / 직장 / 단체)</li>
+      </ul>
+    </div>
+
+    <h3>📧 호암 회신 메일 드래프트</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">
+      예식계약 체크리스트.hwp 회신용 메일 드래프트. 사용자 결정 사항 + [확인 필요] 마커. 박스 안 본문 복사 → Gmail/Naver 메일 붙여넣기.
+    </p>
+
+    <div class="card" style="background:var(--gold-soft);border-color:var(--gold);margin-bottom:14px">
+      <div class="kv"><span class="kv-k">수신</span><span class="kv-v"><code>hoam@snu.ac.kr</code></span></div>
+      <div class="kv"><span class="kv-k">제목</span><span class="kv-v" id="mail-subject">[정형구·전지혜] 7월 11일(토) 17시 예식 최종 확정 체크리스트 회신</span></div>
+      <div class="kv"><span class="kv-k">발송 마감</span><span class="kv-v"><strong style="color:var(--rose)">2026-07-03(금) 15:00</strong></span></div>
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+      <button onclick="copyDraft('mail-body')" style="padding:8px 16px;font-size:13px;font-weight:700;background:var(--primary);color:#fff;border:none;border-radius:6px;cursor:pointer">📋 본문 복사</button>
+      <a href="mailto:hoam@snu.ac.kr?subject=%5B%EC%A0%95%ED%98%95%EA%B5%AC%C2%B7%EC%A0%84%EC%A7%80%ED%98%9C%5D%207%EC%9B%94%2011%EC%9D%BC%28%ED%86%A0%29%2017%EC%8B%9C%20%EC%98%88%EC%8B%9D%20%EC%B5%9C%EC%A2%85%20%ED%99%95%EC%A0%95%20%EC%B2%B4%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%8A%B8%20%ED%9A%8C%EC%8B%A0" style="padding:8px 16px;font-size:13px;font-weight:700;background:var(--surface-2);color:var(--ink);border:1px solid var(--line-strong);border-radius:6px;text-decoration:none">✉ 메일 클라이언트 열기</a>
+      <span id="copy-status" style="font-size:11.5px;color:var(--ok);align-self:center"></span>
+    </div>
+
+    <div id="mail-body" style="background:#fff;border:1px solid var(--line);border-radius:8px;padding:22px 26px;font-family:'Pretendard Variable',Pretendard,system-ui,sans-serif;font-size:13.5px;line-height:1.9;color:var(--ink);white-space:pre-wrap;word-break:keep-all">호암교수회관 예약실 담당자님께,
+
+안녕하세요. 2026년 7월 11일(토) 17:00 예식 신랑 정형구·신부 전지혜 측입니다.
+예식계약 체크리스트(4/21 메일 첨부)에 대한 회신을 다음과 같이 드립니다.
+
+────────────────────────────
+■ 1. 식순 / 입장 방식
+────────────────────────────
+- 양가 어머니 화촉 점화 → 양가 아버지 입장 → 신랑·신부 함께 입장 순서로 진행 부탁드립니다.
+- 주례는 별도 모시지 않으며, 양가 부친 축사 2편 + 호암 축가팀으로 진행 예정입니다.
+
+────────────────────────────
+■ 2. 호암 유료 옵션
+────────────────────────────
+- 사회자: 호암 측 배정 옵션으로 진행 부탁드립니다.
+- 축가: 호암 측 축가팀 옵션으로 진행 부탁드립니다. (1곡 표준 / 곡 수 [확인 필요])
+- 폐백 의상: 호암 기본 포함 옵션 그대로 사용하겠습니다. 수모님은 드레스 업체와 별도 협의 중입니다.
+- 꽃 장식: 추가하지 않습니다 (단상·통로 호암 기본 제공분만 유지).
+- 음·주류 무제한: 무료 혜택 적용 확인했습니다 (호암 3/20 답신 기준, 당일 결제 시 차감).
+
+────────────────────────────
+■ 3. 인원 / 식권
+────────────────────────────
+- 보증 인원(주문 식수): [확인 필요 — 250~270명 사이에서 최종 확정 예정]
+- 식권 준비: 혼주 측에서 준비합니다. 당일 부족 시 회관 측에 추가 요청드릴 수 있도록 부탁드립니다.
+- 미취학 어린이는 식권 없이 입장하며, 초등학생 이상부터 식권 배포 원칙 인지했습니다.
+
+────────────────────────────
+■ 4. 답례품
+────────────────────────────
+- 답례품 수량: [확인 필요 — 보증 인원 10% 초과분 대비 별도 준비]
+- 항목: [확인 필요]
+
+────────────────────────────
+■ 5. 시식 예약
+────────────────────────────
+- 희망 일정: [확인 필요 — 6/13(토) 10:30 또는 6/27(토) 10:30 중 회신 예정]
+- 시식 인원: 양가 부모님 + 신랑·신부 총 6명
+- 별도 메일로 예약 양식(예식일정·신랑신부 성함·시식날짜·시식인원) 회신드리겠습니다.
+
+────────────────────────────
+■ 6. 포토테이블 (2층 로비)
+────────────────────────────
+- 큰 액자 2개 + 소액자 5~7개 혼주 측 준비 예정입니다.
+- 호암 기본 제공 꽃·촛불·조형물 장식은 그대로 사용하겠습니다.
+
+────────────────────────────
+■ 7. 비용 정산
+────────────────────────────
+- 본관 1층 레스토랑 수납원에서 당일 결제 인지했습니다.
+- 카드 한도 사전 조정 예정이며, 현금 지불 항목 발생 시 세금계산서 발행 부탁드립니다.
+
+────────────────────────────
+■ 8. 기타 인지 사항
+────────────────────────────
+- 예식 시작 1시간 전(16:00) 신랑·신부·양가 혼주 도착, 30분 전(16:30) 사회자·주례 도착 일정 인지했습니다.
+- 예식장 1시간 이내 / 피로연장 2시간 이내 사용 인지했습니다.
+- 폐백은 식사 후 가장 마지막에 30분 진행으로 인지했습니다.
+
+────────────────────────────
+■ [확인 필요] 항목 요약
+────────────────────────────
+다음 항목은 확정 후 별도 회신드리겠습니다.
+1) 보증 인원(주문 식수) 최종 확정
+2) 호암 축가 곡 수 (1곡/2곡)
+3) 답례품 수량 및 항목
+4) 시식 예약 일정 (6/13 또는 6/27)
+
+추가 안내사항이나 보완 필요한 항목 있으시면 회신 부탁드립니다.
+감사합니다.
+
+신랑 정형구·신부 전지혜 드림
+hoam@snu.ac.kr / 1688-7745(ARS)[3번]</div>
+
+    <div class="card" style="background:var(--rose-soft);border-color:var(--rose);margin-top:14px">
+      <h4 style="margin-top:0;font-size:13px">⚠ 보내기 전 마지막 체크</h4>
+      <ul style="font-size:12.5px;line-height:1.9;color:var(--ink-2);margin-left:18px">
+        <li>[확인 필요] 4개 항목 확정했는지 점검 (보증 인원 / 축가 곡 수 / 답례품 / 시식 일정)</li>
+        <li>발신 메일 주소: 신랑 또는 신부 본인 메일 사용 (계약 명의자 권장)</li>
+        <li>예식계약 체크리스트.hwp 작성본 첨부 (4/21 받은 hwp 양식에 직접 채워 회신)</li>
+        <li>회신 후 호암 측 확인 답신 받기까지 1~2 영업일 소요 가능</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 탭 6: 호암 유료 옵션 ═══ -->
+<div class="tab-panel" id="tab-options">
+  <section>
+    <h2>💰 호암 유료 옵션 (4/21 첨부 추가옵션.jpg 기준)</h2>
+    <p style="font-size:12.5px;color:var(--muted);margin-bottom:14px">호암 측에서 제공하는 유료 옵션. 정확한 가격은 호암 첨부 추가옵션 jpg에서 확인 필요. 아래는 일반 가격대 추정.</p>
+
+    <div class="option-box">
+      <div class="o-name">🎤 사회자 (호암 배정)</div>
+      <div class="o-price">예상 ₩30~50만 <span class="tag tag-todo">정확한 가격 확인</span></div>
+      <div class="o-desc">호암 측에서 사회자 배정. 30분 전 도착. 대본·진행 호암 표준.</div>
+    </div>
+
+    <div class="option-box">
+      <div class="o-name">🎼 축가 (호암 배정)</div>
+      <div class="o-price">예상 ₩30~80만 (인원·곡 수에 따라) <span class="tag tag-todo">정확한 가격 확인</span></div>
+      <div class="o-desc">호암 측에서 축가 팀 배정. 예식 중반 3분 (1곡) 표준. 2곡 옵션 별도.</div>
+    </div>
+
+    <div class="option-box">
+      <div class="o-name">📸 원판 사진 8컷 (기본 포함)</div>
+      <div class="o-price">예식 비용에 포함 (호암 PDF 안내)</div>
+      <div class="o-desc">호암 기본 제공. 별도 추가 컷은 더델라 스튜디오와 협의.</div>
+    </div>
+
+    <div class="option-box">
+      <div class="o-name">👘 폐백 의상 (기본 포함)</div>
+      <div class="o-price">호암 준비 (PDF 명시)</div>
+      <div class="o-desc">수모님은 드레스 업체와 별도 협의. 모베터쉬크에 문의 필요.</div>
+    </div>
+
+    <div class="option-box">
+      <div class="o-name">🍾 음·주류 무제한 (옵션)</div>
+      <div class="o-price">인당 ₩4,000 (VAT 포함) × 식권 수량</div>
+      <div class="o-desc">맥주 / 소주 / 콜라 / 사이다 / 생수 무제한. 음주류 무료 혜택 적용 받음 (당일 결제 시 차감).</div>
+    </div>
+
+    <div class="option-box">
+      <div class="o-name">💐 꽃 장식</div>
+      <div class="o-price"><span style="color:var(--muted)">선택 안 함 (호암에 회신함)</span></div>
+      <div class="o-desc">부케·코사지·메인 장식 모두 없음. 단상·통로는 호암 기본 제공분만 유지.</div>
+    </div>
+
+    <div class="card" style="background:var(--rose-soft);border-color:var(--rose);margin-top:16px">
+      <p style="font-size:12.5px;color:var(--ink-2);line-height:1.8">
+        📌 <strong>가격표 위치 확인 필요</strong>: 4/21 호암 메일 첨부 <code>웨딩 추가옵션 (26년).jpg</code> 에 정확한 가격 있음. 위치: <code>C:\Users\JEON\projects\wedding_2026\SNU_호암교수회관_2026-03-20\</code> (jpg 파일 확인 후 본 페이지 가격 업데이트).
+      </p>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 탭 7: 동선·자리 ═══ -->
+<div class="tab-panel" id="tab-flow">
+  <section>
+    <h2>🚶 입장 동선 (사용자 결정)</h2>
+    <div class="card">
+      <ol style="padding-left:22px;font-size:14px;color:var(--ink-2);line-height:2">
+        <li>① <strong>양가 어머니 입장</strong> — 양쪽에서 각각 따로 (식장 뒤편 → 단상 양쪽 자리). 화촉 점화 진행.</li>
+        <li>② <strong>양가 아버지 입장</strong> — 양쪽에서 각각 따로 (어머니 옆 자리로).</li>
+        <li>③ <strong>신랑·신부 함께 입장</strong> — 통로 가운데를 둘이 같이 행진. 사용자 결정 (전통 신부 단독 입장 X).</li>
+        <li>④ 단상 위 맞절·인사.</li>
+        <li>⑤ 행진곡 → <strong>신랑·신부 같이 퇴장</strong>.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>📍 좌석 배치 (표준)</h2>
+    <div class="card">
+      <div class="kv"><span class="kv-k">신랑 측 (왼쪽)</span><span class="kv-v">신랑 부친·모친 + 형제·자매·친척 가까운 앞 줄</span></div>
+      <div class="kv"><span class="kv-k">신부 측 (오른쪽)</span><span class="kv-v">신부 부친·모친 + 형제·자매·친척 가까운 앞 줄</span></div>
+      <div class="kv"><span class="kv-k">단상</span><span class="kv-v">신랑·신부 가운데 / 양가 부모 양옆</span></div>
+      <div class="kv"><span class="kv-k">사회자 자리</span><span class="kv-v">단상 옆 마이크 위치 (호암 표준)</span></div>
+      <div class="kv"><span class="kv-k">하객석</span><span class="kv-v">신랑 측·신부 측 구분 없이 자유 착석 (현대 표준)</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>🎒 헬퍼·메이크업 도착 시간 (16:00 이전)</h2>
+    <div class="card">
+      <div class="kv"><span class="kv-k">신부 헬퍼</span><span class="kv-v">14:00 도착 권장 (드레스 + 메이크업 + 헤어피스 준비) <span class="tag tag-todo">업체 확정 후 입력</span></span></div>
+      <div class="kv"><span class="kv-k">신부 메이크업</span><span class="kv-v">새 업체 (꾸띠원 취소 후 재예약) — 도착 시간 협의 필요 <span class="tag tag-todo">업체명·시간 입력</span></span></div>
+      <div class="kv"><span class="kv-k">신랑 헤어</span><span class="kv-v">16만원 결제 완료 — 16:00 전 도착</span></div>
+      <div class="kv"><span class="kv-k">스튜디오 (더델라)</span><span class="kv-v">본식 리허설 촬영 — 16:00~ 사전 촬영 가능</span></div>
+      <div class="kv"><span class="kv-k">신부 차량 등록</span><span class="kv-v">호암 주차 안내용 — 7/3 체크리스트 작성 시 함께 입력 <span class="tag tag-todo"></span></span></div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 탭 8: 시식 예약 ═══ -->
+<div class="tab-panel" id="tab-tasting">
+  <section>
+    <h2>🍽 시식 예약 (호암 안내 기준)</h2>
+    <div class="card" style="background:var(--warn-soft);border-color:var(--warn)">
+      <h3 style="margin-top:0;color:var(--warn)">⚠️ 시급 — 다음 주 내 발송 필요</h3>
+      <p style="font-size:13.5px;color:var(--ink-2);line-height:1.8">
+        호암 안내: 7~8월 웨딩은 공사 이슈로 5~7월 웨딩 있는 주말에 시식 진행. <strong>7/11 웨딩 기준 후보: 6/13(토) 또는 6/27(토)</strong>.<br>
+        시식 가능 인원: 양가 부모님 + 신랑·신부 <strong>총 6명</strong>. 임박해서(2~5일 전) 예약은 어려울 수 있음 → 빨리 발송.
+      </p>
+    </div>
+
+    <h3>📅 7/11 웨딩 기준 시식 가능일</h3>
+    <div class="card-grid">
+      <div class="card" style="margin-bottom:0">
+        <h4 style="margin-top:0;color:var(--rose-strong)">6월 13일 (토)</h4>
+        <div class="kv"><span class="kv-k">시간</span><span class="kv-v">10:30~11:30</span></div>
+        <div class="kv"><span class="kv-k">웨딩 4주 전</span><span class="kv-v">꽃업체 격주 운영 — A 업체</span></div>
+        <div class="kv"><span class="kv-k">도착</span><span class="kv-v">10:20까지 본관 1층 예약실 (시식권 수령)</span></div>
+      </div>
+      <div class="card" style="margin-bottom:0;border-color:var(--gold)">
+        <h4 style="margin-top:0;color:var(--gold-strong)">6월 27일 (토) ⭐ 가장 가까움</h4>
+        <div class="kv"><span class="kv-k">시간</span><span class="kv-v">10:30~11:30</span></div>
+        <div class="kv"><span class="kv-k">웨딩 2주 전</span><span class="kv-v">꽃업체 격주 운영 — B 업체 (꽃 안 하니 무관)</span></div>
+        <div class="kv"><span class="kv-k">도착</span><span class="kv-v">10:20까지 본관 1층 예약실 (시식권 수령)</span></div>
+      </div>
+    </div>
+
+    <h3>📧 예약 메일 드래프트 (그대로 복사 → hoam@snu.ac.kr 발송)</h3>
+
+    <div class="card" style="background:var(--surface)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong style="color:var(--rose-strong)">A안 — 6/13 토 시식 (4주 전)</strong>
+        <button onclick="copyDraft('draft-a')" style="font-size:11px;font-weight:700;color:var(--rose);background:var(--rose-soft);border:1px solid var(--rose);border-radius:999px;padding:4px 12px;cursor:pointer;font-family:inherit">📋 복사</button>
+      </div>
+      <div id="draft-a" class="speech-text" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#fafafa">받는 사람: hoam@snu.ac.kr
+제목: [시식 예약 요청] 7/11 17시 정형구·전지혜 / 6월 13일(토) 시식
+
+호암교수회관 예약실 담당 선생님께,
+
+안녕하세요. 7월 11일(토) 17시 예식 예정인 정형구·전지혜입니다.
+시식 일정 예약 요청드립니다.
+
+1. 예식일정: 2026년 7월 11일 (토) 17시
+2. 신랑신부 성함: 정형구 · 전지혜
+3. 시식날짜: 2026년 6월 13일 (토) 10:30~11:30
+4. 시식인원: 6명 (양가 부모님 + 신랑·신부)
+
+10:20까지 본관 1층 예약실에 도착해서 시식권 수령하겠습니다.
+확인 부탁드립니다. 감사합니다.
+
+정형구·전지혜 드림</div>
+    </div>
+
+    <div class="card" style="background:var(--surface);border-color:var(--gold)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong style="color:var(--gold-strong)">B안 — 6/27 토 시식 (2주 전, 가까움) ⭐</strong>
+        <button onclick="copyDraft('draft-b')" style="font-size:11px;font-weight:700;color:var(--gold-strong);background:var(--gold-soft);border:1px solid var(--gold);border-radius:999px;padding:4px 12px;cursor:pointer;font-family:inherit">📋 복사</button>
+      </div>
+      <div id="draft-b" class="speech-text" style="font-family:'JetBrains Mono',monospace;font-size:12.5px;background:#fafafa">받는 사람: hoam@snu.ac.kr
+제목: [시식 예약 요청] 7/11 17시 정형구·전지혜 / 6월 27일(토) 시식
+
+호암교수회관 예약실 담당 선생님께,
+
+안녕하세요. 7월 11일(토) 17시 예식 예정인 정형구·전지혜입니다.
+시식 일정 예약 요청드립니다.
+
+1. 예식일정: 2026년 7월 11일 (토) 17시
+2. 신랑신부 성함: 정형구 · 전지혜
+3. 시식날짜: 2026년 6월 27일 (토) 10:30~11:30
+4. 시식인원: 6명 (양가 부모님 + 신랑·신부)
+
+10:20까지 본관 1층 예약실에 도착해서 시식권 수령하겠습니다.
+확인 부탁드립니다. 감사합니다.
+
+정형구·전지혜 드림</div>
+    </div>
+
+    <h3>📌 사전 조정 사항</h3>
+    <div class="card">
+      <ul style="padding-left:20px;font-size:13px;color:var(--ink-2);line-height:1.9">
+        <li><strong>양가 부모님 일정 확인</strong> — 6/13 또는 6/27 토 오전 가능 여부. 일정 안 맞으면 다른 날 따로 진행도 가능 (호암 안내 기준).</li>
+        <li><strong>임박해서 (2~5일 전) 예약은 어려움</strong> → 6/13 가려면 늦어도 6/8 전, 6/27 가려면 6/22 전 발송 권장.</li>
+        <li><strong>특정 일정 몰릴 경우 호암에서 다른 날짜 권유 연락 올 수 있음</strong> (조기 시식 예약 마감 케이스).</li>
+        <li>10분 이상 늦으면 입장 제한.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<!-- ═══ 탭 9: 답례품 ═══ -->
+<div class="tab-panel" id="tab-gifts">
+  <section>
+    <h2>🎁 답례품 운영</h2>
+
+    <div class="card" style="background:var(--gold-soft);border-color:var(--gold)">
+      <h3 style="margin-top:0;color:var(--gold-strong)">📋 호암 정책 (PDF 6항)</h3>
+      <p style="font-size:13.5px;color:var(--ink-2);line-height:1.8">
+        "당일 최대 <strong>10%까지만 추가 가능</strong>하며, 그 이상 <strong>초과 인원에 대해서는 답례품으로 제공</strong>됩니다."<br>
+        → 보증 인원 <strong>250 계약 시 당일 275까지</strong> 식사 추가 가능, <strong>276 이상은 식사 대신 답례품</strong> 제공.<br>
+        → 신랑·신부가 <strong>비상 답례품 여유분</strong>을 미리 준비하는 게 안전.
+      </p>
+    </div>
+
+    <h3>🎯 답례품 2 트랙</h3>
+    <div class="card-grid">
+      <div class="card" style="margin-bottom:0">
+        <h4 style="margin-top:0">트랙 A — 일반 답례품 (선택)</h4>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.75">
+          모든 하객에게 작은 선물.<br>
+          요즘은 안 하는 추세도 많음 (식대만으로 갈음).<br>
+          예산·취향에 따라 선택.
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:var(--muted)">필요 수량: 보증 인원 × 1 (예: 250개)</div>
+      </div>
+      <div class="card" style="margin-bottom:0;border-color:var(--warn);background:var(--warn-soft)">
+        <h4 style="margin-top:0;color:var(--warn)">트랙 B — 초과 인원 비상용 (강력 권장)</h4>
+        <div style="font-size:12.5px;color:var(--ink-2);line-height:1.75">
+          식사 못 받는 초과 인원에게 사과 의미.<br>
+          호암 정책상 <strong>275명 초과 시</strong> 발생.<br>
+          여유분 <strong>20~30개</strong> 준비 권장.
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:var(--muted)">필요 수량: 예비 20~30개</div>
+      </div>
+    </div>
+
+    <h3>🏢 회사용 5천원 미만 10선 (시장조사 2026-06-06)</h3>
+    <div class="card" style="background:var(--rose-soft);border-color:var(--rose);margin-bottom:14px">
+      <h4 style="margin-top:0;color:var(--rose-strong);font-size:13px">📋 선정 근거 6 기준</h4>
+      <ol style="padding-left:22px;font-size:12.5px;color:var(--ink-2);line-height:1.85;margin:0">
+        <li><strong>가격대 ₩3,000~5,000</strong> — 회사 동료 표준 (식대 별도라 부담 X). 출처: 글래스월렛·다인스토리 가이드.</li>
+        <li><strong>상온 보관</strong> — 사무실 책상 며칠 보관 가능 (냉장 필요한 떡·생크림 X).</li>
+        <li><strong>개별 포장</strong> — 한 사람씩 나눠주기 좋음 (사회생활 매너).</li>
+        <li><strong>가벼움</strong> — 들고 다니거나 가방에 넣기 부담 X.</li>
+        <li><strong>호불호 없음</strong> — 누구나 받아도 무난 (술·자극적 향료 X).</li>
+        <li><strong>실용·일상성</strong> — 사무실에서 바로 쓰거나 먹을 수 있음.</li>
+      </ol>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-bottom:14px">
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">🍡 식품</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">1. 양갱 세트 (가가호호·바스)</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩3,000~4,500</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">상온 1년 보관. 개별 포장 미니 3~5개입. 한과·전통 톤. 회사용 No.1 베스트셀러.</div>
+        <a href="https://thedotom.com/category/%EA%B2%B0%ED%98%BC%EB%8B%B5%EB%A1%80%ED%92%88/194/" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">더도톰 결혼답례품 →</a>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">🥮 식품</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">2. 마들렌·휘낭시에 2개입</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩3,500~5,000</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">프랑스 베이커리 미니 박스. 상온 7~14일. 커피 한 잔에 곁들이기 좋아 사무실 환영.</div>
+        <a href="https://www.idus.com/v2/search?keyword=%EB%A7%88%EB%93%A4%EB%A0%8C%20%EB%8B%B5%EB%A1%80%ED%92%88" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">아이디어스 마들렌 →</a>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">☕ 식품</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">3. 드립백 커피 2~3개입</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩3,000~4,500</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">테라로사·블루보틀 미니 드립백. 사무실에서 바로 쓰는 실용성 최고. 호불호 거의 없음.</div>
+        <a href="https://www.terarosa.com/" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">테라로사 →</a>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">🍯 식품</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">4. 꿀스틱 5~10개입</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩3,000~4,500</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">스틱형이라 가방·서랍 보관 편함. 차에 타먹기 OK. 상온 6개월 이상.</div>
+        <a href="https://thedotom.com/category/%EA%B2%B0%ED%98%BC%EB%8B%B5%EB%A1%80%ED%92%88/194/" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">더도톰 꿀스틱 →</a>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">🍵 식품</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">5. 티백 세트 5~10개입</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩3,000~4,500</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">오설록·도담 등. 무카페인 옵션 함께 두면 임산부·임신 준비 동료도 OK.</div>
+        <a href="https://www.osulloc.com/" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">오설록 →</a>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">🛁 일상</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">6. 송월타올 프리미엄무지 1매</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩3,300~3,800</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">170g 정량. 한국 대표 결혼 답례품 부동 1위. 회사 동료도 거부감 X.</div>
+        <a href="https://htowel.com/product/%EC%86%A1%EC%9B%94%ED%83%80%EC%98%AC-%ED%94%84%EB%9D%BC%EC%9E%84%EB%AC%B4%EC%A7%80-%EB%8B%B5%EB%A1%80%ED%92%88-2p-%EC%88%98%EA%B1%B4%EC%84%B8%ED%8A%B8/902/" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">송월타월한아름 →</a>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">🧴 일상</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">7. 핸드크림 미니 30~50ml</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩3,500~5,000</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">록시땅·이솝 미니. 또는 한국 브랜드(이니스프리·라운드랩). 사무실 책상 비치 트렌드.</div>
+        <a href="https://m.oliveyoung.co.kr/m/mtn/gift/category?themeCategoryNumber=900000800010139" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">올리브영 가벼운선물 →</a>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">🧖 일상</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">8. 마스크팩 3~5장 세트</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩3,500~5,000</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">메디힐·이니스프리·아비브 미니박스. 여성 동료 비중 높을 때 안전 선택.</div>
+        <a href="https://m.oliveyoung.co.kr/" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">올리브영 →</a>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">🍓 식품</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">9. 잼·스프레드 미니 60g</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩4,000~5,000</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">수제 잼·아카시아 꿀잼. 라벨에 신랑신부 이름 커스텀 OK. 디자인 강점.</div>
+        <a href="https://www.idus.com/v2/search?keyword=%EA%B2%B0%ED%98%BC%EB%8B%B5%EB%A1%80%ED%92%88%20%EC%9E%BC" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">아이디어스 잼 →</a>
+      </div>
+
+      <div class="card" style="margin-bottom:0">
+        <div style="font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">🌰 식품</div>
+        <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:2px">10. 견과류 믹스 20~30g</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--rose-strong);font-weight:700;margin-bottom:6px">₩3,000~4,500</div>
+        <div style="font-size:12px;color:var(--ink-2);line-height:1.55;margin-bottom:6px">하루견과 미니 5팩. 상온·실용·건강. 식약처 인증 표준 제품.</div>
+        <a href="https://soogunstore.com/" target="_blank" rel="noopener" style="font-size:11px;color:var(--rose);font-weight:700;text-decoration:none">송월스토어 →</a>
+      </div>
+
+    </div>
+
+    <div class="card" style="background:var(--gold-soft);border-color:var(--gold);margin-bottom:18px">
+      <h4 style="margin-top:0;color:var(--gold-strong);font-size:13px">🏆 TOP 3 권장 (회사 동료 케이스)</h4>
+      <ol style="padding-left:22px;font-size:13px;color:var(--ink-2);line-height:1.85;margin:0">
+        <li><strong>1. 양갱 세트</strong> (3,500원선) — 한과 톤이라 사회생활 매너 정수. 상온 1년 + 호불호 거의 없음.</li>
+        <li><strong>2. 드립백 커피 2~3개입</strong> (4,000원선) — 사무실에서 바로 쓰는 실용성. 회사 동료 가장 환영.</li>
+        <li><strong>3. 송월타올</strong> (3,500원선) — 한국 결혼 답례품 부동 1위. 거부감 ZERO. 디자인 단순해서 호불호 X.</li>
+      </ol>
+      <p style="font-size:11.5px;color:var(--muted);margin-top:10px">📌 회사 동료에게는 <strong>식품류가 가장 무난</strong>. 가져가서 먹어도, 안 먹어도 부담 없음. 일상용품(타올·핸드크림)은 디자인 호불호 약간 있음. 회사 분위기 봐서 결정.</p>
+    </div>
+
+    <h3>💡 인기 품목 (2026 한국 결혼식 트렌드)</h3>
+    <div class="card-grid">
+      <div class="card" style="margin-bottom:0">
+        <h4 style="margin-top:0;color:var(--rose-strong)">💧 저가 (₩3,000~5,000)</h4>
+        <ul style="padding-left:18px;font-size:12.5px;color:var(--ink-2);line-height:1.8;margin:0">
+          <li>전통 떡 (찹쌀떡·쑥인절미)</li>
+          <li>양갱 (가가호호·HONOKA)</li>
+          <li>티백 세트 (오설록·티에리)</li>
+          <li>고급 잼 한 병</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <h4 style="margin-top:0;color:var(--rose-strong)">🧴 중가 (₩5,000~10,000)</h4>
+        <ul style="padding-left:18px;font-size:12.5px;color:var(--ink-2);line-height:1.8;margin:0">
+          <li>핸드크림 (이솝·록시땅·바이레도 미니)</li>
+          <li>마카롱·휘낭시에 박스 (정통 프랑스)</li>
+          <li>디퓨저 미니 (조말론 스타일)</li>
+          <li>꿀 한 병 (소사이어티 등 프리미엄)</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-bottom:0">
+        <h4 style="margin-top:0;color:var(--rose-strong)">🍷 고가 (₩10,000~30,000)</h4>
+        <ul style="padding-left:18px;font-size:12.5px;color:var(--ink-2);line-height:1.8;margin:0">
+          <li>미니 와인 1병 + 라벨 커스텀</li>
+          <li>고급 향초 (양키캔들 미니·딥디크)</li>
+          <li>도자기 컵 1개 (한국 도예)</li>
+          <li>꽃다발 형태 비누</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>📊 의사결정 표</h3>
+    <div class="card">
+      <div class="kv"><span class="kv-k">방향성</span><span class="kv-v">트랙 A 일반 답례품 진행 여부 결정 <span class="tag tag-todo">미정</span></span></div>
+      <div class="kv"><span class="kv-k">예산</span><span class="kv-v">인당 ₩? × 수량 ? = 총 ? 원 <span class="tag tag-todo">미정</span></span></div>
+      <div class="kv"><span class="kv-k">품목</span><span class="kv-v">위 후보 중 선택 또는 직접 발굴 <span class="tag tag-todo">미정</span></span></div>
+      <div class="kv"><span class="kv-k">주문처</span><span class="kv-v">예: 카카오메이커스 / 오설록 / 양갱 전문 / 도매 사이트 <span class="tag tag-todo">미정</span></span></div>
+      <div class="kv"><span class="kv-k">수량</span><span class="kv-v">보증 인원(250) + 비상 여유(20~30) = <strong>270~280개</strong></span></div>
+      <div class="kv"><span class="kv-k">포장</span><span class="kv-v">통일된 리본·태그 (신랑·신부 이름·날짜) <span class="tag tag-todo">디자인 미정</span></span></div>
+      <div class="kv"><span class="kv-k">배송 일정</span><span class="kv-v">본식 1주 전 도착 (6/28~7/4) → 본식 전날 호암 반입 가능 여부 확인</span></div>
+      <div class="kv"><span class="kv-k">배치 위치</span><span class="kv-v">접수대 옆 또는 피로연장 입구 (혼주 측에서 챙김)</span></div>
+    </div>
+
+    <h3>🔁 트랙 B 비상용 권장 패턴</h3>
+    <div class="card">
+      <ul style="padding-left:20px;font-size:13px;color:var(--ink-2);line-height:1.9">
+        <li><strong>20~30개 여유분</strong> 트랙 A와 같은 품목으로 추가 주문.</li>
+        <li>일반 답례품 안 할 거면 <strong>비상용만 별도 준비</strong> — 양갱이나 핸드크림 같은 저~중가 품목 30개 정도.</li>
+        <li>접수대에 별도 박스로 보관 → 식사 못 받는 분에게 "초과 인원이라 식사가 어려워 죄송합니다" 멘트와 함께 전달.</li>
+        <li><strong>호암 사회자·예약실에 사전 협의</strong> — 초과 인원 발생 시 어떻게 안내할지 통일.</li>
+      </ul>
+    </div>
+
+    <div class="card" style="background:var(--rose-soft);border-color:var(--rose);margin-top:16px">
+      <h3 style="margin-top:0;color:var(--rose-strong);font-size:14px">📌 7/3 호암 회신 시 포함 사항</h3>
+      <ul style="padding-left:20px;font-size:13px;color:var(--ink-2);line-height:1.9;margin-top:4px">
+        <li>답례품 진행 여부 + 품목 명시</li>
+        <li>본식 전날 호암 반입 가능한지 (포장된 박스로 미리 입고)</li>
+        <li>초과 인원 발생 시 접수대 대응 통일안</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+</div><!-- /panels-pool 닫기 -->
+
+<footer>
+  🎬 식순 · L2 신혼용 · 2026-07-11(토) 17:00 호암교수회관 · 사용자 결정 사항 반영 · 표준 호암 식순 기반<br>
+  이 대시보드 한정 구조 (사용자 지시 2026-06-06): 버티컬(Level 1, 좌측 세로) 3 그룹 → 호라이즌(Level 2, 콘텐츠 상단 가로) 9 서브탭 · 일반 정책(호라이즌 우선)의 역순<br>
+  마스터 출처: <code>SNU_호암교수회관_2026-03-20/</code> · 보안 정책: <a href="file:///C:/Users/JEON/projects/personal-2026/기본지침서.html">기본지침서</a>
+</footer>
+
+</div><!-- /wrap -->
+
+<script>
+// 식순 대시보드 전용 구조: 버티컬(Level 1, 좌측) → 호라이즌(Level 2, 우측 상단)
+var GROUP_MAP = {
+  progress: ['tab-overview','tab-timeline','tab-cast','tab-flow'],
+  content:  ['tab-speech','tab-music'],
+  hoam:     ['tab-options','tab-tasting','tab-gifts']
+};
+
+window.addEventListener('DOMContentLoaded', function(){
+  moveTabIntoView('tab-overview');
+});
+
+// Level 1: 좌측 버티컬 그룹 선택
+function goGroup(group, btn) {
+  document.querySelectorAll('.vbtn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  // 그룹별 sub-hnav 전환
+  ['progress','content','hoam'].forEach(function(g){
+    document.getElementById('hnav-'+g).style.display = (g===group ? 'flex' : 'none');
+  });
+  // 해당 그룹 첫 sub-tab 자동
+  var firstTab = GROUP_MAP[group][0];
+  document.querySelectorAll('#hnav-'+group+' .hbtn').forEach((b,i) => {
+    b.classList.toggle('on', i === 0);
+  });
+  moveTabIntoView(firstTab);
+}
+
+// Level 2: 우측 호라이즌 sub-tab 선택
+function goSubTab(group, tabId, btn) {
+  document.querySelectorAll('#hnav-'+group+' .hbtn').forEach(b => b.classList.remove('on'));
+  if (btn) btn.classList.add('on');
+  moveTabIntoView(tabId);
+}
+
+// 선택된 panel 을 panel-current 영역으로 이동
+function moveTabIntoView(tabId) {
+  var pool = document.getElementById('panels-pool');
+  var container = document.getElementById('panel-current');
+  var tabEl = document.getElementById(tabId);
+  if (!tabEl || !container) return;
+  while (container.firstChild) pool.appendChild(container.firstChild);
+  container.appendChild(tabEl);
+  tabEl.classList.add('active');
+  tabEl.style.display = 'block';
+}
+function toggleSitemap() {
+  var el = document.getElementById('global-sitemap');
+  var arr = document.getElementById('sm-arr');
+  var open = el.getAttribute('data-open') === 'true';
+  el.setAttribute('data-open', open ? 'false' : 'true');
+  arr.textContent = open ? '▾' : '▴';
+}
+// D-day
+var wd = new Date('2026-07-11T17:00:00');
+var now = new Date();
+var d = Math.ceil((wd - now) / 86400000);
+document.getElementById('dday').textContent = d > 0 ? 'D-' + d : (d === 0 ? 'D-DAY' : 'D+' + Math.abs(d));
+
+// 시식 예약 메일 드래프트 복사
+function copyDraft(id) {
+  var text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(function(){
+    alert('✓ 클립보드에 복사됨. 메일에 붙여넣기 하세요.');
+  }, function(){
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('✓ 복사됨 (폴백).');
+  });
+}
+</script>
+</body>
+</html>
