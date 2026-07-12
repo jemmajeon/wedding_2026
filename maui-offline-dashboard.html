@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0b1f2a" />
+<title>마우이 오프라인 여행 대시보드 · 인터넷 없이도</title>
+<!--
+  ════════════════════════════════════════════════════════════════
+  MAUI OFFLINE DASHBOARD — 100% self-contained. NO external requests.
+  인터넷이 끊겨도 이 파일 하나만 열면 전부 보입니다.
+  - 폰트: 시스템 폰트만 사용 (CDN 없음)
+  - 지도: 인라인 SVG (타일 서버 불필요)
+  - 데이터: 전부 이 파일 안에 내장
+  - 저장: localStorage (체크리스트·환율·테마)
+  파일을 휴대폰에 저장 → 오프라인에서 브라우저로 열기.
+  ════════════════════════════════════════════════════════════════
+-->
+<style>
+  :root{
+    --bg:#f5f3ee; --bg2:#ebe7de; --surface:#ffffff; --surface2:#faf8f3;
+    --ink:#1c2b2f; --ink2:#3f5257; --muted:#78888c; --line:#e3ddd0; --line2:#d0c8b6;
+    --teal:#0e7c6b; --teal-soft:#dcf1ec; --teal-ink:#0a5245;
+    --ocean:#1266a3; --ocean-soft:#dcecf7;
+    --sun:#e08a1e; --sun-soft:#fce6cc; --sun-ink:#9a5c05;
+    --coral:#d1495b; --coral-soft:#fbe4e7;
+    --plum:#7a4bb0; --plum-soft:#efe6f8;
+    --green:#3f8f3f; --green-soft:#e2f2e2;
+    --gold:#b08525;
+    --danger:#c0392b; --danger-soft:#fbe3df;
+    --radius:16px; --radius-sm:11px;
+    --shadow:0 1px 3px rgba(20,40,45,.06),0 8px 24px rgba(20,40,45,.05);
+    --shadow-lg:0 12px 40px rgba(20,40,45,.12);
+    --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+  }
+  html[data-theme="dark"]{
+    --bg:#0b1a20; --bg2:#0f2027; --surface:#132a32; --surface2:#0f242b;
+    --ink:#eaf3f2; --ink2:#b6ccca; --muted:#7d9997; --line:#22414a; --line2:#2c4f59;
+    --teal:#39c3ab; --teal-soft:#123832; --teal-ink:#7fe3d2;
+    --ocean:#4aa8e6; --ocean-soft:#10303f;
+    --sun:#f0a94a; --sun-soft:#3a2a10; --sun-ink:#f6c37e;
+    --coral:#f0788a; --coral-soft:#3a1b20;
+    --plum:#b389e0; --plum-soft:#281a38;
+    --green:#6bc46b; --green-soft:#16301a;
+    --gold:#d4ad55;
+    --danger:#ff6b5b; --danger-soft:#3a1712;
+    --shadow:0 1px 3px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+    --shadow-lg:0 12px 40px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg);
+    background-image:
+      radial-gradient(1100px 520px at 8% -12%,rgba(14,124,107,.10),transparent 60%),
+      radial-gradient(900px 620px at 102% -6%,rgba(18,102,163,.09),transparent 55%),
+      radial-gradient(700px 500px at 60% 108%,rgba(224,138,30,.06),transparent 60%);
+    background-attachment:fixed;
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;
+    font-size:15px; line-height:1.62; -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:22px 18px 120px}
+  a{color:var(--ocean);text-decoration:none}
+  a:hover{text-decoration:underline}
+  h2,h3,h4{letter-spacing:-.02em;line-height:1.2}
+  .mono{font-family:var(--mono)}
+
+  /* ── Header ── */
+  header.top{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
+  .brand .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+  .brand h1{margin:0;font-size:clamp(25px,5.2vw,40px);font-weight:850;letter-spacing:-.03em;line-height:1.02}
+  .brand .sub{margin:6px 0 0;color:var(--muted);font-size:13px;font-weight:600}
+  .htools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .chip-btn{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1.4px solid var(--line);border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:700;color:var(--ink2);cursor:pointer;font-family:inherit}
+  .chip-btn:hover{border-color:var(--line2)}
+  .rate{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1.4px solid var(--line);border-radius:999px;padding:6px 12px}
+  .rate label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.06em}
+  .rate input{width:52px;border:0;background:transparent;font-family:var(--mono);font-size:14px;font-weight:800;color:var(--teal);text-align:center;outline:none}
+
+  /* ── Offline banner ── */
+  .offline-banner{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(100deg,var(--teal-soft),transparent);border:1.5px solid var(--teal);border-left-width:5px;border-radius:var(--radius);padding:13px 16px;margin:12px 0 20px}
+  .offline-banner .ob-ic{font-size:22px;line-height:1.2}
+  .offline-banner b{color:var(--teal-ink)}
+  .offline-banner .ob-txt{font-size:13px;color:var(--ink2)}
+  .net-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+  .net-on{background:var(--green)} .net-off{background:var(--muted)}
+
+  /* ── Tabs ── */
+  .tabs{position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 6px;margin:0 -18px 18px;border-bottom:2px solid var(--line);
+    display:flex;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-left:18px;padding-right:18px;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;padding:9px 15px;border:1.5px solid transparent;border-radius:11px;background:transparent;color:var(--muted);font-weight:750;font-size:13.5px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:.15s}
+  .tab:hover{color:var(--ink2);background:var(--surface2)}
+  .tab.active{background:var(--surface);color:var(--teal-ink);border-color:var(--line);box-shadow:var(--shadow)}
+  .tab .t-ic{margin-right:5px}
+
+  /* ── Cards / layout ── */
+  section.panel{display:none;animation:fade .25s ease}
+  section.panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .grid{display:grid;gap:14px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}.g4.keep2,.g3.keep2{grid-template-columns:1fr 1fr}}
+  .card{background:var(--surface);border:1.4px solid var(--line);border-radius:var(--radius);padding:18px 18px;box-shadow:var(--shadow)}
+  .card.pad-lg{padding:22px 22px}
+  .card h3{margin:0 0 4px;font-size:16px;font-weight:820}
+  .sec-title{display:flex;align-items:center;gap:9px;margin:26px 0 13px;font-size:19px;font-weight:840;letter-spacing:-.025em}
+  .sec-title:first-child{margin-top:4px}
+  .sec-title .st-ic{font-size:22px}
+  .sec-title small{font-weight:600;font-size:12.5px;color:var(--muted);letter-spacing:0}
+  .lead{color:var(--ink2);font-size:13.5px;margin:0 0 6px}
+  .muted{color:var(--muted)}
+  .kicker{font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+
+  /* KPI */
+  .kpi{border-radius:var(--radius);padding:16px 16px 14px;color:#fff;position:relative;overflow:hidden}
+  .kpi .k-lab{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.9}
+  .kpi .k-val{font-size:26px;font-weight:850;letter-spacing:-.02em;margin-top:3px;font-family:var(--mono)}
+  .kpi .k-sub{font-size:11.5px;opacity:.92;margin-top:2px;font-weight:600}
+  .kpi.teal{background:linear-gradient(135deg,#0e7c6b,#0a5245)}
+  .kpi.ocean{background:linear-gradient(135deg,#1780c4,#0d5183)}
+  .kpi.sun{background:linear-gradient(135deg,#e89024,#c66a10)}
+  .kpi.coral{background:linear-gradient(135deg,#d1495b,#a8323f)}
+
+  /* Alert boxes */
+  .alert{display:flex;gap:11px;align-items:flex-start;border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;border:1.4px solid;line-height:1.55}
+  .alert .a-ic{font-size:17px;flex:0 0 auto;margin-top:1px}
+  .alert.danger{background:var(--danger-soft);border-color:var(--danger);color:var(--ink)}
+  .alert.warn{background:var(--sun-soft);border-color:var(--sun);color:var(--ink)}
+  .alert.ok{background:var(--green-soft);border-color:var(--green);color:var(--ink)}
+  .alert.info{background:var(--ocean-soft);border-color:var(--ocean);color:var(--ink)}
+  .alert b{font-weight:800}
+
+  /* Pills / tags */
+  .pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:750;padding:2px 9px;border-radius:999px;background:var(--bg2);color:var(--ink2);white-space:nowrap}
+  .pill.teal{background:var(--teal-soft);color:var(--teal-ink)}
+  .pill.sun{background:var(--sun-soft);color:var(--sun-ink)}
+  .pill.coral{background:var(--coral-soft);color:var(--coral)}
+  .pill.ocean{background:var(--ocean-soft);color:var(--ocean)}
+  .pill.plum{background:var(--plum-soft);color:var(--plum)}
+  .pill.green{background:var(--green-soft);color:var(--green)}
+  .pill.danger{background:var(--danger-soft);color:var(--danger)}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+
+  /* Emergency */
+  .emg{border:1.5px solid var(--danger);border-left-width:5px;border-radius:var(--radius);background:var(--surface);padding:0;overflow:hidden}
+  .emg .emg-h{background:var(--danger-soft);padding:11px 16px;font-weight:850;font-size:15px;display:flex;align-items:center;gap:8px;color:var(--danger)}
+  .emg-list{padding:6px 0}
+  .emg-row{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;padding:10px 16px;border-top:1px solid var(--line)}
+  .emg-row:first-child{border-top:0}
+  .emg-row .er-name{font-weight:800;font-size:14px;min-width:150px;flex:1}
+  .emg-row .er-name small{display:block;font-weight:600;color:var(--muted);font-size:11.5px}
+  .emg-row .er-num{font-family:var(--mono);font-weight:800;font-size:16px;color:var(--danger)}
+  .emg-row .er-addr{flex-basis:100%;font-size:12px;color:var(--ink2)}
+
+  /* RTH stop cards */
+  .rth-stop{background:var(--surface);border:1.4px solid var(--line);border-radius:var(--radius);padding:0;overflow:hidden;box-shadow:var(--shadow)}
+  .rth-head{display:flex;gap:12px;align-items:center;padding:13px 15px;cursor:pointer}
+  .rth-mm{flex:0 0 auto;width:48px;height:48px;border-radius:12px;background:var(--teal-soft);color:var(--teal-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:850;line-height:1}
+  .rth-mm .mm-num{font-size:16px;font-family:var(--mono)}
+  .rth-mm .mm-lab{font-size:8px;letter-spacing:.05em;opacity:.8;margin-top:2px}
+  .rth-title{flex:1;min-width:0}
+  .rth-title .rt-name{font-weight:820;font-size:15px}
+  .rth-title .rt-en{font-size:11.5px;color:var(--muted);font-weight:600}
+  .rth-body{padding:0 15px 14px;font-size:13px;color:var(--ink2)}
+  .rth-body .rt-desc{margin:2px 0 8px}
+  .rth-toggle{font-size:18px;color:var(--muted);transition:transform .2s;flex:0 0 auto}
+  .rth-stop.open .rth-toggle{transform:rotate(90deg)}
+  .rth-stop:not(.open) .rth-body{display:none}
+  .rth-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+  .kv{display:flex;gap:10px;font-size:12.5px;padding:4px 0;border-top:1px dashed var(--line)}
+  .kv .k{color:var(--muted);font-weight:700;flex:0 0 84px}
+  .kv .v{color:var(--ink2);flex:1}
+
+  /* Timeline (itinerary) */
+  .day-head{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:22px 0 12px;padding:12px 15px;border-radius:var(--radius);background:linear-gradient(100deg,var(--teal-soft),transparent);border:1.4px solid var(--line)}
+  .day-head .d-badge{background:var(--teal);color:#fff;font-weight:850;border-radius:10px;padding:6px 11px;font-size:13px;letter-spacing:.02em}
+  .day-head .d-title{font-weight:840;font-size:16px}
+  .day-head .d-meta{color:var(--muted);font-size:12.5px;font-weight:650}
+  .tl{position:relative;margin-left:8px;padding-left:22px;border-left:2.5px solid var(--line)}
+  .tl-item{position:relative;padding:9px 0 13px}
+  .tl-item::before{content:"";position:absolute;left:-30px;top:14px;width:11px;height:11px;border-radius:50%;background:var(--surface);border:2.5px solid var(--teal)}
+  .tl-item.fix::before{background:var(--teal)}
+  .tl-time{font-family:var(--mono);font-size:12px;font-weight:800;color:var(--teal-ink)}
+  .tl-place{font-weight:780;font-size:14.5px;margin:1px 0 2px}
+  .tl-note{font-size:12.5px;color:var(--ink2)}
+  .tl-cat{font-size:11px}
+
+  /* Map */
+  .map-shell{background:var(--surface);border:1.4px solid var(--line);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow)}
+  svg.maui{width:100%;height:auto;display:block;background:
+    linear-gradient(180deg,var(--ocean-soft),transparent 70%);border-radius:12px}
+  .legend{display:flex;flex-wrap:wrap;gap:9px 16px;margin-top:12px;font-size:12px;color:var(--ink2)}
+  .legend span{display:inline-flex;align-items:center;gap:6px;font-weight:650}
+  .legend i{width:12px;height:12px;border-radius:50%;display:inline-block;border:1.5px solid rgba(0,0,0,.15)}
+
+  /* Food/beach rows */
+  .listcard{background:var(--surface);border:1.4px solid var(--line);border-radius:var(--radius-sm);padding:13px 15px;box-shadow:var(--shadow)}
+  .listcard .lc-top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .listcard .lc-name{font-weight:810;font-size:14.5px}
+  .listcard .lc-en{font-size:11px;color:var(--muted);font-weight:600}
+  .listcard .lc-desc{font-size:12.5px;color:var(--ink2);margin-top:5px}
+  .stars{color:var(--gold);font-size:12px;letter-spacing:1px}
+
+  /* Checklist */
+  .chk{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:10px;border:1.3px solid var(--line);background:var(--surface);margin-bottom:7px;cursor:pointer;transition:.12s}
+  .chk:hover{border-color:var(--line2)}
+  .chk input{margin-top:3px;width:17px;height:17px;accent-color:var(--teal);flex:0 0 auto}
+  .chk .c-txt{font-size:13px;color:var(--ink)}
+  .chk .c-txt small{display:block;color:var(--muted);font-size:11.5px;font-weight:600}
+  .chk.done .c-txt{text-decoration:line-through;color:var(--muted)}
+  .chk-progress{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;margin:4px 0 14px}
+  .chk-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--ocean));width:0;transition:width .3s}
+
+  /* budget table */
+  table.bt{width:100%;border-collapse:collapse;font-size:13px}
+  table.bt th,table.bt td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--line)}
+  table.bt th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:800}
+  table.bt td.num{font-family:var(--mono);text-align:right;font-weight:700}
+  table.bt tr.total td{border-top:2px solid var(--line2);font-weight:850;font-size:14px}
+  table.bt .krw{color:var(--muted);font-size:11px;display:block;font-weight:600}
+
+  .disclosure{border:1.3px solid var(--line);border-radius:var(--radius-sm);background:var(--surface2);margin-bottom:9px;overflow:hidden}
+  .disclosure>summary{cursor:pointer;padding:11px 14px;font-weight:780;font-size:13.5px;list-style:none;display:flex;align-items:center;gap:8px}
+  .disclosure>summary::-webkit-details-marker{display:none}
+  .disclosure>summary::before{content:"▸";color:var(--teal);font-size:12px;transition:.2s}
+  .disclosure[open]>summary::before{transform:rotate(90deg)}
+  .disclosure .dc-body{padding:2px 14px 14px;font-size:13px;color:var(--ink2)}
+
+  footer.foot{margin-top:40px;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:20px}
+  .backtop{position:fixed;right:16px;bottom:16px;z-index:60;width:46px;height:46px;border-radius:50%;background:var(--teal);color:#fff;border:0;font-size:20px;cursor:pointer;box-shadow:var(--shadow-lg);display:none}
+  .backtop.show{display:block}
+  .gmap-link{font-size:11.5px;font-weight:750}
+  .gmap-link::before{content:"📍 ";}
+  .copybtn{font-size:10.5px;font-weight:700;background:var(--bg2);border:1px solid var(--line);border-radius:7px;padding:2px 7px;cursor:pointer;color:var(--ink2);font-family:var(--mono)}
+  .copybtn:active{background:var(--teal-soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">🌺 지혜 &amp; 형구 · 신혼여행 · Maui 2026</div>
+      <h1>마우이 오프라인 대시보드</h1>
+      <p class="sub">7/12(일)–7/16(목) · 마우이 4박 · 인터넷 없이도 전부 열림</p>
+    </div>
+    <div class="htools">
+      <span class="rate"><label>₩/$</label><input id="rateInput" type="number" inputmode="decimal" value="1385" /></span>
+      <button class="chip-btn" id="themeBtn" title="다크/라이트">🌙 <span id="themeLbl">다크</span></button>
+      <button class="chip-btn" id="netBtn" title="네트워크 상태"><span class="net-dot net-off" id="netDot"></span><span id="netLbl">확인</span></button>
+    </div>
+  </header>
+
+  <div class="offline-banner">
+    <div class="ob-ic">📡</div>
+    <div class="ob-txt">
+      <b>완전 오프라인 대시보드예요.</b> 이 파일은 폰트·지도·데이터가 전부 안에 들어있어서 <b>비행기 모드·통신 음영 지역에서도</b> 그대로 열립니다.
+      로드 투 하나는 신호가 끊기는 구간이 많으니 — <b>출발 전에 이 파일을 폰에 저장하고, 구글맵 오프라인 지역·Shaka Guide 앱을 미리 다운로드</b>하세요.
+      아래 <b>📍 지도 링크</b>는 온라인일 때만 열리고, 옆의 <span class="copybtn">좌표복사</span> 버튼으로 좌표를 복사해두면 오프라인 GPS에 붙여넣을 수 있어요.
+    </div>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-tab="overview"><span class="t-ic">📊</span>개요</button>
+    <button class="tab" data-tab="emergency"><span class="t-ic">🚨</span>긴급·오프라인</button>
+    <button class="tab" data-tab="rth"><span class="t-ic">🛣️</span>로드 투 하나</button>
+    <button class="tab" data-tab="itin"><span class="t-ic">🗓️</span>일정</button>
+    <button class="tab" data-tab="map"><span class="t-ic">🗺️</span>지도</button>
+    <button class="tab" data-tab="explore"><span class="t-ic">🏖️</span>해변·맛집</button>
+    <button class="tab" data-tab="stay"><span class="t-ic">🛏️</span>숙소·준비</button>
+  </nav>
+
+  <!-- ══════════════ OVERVIEW ══════════════ -->
+  <section class="panel active" id="overview">
+    <div class="grid g4 keep2">
+      <div class="kpi teal"><div class="k-lab">마우이 체류</div><div class="k-val">4박 5일</div><div class="k-sub">7/12(일)–7/16(목)</div></div>
+      <div class="kpi ocean"><div class="k-lab">숙소</div><div class="k-val">3곳</div><div class="k-sub">Kaapana 2 · Hana 1 · Mikela 1</div></div>
+      <div class="kpi sun"><div class="k-lab">7월 날씨</div><div class="k-val">24–31°C</div><div class="k-sub">일출 5:52 · 일몰 19:09</div></div>
+      <div class="kpi coral"><div class="k-lab">마우이 예상 비용</div><div class="k-val" id="kpiCost">—</div><div class="k-sub" id="kpiCostKrw">2인 · 중예산</div></div>
+    </div>
+
+    <div class="sec-title"><span class="st-ic">⚡</span>2026 꼭 알아야 할 것 <small>· 출발 전 확인</small></div>
+    <div class="grid g2">
+      <div class="alert danger"><span class="a-ic">🚧</span><div><b>하나 뒷길(Piʻilani Hwy, Hwy 31)은 2026년 대부분 통제 중.</b> 폭풍 피해 복구로 하나 마을 남쪽 순환로가 막혀 있어요. <b>Day 4 "하나 → 미켈라 역방향"이 뒷길을 쓰는 거라면 불가</b> — 하나까지 왔던 길로 되돌아가야 합니다. 출발 전 <span class="mono">goo.gl/maps</span> 또는 hidot.hawaii.gov 로 최신 통행 상태 재확인.</div></div>
+      <div class="alert warn"><span class="a-ic">🌋</span><div><b>할레아칼라 일출 예약제.</b> $1 예약(차량당) + 입장료 $30/차량(3일권). 예약은 <b>60일 전 07:00 HST</b> 오픈 + 48시간 전 취소분. 새벽 3–7시 진입 시 예약 필수. recreation.gov.</div></div>
+      <div class="alert warn"><span class="a-ic">⬛</span><div><b>와이아나파나파(흑사 해변) 예약 필수.</b> gowaianapanapa.com · 비거주자 $5/인 + $10/차 + 수수료 $1.78. <b>30일 전</b> 오픈, 당일 예약 불가. 예약 시간 <b>30분 안에</b> 도착 못 하면 입장 거절.</div></div>
+      <div class="alert ok"><span class="a-ic">🌴</span><div><b>라하이나·서마우이 화재 지역은 이번 동선과 무관.</b> 키헤이·와일레아·파이아·하나·로드투하나는 정상 운영. Front St. 일부만 제한. 관광은 회복을 돕는 일이니 예의를 지키며 다니면 됩니다.</div></div>
+      <div class="alert info"><span class="a-ic">🧴</span><div><b>미네랄(리프세이프) 선크림만 허용.</b> 옥시벤존·옥티노세이트 함유 제품은 하와이 법으로 판매 금지. 면세점서 사온 선크림도 압수될 수 있어요. Zinc Oxide 기반으로 현지 구매.</div></div>
+      <div class="alert info"><span class="a-ic">🐢</span><div><b>바다거북(Honu)은 3m(10ft) 거리 의무.</b> 만지면 벌금 $5,000+. 사진은 줌으로. Hoʻokipa·Kaapana 해변에서 자주 출현.</div></div>
+    </div>
+
+    <div class="sec-title"><span class="st-ic">🗺️</span>마우이 4박 한눈에</div>
+    <div class="card pad-lg">
+      <div class="grid g2">
+        <div>
+          <div class="kicker">동선 요약</div>
+          <p class="lead" style="margin-top:6px">
+            <b>Day 1·2</b> 카아파나(Kaapana) 베이스 — 도착·휴식·파이아·짧은 로드투하나 맛보기.<br>
+            <b>Day 3</b> 풀데이 <b>로드 투 하나</b> → 하나 마을 1박.<br>
+            <b>Day 4</b> 하나 → 미켈라(남부) 1박 <span class="pill danger">뒷길 통제 주의</span>.<br>
+            <b>Day 5</b> 미켈라 → OGG 렌트카 반납 → 오아후로.
+          </p>
+        </div>
+        <div>
+          <div class="kicker">7월 마우이 기본값</div>
+          <div class="kv"><span class="k">기온</span><span class="v">낮 27–31°C / 밤 24°C. 습하지만 무역풍으로 쾌적</span></div>
+          <div class="kv"><span class="k">일출/일몰</span><span class="v">약 05:52 / 19:09 (카훌루이 기준)</span></div>
+          <div class="kv"><span class="k">비</span><span class="v">월 7일 정도, 짧은 소나기. 하나·동부는 더 자주</span></div>
+          <div class="kv"><span class="k">바다</span><span class="v">여름 잔잔. 스노클 최적. 오후 바람↑</span></div>
+          <div class="kv"><span class="k">시차</span><span class="v">한국보다 −19시간</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-title"><span class="st-ic">💰</span>마우이 구간 예상 비용 <small>· 2인 · 환율 입력값 반영</small></div>
+    <div class="card">
+      <table class="bt" id="budgetTable"><thead><tr><th>항목</th><th style="text-align:right">저</th><th style="text-align:right">중(권장)</th><th style="text-align:right">고</th></tr></thead><tbody></tbody></table>
+      <p class="muted" style="font-size:11.5px;margin:10px 2px 0">마우이 4박 구간 추정(항공 제외). 상단 환율 바꾸면 KRW 자동 갱신. 국내선(HNL↔OGG)·오아후 비용은 별도.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════ EMERGENCY / OFFLINE ══════════════ -->
+  <section class="panel" id="emergency">
+    <div class="alert danger" style="margin-bottom:16px"><span class="a-ic">☎️</span><div><b>긴급 시 미국 어디서나 911.</b> 한국어 통역 요청: "Korean, please." · 위치 모를 땐 가장 가까운 <b>마일 마커 번호</b>를 말하세요(로드투하나엔 표지판이 있음).</div></div>
+
+    <div class="sec-title"><span class="st-ic">🚨</span>긴급 연락처 <small>· 오프라인에서 그대로 보임</small></div>
+    <div class="emg">
+      <div class="emg-h">🆘 응급 · 병원</div>
+      <div class="emg-list">
+        <div class="emg-row"><div class="er-name">긴급(경찰·소방·구급)<small>미국 전역 공통</small></div><div class="er-num">911</div></div>
+        <div class="emg-row"><div class="er-name">Maui Memorial Medical Center<small>마우이 유일 종합병원·응급실(24h)·외상센터</small></div><div class="er-num">808-244-9056</div><div class="er-addr">📍 221 Mahalani St, Wailuku, HI 96793 · 카훌루이서 차로 ~15분 <button class="copybtn" data-copy="20.8850,-156.4938">좌표복사</button></div></div>
+        <div class="emg-row"><div class="er-name">Minit Medical Urgent Care<small>가벼운 부상·발열 (카훌루이)</small></div><div class="er-num">808-667-6161</div><div class="er-addr">📍 270 Dairy Rd Ste 239, Kahului · 공항 근처 <button class="copybtn" data-copy="20.8895,-156.4560">좌표복사</button></div></div>
+        <div class="emg-row"><div class="er-name">Hana Health (Hāna Community Clinic)<small>하나 마을 유일 진료소 · 원격지</small></div><div class="er-num">808-248-8294</div><div class="er-addr">📍 4590 Hana Hwy, Hana, HI 96713 <button class="copybtn" data-copy="20.7576,-155.9905">좌표복사</button></div></div>
+        <div class="emg-row"><div class="er-name">주호놀룰루 대한민국 총영사관<small>여권 분실·사건사고 (오아후)</small></div><div class="er-num">808-595-6109</div><div class="er-addr">📍 2756 Pali Hwy, Honolulu · 긴급(야간) 808-265-9349</div></div>
+        <div class="emg-row"><div class="er-name">렌트카 로드사이드<small>펑크·배터리·사고 시</small></div><div class="er-num">계약서 확인</div><div class="er-addr">픽업 시 받은 봉투/앱의 24h 번호. 사고 시 경찰 리포트 번호 필수 확보.</div></div>
+      </div>
+    </div>
+
+    <div class="sec-title"><span class="st-ic">📡</span>오프라인 대비 체크리스트 <small>· 출발 전 폰에서</small></div>
+    <div class="card">
+      <div class="chk-progress"><i id="offlineBar"></i></div>
+      <div id="offlineChk"></div>
+    </div>
+
+    <div class="sec-title"><span class="st-ic">🧭</span>신호가 끊겼을 때</div>
+    <div class="grid g2">
+      <div class="card"><h3>🚗 로드 투 하나에서</h3>
+        <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--ink2);line-height:1.7">
+          <li><b>마일 마커(MM)가 곧 주소.</b> 도로변 초록 표지판 번호로 위치 파악·구조 요청.</li>
+          <li><b>Shaka Guide / GyPSy</b> 앱은 GPS로 작동 — 신호 없어도 오프라인 다운받아 두면 자동 안내.</li>
+          <li>구글맵 <b>"오프라인 지역"</b>에 East Maui 전체를 미리 저장(설정→오프라인 지도).</li>
+          <li>기름은 <b>파이아에서 만땅</b>. 하나 주유소는 비싸고 일찍 닫음(보통 18시).</li>
+          <li>현금 소액 필수 — 나히쿠·일부 노점은 <b>현금만</b>.</li>
+        </ul>
+      </div>
+      <div class="card"><h3>🏝️ 일반 대비</h3>
+        <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--ink2);line-height:1.7">
+          <li>예약 확인 메일(할레아칼라·와이아나파나파·숙소)은 <b>스크린샷</b>으로 저장.</li>
+          <li>여권·ESTA·e티켓·보험증서 <b>사진</b>을 폰 앨범 한 폴더에.</li>
+          <li>숙소 주소·체크인 방법·와이파이 비번을 <b>메모앱에 오프라인 복붙</b>.</li>
+          <li>이 대시보드 파일을 <b>홈 화면에 추가</b>하면 앱처럼 바로 열림.</li>
+          <li>보조배터리 + 차량 충전기. 새벽 일출·풀데이 드라이브엔 배터리 소모 큼.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ ROAD TO HANA ══════════════ -->
+  <section class="panel" id="rth">
+    <div class="alert warn" style="margin-bottom:14px"><span class="a-ic">⚠️</span><div><b>이 탭이 오프라인의 핵심.</b> 로드 투 하나는 신호가 자주 끊깁니다. 마일 마커(MM) 순서대로 정리했어요. 카드를 누르면 상세가 열립니다. <b>파이아 → 하나 편도 약 3–4시간</b>(정차 포함 풀데이). 늦어도 아침 7시 전 출발 권장.</div></div>
+
+    <div class="grid g4 keep2" style="margin-bottom:16px">
+      <div class="card" style="padding:13px 14px"><div class="kicker">거리</div><div style="font-weight:850;font-size:19px;font-family:var(--mono)">~64 mi</div><div class="muted" style="font-size:11.5px">파이아→하나 왕복. 커브 600개+</div></div>
+      <div class="card" style="padding:13px 14px"><div class="kicker">다리</div><div style="font-weight:850;font-size:19px;font-family:var(--mono)">59개</div><div class="muted" style="font-size:11.5px">1차선 46개 — 먼저 온 차 우선</div></div>
+      <div class="card" style="padding:13px 14px"><div class="kicker">운전 팁</div><div style="font-weight:850;font-size:15px">규정속도 −5mph</div><div class="muted" style="font-size:11.5px">코너 전 감속 · 멀미 예방</div></div>
+      <div class="card" style="padding:13px 14px"><div class="kicker">주유</div><div style="font-weight:850;font-size:15px">파이아 만땅</div><div class="muted" style="font-size:11.5px">하나 주유소 비쌈·일찍 닫음</div></div>
+    </div>
+
+    <div id="rthList" class="grid" style="gap:11px"></div>
+
+    <div class="sec-title"><span class="st-ic">🚗</span>운전 규칙 <small>· 안전이 최우선</small></div>
+    <div class="grid g2">
+      <div class="card"><h3>느리게, 양보하며</h3><ul style="margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--ink2);line-height:1.7">
+        <li><b>1차선 다리:</b> 반대편 차가 먼저 진입했으면 정지·양보. 서너 대까지 줄줄이 보내기.</li>
+        <li><b>현지 차 양보:</b> 뒤에 로컬이 붙으면 안전한 곳에서 먼저 보내기(생활 도로).</li>
+        <li><b>규정속도보다 5mph 낮게</b> 유지하면 동승자 멀미가 크게 줄어요.</li>
+        <li>코너 진입 <b>전에</b> 감속. 코너 중 브레이크는 더 위험.</li>
+      </ul></div>
+      <div class="card"><h3>주의사항</h3><ul style="margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--ink2);line-height:1.7">
+        <li>차 안에 <b>가방·귀중품 두지 않기</b>(주차장 유리 파손 도난 잦음). 트렁크도 X.</li>
+        <li>비 온 뒤 <b>폭포·계곡 급류·낙석</b> 주의. 물 흐리면 들어가지 않기(렙토스피라증).</li>
+        <li><b>야간 하산 졸음</b> 극도 주의 — 할레아칼라 일출 뒤 특히. 쉬었다 운전.</li>
+        <li><b>뒷길(Piʻilani Hwy) 2026 통제</b> — 하나 남쪽 순환은 왔던 길로 복귀가 기본.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <!-- ══════════════ ITINERARY ══════════════ -->
+  <section class="panel" id="itin">
+    <div class="alert info" style="margin-bottom:8px"><span class="a-ic">🗓️</span><div><b>마우이 구간(Day 1–5)</b>만 담았어요. 오아후 일정은 기존 <span class="mono">hawaii-trip-dashboard</span>에 있습니다. ● = 확정, ○ = 유동.</div></div>
+    <div id="itinList"></div>
+  </section>
+
+  <!-- ══════════════ MAP ══════════════ -->
+  <section class="panel" id="map">
+    <div class="alert info" style="margin-bottom:14px"><span class="a-ic">🗺️</span><div><b>오프라인 SVG 지도.</b> 실제 위경도로 마우이 윤곽과 주요 스팟을 그렸습니다(타일 서버 불필요 — 신호 없어도 표시). 점을 누르면 이름·좌표가 뜨고, 좌표는 복사해서 GPS에 붙여넣을 수 있어요. <b>붉은 선 = 로드 투 하나 동선</b>.</div></div>
+    <div class="map-shell">
+      <svg class="maui" id="mauiSvg" viewBox="0 0 760 540" role="img" aria-label="마우이 지도"></svg>
+      <div id="mapInfo" style="margin-top:10px;font-size:13px;min-height:22px;color:var(--ink2)"></div>
+      <div class="legend">
+        <span><i style="background:#e08a1e"></i>일정 스팟</span>
+        <span><i style="background:#0e7c6b"></i>숙소</span>
+        <span><i style="background:#1266a3"></i>공항</span>
+        <span><i style="background:#d1495b"></i>로드투하나</span>
+        <span><i style="background:#7a4bb0"></i>할레아칼라</span>
+      </div>
+    </div>
+    <p class="muted" style="font-size:11.5px;margin-top:10px">※ 개략 윤곽입니다. 실제 내비게이션은 Shaka Guide/구글맵 오프라인 지도 사용. 좌표는 참고용.</p>
+  </section>
+
+  <!-- ══════════════ EXPLORE (BEACH + FOOD) ══════════════ -->
+  <section class="panel" id="explore">
+    <div class="sec-title"><span class="st-ic">🤿</span>스노클링 · 해변</div>
+    <div class="grid g2" id="beachList"></div>
+
+    <div class="sec-title"><span class="st-ic">🍽️</span>맛집 <small>· 주소·영업·결제수단 · 오프라인 대비 상세</small></div>
+    <div class="grid g2" id="foodList"></div>
+
+    <div class="sec-title"><span class="st-ic">🛒</span>마트 · 주유 <small>· 파이아에서 채우기</small></div>
+    <div class="grid g3 keep2" id="martList"></div>
+  </section>
+
+  <!-- ══════════════ STAY + PREP ══════════════ -->
+  <section class="panel" id="stay">
+    <div class="sec-title"><span class="st-ic">🛏️</span>숙소 <small>· 3곳 · 체크인 정보</small></div>
+    <div class="grid g3 keep2" id="stayList"></div>
+    <div class="alert warn" style="margin-top:12px"><span class="a-ic">📝</span><div><b>숙소 정확한 주소·체크인 방법·와이파이 비번을 여기에 오프라인으로 적어두세요.</b> (Kaapana·Mikela는 에어비앤비 리스트명으로 보임 — 예약 확정 후 실제 주소를 스크린샷·메모.) 좌표는 대략값입니다.</div></div>
+
+    <div class="sec-title"><span class="st-ic">🎒</span>짐 체크리스트</div>
+    <div class="card">
+      <div class="chk-progress"><i id="packBar"></i></div>
+      <div id="packChk"></div>
+    </div>
+
+    <div class="sec-title"><span class="st-ic">💡</span>실전 팁</div>
+    <div id="tipList" class="grid g2"></div>
+  </section>
+
+  <footer class="foot">
+    <p>🌺 지혜 &amp; 형구 · 마우이 오프라인 대시보드 · 100% self-contained · 인터넷 없이 열림</p>
+    <p class="muted" style="font-size:11px">2026 기준 확인: 할레아칼라 $30/차+$1예약 · 와이아나파나파 예약제 · 하나 뒷길 통제 · 리프세이프 선크림 의무</p>
+  </footer>
+</div>
+<button class="backtop" id="backtop" aria-label="맨 위로">↑</button>
+
+<script>
+/* ═══════════════════════ DATA (all embedded, offline) ═══════════════════════ */
+const BUDGET = [
+  {item:"숙박 — Kaapana 2박 + Hana 1박 + Mikela 1박", low:800, mid:1150, high:1750, note:"에어비앤비 4박(2인)"},
+  {item:"렌트카 4일 (SUV 권장 · Hana Hwy 굴곡)", low:340, mid:440, high:560, note:"OGG 픽업/반납 · 보험 카드사 LDW"},
+  {item:"주유 · 주차", low:110, mid:150, high:210, note:"파이아 만땅 · Hana Hwy 거리"},
+  {item:"식사 4일 (3끼 · Paia Fish Market 등)", low:360, mid:520, high:760, note:"해산물·로컬 위주"},
+  {item:"입장·예약료", low:70, mid:110, high:150, note:"할레아칼라 $31·와이아나파나파 ·주립공원"},
+  {item:"기타(현금·기념품·선크림)", low:80, mid:140, high:240, note:"리프세이프 선크림 현지 구매"},
+  {item:"━━━ 마우이 구간 합계 (4박) ━━━", low:1760, mid:2510, high:3670, note:"항공·국내선·오아후 별도", isTotal:true},
+];
+
+/* Road to Hana — mile-by-mile (파이아 0 기준, Hana Hwy MM) */
+const RTH = [
+  {mm:"0", name:"Pāʻia 마을 (출발)", en:"Paia Town", lat:20.9028, lng:-156.3690, cat:"출발", desc:"주유 만땅·화장실·간식·현금 준비의 마지막 포인트. Paia Fish Market에서 도시락 포장 추천.", tips:"7시 전 출발이 이상적. 하나 방향 편의시설은 여기가 사실상 마지막.", cash:"카드 OK", rest:"있음"},
+  {mm:"2", name:"Twin Falls", en:"트윈 폭포", lat:20.9192, lng:-156.2528, cat:"폭포", desc:"첫 폭포·짧은 트레일(왕복 30분). 폭포 자체는 평범하지만 몸풀기 좋음. 입구 코코넛·스무디 노점.", tips:"코코넛 음료는 '나올 때' 사기(들어갈 때 사면 내내 무거움). 주차 유료 소액.", cash:"현금 권장", rest:"간이"},
+  {mm:"6.5", name:"Waikamoi Ridge Trail", en:"유칼립투스 숲", lat:20.9058, lng:-156.2211, cat:"트레일", desc:"거대한 유칼립투스·대나무 숲 짧은 순환 트레일. 향이 인상적. 주차 공간 제한.", tips:"주차 자리가 없으면 무리하지 말고 통과. 비 온 뒤 미끄럼 주의.", cash:"무료", rest:"없음"},
+  {mm:"9.5", name:"Garden of Eden Arboretum", en:"에덴 정원(유료)", lat:20.8683, lng:-156.2075, cat:"정원", desc:"쥬라기공원 오프닝 촬영지 뷰. 사설 식물원·입장료 있음. 시간 여유 있을 때만.", tips:"입장료 $20+/인. 급하면 스킵하고 무료 스팟에 집중.", cash:"카드 OK", rest:"있음"},
+  {mm:"12", name:"Kaumahina State Wayside", en:"전망·화장실", lat:20.8567, lng:-156.1719, cat:"전망", desc:"깨끗한 공중화장실 + Keʻanae 반도 조망 전망대. 중간 휴식 최적.", tips:"화장실 리셋 포인트. 도시락 먹기 좋음.", cash:"무료", rest:"있음"},
+  {mm:"16.5", name:"Keʻanae Peninsula", en:"케아나에 반도", lat:20.8625, lng:-156.1531, cat:"전망", desc:"용암 위 검은 해안에 파도가 부서지는 극적 뷰포인트. 반환점 판단 기준. Aunty Sandy's 바나나빵 명물.", tips:"파도 강한 바위 위로 올라가지 말 것(사망사고 있음). 바나나빵은 여기서.", cash:"현금", rest:"근처"},
+  {mm:"17", name:"Halfway to Hana Stand", en:"하프웨이 스탠드 ⭐", lat:20.8542, lng:-156.1400, cat:"간식", desc:"망고 셰이브아이스 + 샌드위치. 컨디션 체크 포인트 — 계속 갈지 되돌아갈지 여기서 결정.", tips:"카드 가능. 배고프면 여기서 해결하고 후반부 힘내기.", cash:"카드 OK", rest:"간이"},
+  {mm:"18", name:"Upper Waikani (Three Bears)", en:"삼단 폭포", lat:20.8497, lng:-156.1264, cat:"폭포", desc:"'세 마리 곰'이라 불리는 삼단 폭포. 도로변에서 바로 보임. 사진 명소.", tips:"갓길 주차 협소 — 안전할 때만 정차. 비 온 뒤 수량 압도적.", cash:"무료", rest:"없음"},
+  {mm:"22.5", name:"Puaʻa Kaʻa State Wayside", en:"폭포·화장실", lat:20.8181, lng:-156.1103, cat:"전망", desc:"작은 폭포·물놀이 웅덩이 + 화장실. 후반부 휴식 포인트.", tips:"화장실 마지막 안정 구간 중 하나.", cash:"무료", rest:"있음"},
+  {mm:"25", name:"Hanawi Falls", en:"하나위 폭포", lat:20.8069, lng:-156.0731, cat:"폭포", desc:"다리 위에서 보이는 두 갈래 폭포. 로드사이드 뷰.", tips:"다리 위 정차 금지 — 안전 갓길에서.", cash:"무료", rest:"없음"},
+  {mm:"32", name:"Waiʻānapanapa 흑사 해변", en:"Black Sand Beach", lat:20.7867, lng:-156.0014, cat:"자연 ⭐", desc:"칠흑 모래·용암 동굴·블로우홀. 로드투하나 하이라이트. 예약 필수(gowaianapanapa.com).", tips:"비거주자 $5/인+$10/차+수수료. 예약 시간 30분 내 도착. 매진 잦음 — 30일 전 확보.", cash:"온라인예약", rest:"있음"},
+  {mm:"34", name:"Hāna 마을", en:"하나 타운", lat:20.7576, lng:-155.9905, cat:"마을", desc:"종착 마을. Hana Farms·Thai by Pranee·Hana Ranch 식당. 진료소·주유소(비쌈). 조용하고 로컬한 분위기.", tips:"주유는 여기가 마지막(일찍 닫음). 하나 헬스 클리닉 808-248-8294.", cash:"카드/현금", rest:"있음"},
+  {mm:"50", name:"Hāmoa Beach", en:"하모아 비치 ⭐", lat:20.7217, lng:-155.9847, cat:"해변 ⭐", desc:"하나 최고의 비치. 부드러운 회백색 모래·야자수. 마크 트웨인이 극찬한 곳.", tips:"오후 파도 있을 수 있음. 화장실·샤워 있음. 하나 남쪽 5분.", cash:"무료", rest:"있음"},
+  {mm:"42*", name:"Pipiwai Trail · 대나무 숲", en:"Kīpahulu (뒷길)", lat:20.6647, lng:-156.0436, cat:"트레일", desc:"왕복 6.4km·거대 대나무 터널 + 122m Waimoku 폭포. 할레아칼라 국립공원 Kīpahulu 구역. Oheo Gulch(세븐 세이크리드 풀).", tips:"⚠️ 2026 하나 남쪽 뒷길 통제 가능 — 접근성 사전 확인. 입장료는 할레아칼라 패스로 공용.", cash:"공원패스", rest:"있음"},
+];
+
+/* Maui itinerary Day 1–5 */
+const ITIN = [
+  {day:1, date:"7/12(일)", title:"마우이 도착 · 카아파나", meta:"KE053 · HNL→OGG · 파이아", items:[
+    {t:"10:55", p:"HNL 도착 (KE053 프레스티지)", n:"입국·짐 60~90분. e티켓 ICN 21:05→HNL 10:55.", cat:"✈️ 이동", fix:false, lat:21.3187, lng:-157.9224},
+    {t:"13:30", p:"HNL → OGG 국내선", n:"35분 비행(Hawaiian Air). 미예약이면 즉시 발권.", cat:"✈️ 이동", fix:false, lat:20.8987, lng:-156.4305},
+    {t:"16:00", p:"Paia Fish Market", n:"마히마히 추천. 일요일 영업. 도시락 포장도 가능.", cat:"🍽️ 식사", fix:true, lat:20.9024, lng:-156.3711},
+    {t:"18:00", p:"Airbnb 체크인 (Kaapana)", n:"Kaapana 2박 첫날. 렌트카 없으면 택시/우버. 신혼이라 여유롭게.", cat:"🛏️ 숙박", fix:true, lat:20.8500, lng:-156.3800},
+  ]},
+  {day:2, date:"7/13(월)", title:"카아파나 · 로드투하나 맛보기", meta:"렌트카 픽업 · 해변·짧은 투어", items:[
+    {t:"06:00", p:"OGG 렌트카 픽업", n:"공항 옆 렌트카 센터(육교 도보 5분). SUV 권장. 풀탱크 반납 약속.", cat:"🚗 이동", fix:true, lat:20.8987, lng:-156.4305},
+    {t:"08:00", p:"Kaapana 해변 · 스노클링", n:"리조트 비치. 거북 출현 가능. 여유롭게.", cat:"🏖️ 해변", fix:false, lat:20.8500, lng:-156.3800},
+    {t:"12:00", p:"Paia Fish Market (점심)", n:"마히마히.", cat:"🍽️ 식사", fix:false, lat:20.9024, lng:-156.3711},
+    {t:"14:00", p:"Road to Hana 첫 정거장들", n:"Twin Falls · Waikamoi 등 짧은 맛보기. 무리 없이 앞부분만.", cat:"🚗 이동", fix:false, lat:20.9028, lng:-156.3690},
+    {t:"18:00", p:"Kaapana 저녁 · 일몰", n:"숙소 근처 여유로운 저녁.", cat:"🌅 일몰", fix:false, lat:20.8500, lng:-156.3800},
+    {t:"21:00", p:"Airbnb 숙박 (Kaapana 2박째)", n:"내일 풀데이 대비 일찍 자기.", cat:"🛏️ 숙박", fix:true, lat:20.8500, lng:-156.3800},
+  ]},
+  {day:3, date:"7/14(화)", title:"풀데이 로드 투 하나 → 하나 1박", meta:"4~6시간 코스 · 하나 마을 숙박", items:[
+    {t:"06:30", p:"파이아 출발 (Hana Hwy)", n:"주유 만땅·도시락·현금 확인. 풀데이 시작.", cat:"🚗 이동", fix:true, lat:20.9028, lng:-156.3690},
+    {t:"07:00", p:"Twin Falls", n:"첫 정차. 짧은 트레일.", cat:"💧 폭포", fix:false, lat:20.9192, lng:-156.2528},
+    {t:"10:00", p:"Aunty Sandy's 바나나빵 (Keʻanae)", n:"명물 바나나빵. 반도 뷰.", cat:"🍩 간식", fix:false, lat:20.8625, lng:-156.1531},
+    {t:"11:30", p:"Wailua / Upper Waikani 폭포", n:"로드사이드 사진 명소.", cat:"💧 폭포", fix:false, lat:20.8497, lng:-156.1264},
+    {t:"12:30", p:"Waiʻānapanapa 흑사 해변", n:"예약 필수. 흑사+용암 동굴+블로우홀.", cat:"🌿 자연", fix:true, lat:20.7867, lng:-156.0014},
+    {t:"14:00", p:"Hana Farms / Thai by Pranee (점심)", n:"하나 마을 도착 점심.", cat:"🍽️ 식사", fix:false, lat:20.7572, lng:-155.9858},
+    {t:"15:30", p:"Hāmoa Beach", n:"하나 최고 비치. 하나 남쪽 5분.", cat:"🏖️ 해변", fix:false, lat:20.7217, lng:-155.9847},
+    {t:"18:00", p:"Airbnb 체크인 (Hana)", n:"하나 마을 1박. 원격지 특유의 조용함.", cat:"🛏️ 숙박", fix:true, lat:20.7576, lng:-155.9905},
+  ]},
+  {day:4, date:"7/15(수)", title:"하나 → 미켈라(남부) 1박", meta:"⚠️ 뒷길 통제 가능 · 경로 재확인", items:[
+    {t:"09:00", p:"하나 → 미켈라 이동", n:"⚠️ 하나 뒷길(Piʻilani Hwy) 2026 통제 가능 — 막혔으면 왔던 로드투하나로 되돌아가 남부로. 이동 시간 크게 늘 수 있음. 출발 전 상태 확인.", cat:"🚗 이동", fix:true, lat:20.7576, lng:-155.9905},
+    {t:"11:00", p:"미켈라 해변 도착", n:"마우이 남부 조용한 해변.", cat:"🏖️ 해변", fix:false, lat:20.6500, lng:-156.2500},
+    {t:"12:30", p:"로컬 카페 (점심)", n:"지역 로컬 음식.", cat:"🍽️ 식사", fix:false, lat:20.6500, lng:-156.2500},
+    {t:"14:00", p:"미켈라 해변 · 휴식", n:"마우이 마지막 여유로운 오후.", cat:"🏖️ 해변", fix:false, lat:20.6500, lng:-156.2500},
+    {t:"18:00", p:"Airbnb 체크인 (Mikela)", n:"마우이 마지막 밤.", cat:"🛏️ 숙박", fix:true, lat:20.6500, lng:-156.2500},
+  ]},
+  {day:5, date:"7/16(목)", title:"마우이 → 오아후", meta:"렌트카 반납 · OGG→HNL", items:[
+    {t:"08:00", p:"미켈라 → OGG 출발", n:"약 1시간 50분. 10:00 OGG 도착 예상.", cat:"🚗 이동", fix:true, lat:20.6500, lng:-156.2500},
+    {t:"10:30", p:"OGG 렌트카 반납", n:"풀탱크 확인·직원 점검·영수증. 안 하면 갤런당 ~$10 패널티.", cat:"🚗 이동", fix:true, lat:20.8987, lng:-156.4305},
+    {t:"12:30", p:"OGG → HNL 국내선", n:"35분 비행. Hawaiian Air. → 오아후 일정으로.", cat:"✈️ 이동", fix:true, lat:20.8987, lng:-156.4305},
+  ]},
+];
+
+const BEACHES = [
+  {name:"Hoʻokipa Beach", en:"바다거북 수면 ⭐⭐⭐⭐⭐", rate:5, lat:20.9339, lng:-156.3567, desc:"오후 5–7시 해변 오른쪽 끝에 거북 10마리+ 수면. 물개도 간혹. 서핑·윈드서핑 성지. 공항 근처라 마우이 마지막 코스로 좋음.", tip:"거북 3m 거리 필수. 주차장 도난 주의."},
+  {name:"Hāmoa Beach", en:"하나 최고 비치 ⭐⭐⭐⭐⭐", rate:5, lat:20.7217, lng:-155.9847, desc:"부드러운 회백색 모래·야자수 절경. 마크 트웨인 극찬. 하나 남쪽 5분.", tip:"오후 파도 주의. 화장실·샤워 있음."},
+  {name:"Kaapana / 숙소 앞 해변", en:"휴식·스노클 ⭐⭐⭐", rate:3, lat:20.8500, lng:-156.3800, desc:"숙소 베이스 해변. 아침 스노클·석양. 접근성 최고.", tip:"날씨 따라 시야 편차. 아침이 잔잔."},
+  {name:"Wailea Beach", en:"남부 리조트 비치 ⭐⭐⭐⭐", rate:4, lat:20.6847, lng:-156.4433, desc:"남부 대표 백사장. 잔잔·시설 좋음. Black Rock(카아나팔리)와 함께 스노클 인기.", tip:"주차 협소·유료. 오전 추천."},
+  {name:"Waiʻānapanapa 흑사 해변", en:"블랙 샌드 ⭐⭐⭐⭐", rate:4, lat:20.7867, lng:-156.0014, desc:"칠흑 모래·용암 동굴·블로우홀. 로드투하나 하이라이트. 예약 필수.", tip:"수영은 조류 강함 주의. 사진 명소."},
+  {name:"Big Beach (Makena)", en:"광활한 백사장 ⭐⭐⭐⭐", rate:4, lat:20.6320, lng:-156.4470, desc:"넓고 야생적인 남부 대형 백사장. 파도(쇼어브레이크) 셀 수 있어 수영 주의.", tip:"부머 쇼어브레이크 — 목·허리 부상 조심."},
+];
+
+const FOOD = [
+  {name:"Paia Fish Market", en:"파이아 피시마켓", rate:5, lat:20.9024, lng:-156.3711, desc:"마히마히 버거·피시 플레이트 대표. 로드투하나 전 도시락 포장 최적.", addr:"100 Hana Hwy, Paia", hours:"매일 11:00–21:00", pay:"카드 OK"},
+  {name:"Tin Roof (Sheldon Simeon)", en:"틴루프", rate:5, lat:20.8869, lng:-156.4586, desc:"셰프 셸던 시메온의 로컬 플레이트 런치. 카훌루이. 미슐랭 셰프 캐주얼.", addr:"360 Papa Pl, Kahului", hours:"월–금 10:00–14:00 (주말 휴무·확인)", pay:"카드 OK"},
+  {name:"Aunty Sandy's Banana Bread", en:"바나나빵 노점", rate:4, lat:20.8625, lng:-156.1531, desc:"Keʻanae 반도 명물. 갓 구운 따뜻한 바나나빵.", addr:"210 Keanae Rd (MM16.5)", hours:"매일 08:30–14:00 (소진 시 마감)", pay:"현금 권장"},
+  {name:"Hana Farms Clay Oven Pizza", en:"하나 팜스", rate:4, lat:20.7620, lng:-155.9910, desc:"하나 마을 유기농 노점·주말 화덕 피자. 바나나빵·핫소스.", addr:"2910 Hana Hwy, Hana", hours:"매일(피자는 금–일 저녁·확인)", pay:"카드/현금"},
+  {name:"Thai by Pranee (Pranee's)", en:"프라니 타이", rate:4, lat:20.7566, lng:-155.9905, desc:"하나 마을 태국 음식. 풀데이 후 든든한 점심.", addr:"Hana Hwy, Hana", hours:"화·수 휴무 가능 — 확인", pay:"현금 권장"},
+  {name:"Mama's Fish House", en:"마마스 피시하우스 🍷", rate:5, lat:20.9200, lng:-156.3653, desc:"마우이 대표 파인 다이닝(해산물). 예약 필수·수개월 전. 신혼 디너 후보.", addr:"799 Poho Pl, Paia", hours:"매일 · 예약제", pay:"카드 · 예약 필수"},
+];
+
+const MART = [
+  {name:"⛽ 주유 — 파이아 (Paia)", desc:"로드투하나 전 만땅 필수 포인트. 하나 방향 마지막 주유소.", addr:"Baldwin Ave / Hana Hwy 인근", lat:20.9030, lng:-156.3680},
+  {name:"🛒 Foodland Pukalani", en:"식료품·도시락 물", desc:"업컨트리 대형 마트. 도시락·물·과일. 로드투하나 전 보급.", addr:"55 Pukalani St, Pukalani", lat:20.8367, lng:-156.3389},
+  {name:"🛒 Mana Foods (Paia)", en:"파이아 유기농", desc:"파이아 자연식·델리. 샌드위치·스낵 포장 좋음.", addr:"49 Baldwin Ave, Paia", lat:20.9036, lng:-156.3703},
+  {name:"🏬 Walmart Kahului", en:"생필품·캠핑", desc:"선크림(리프세이프)·모기약·비치용품·간식 저렴. 도착 첫날 보급.", addr:"101 Pakaula St, Kahului", lat:20.8730, lng:-156.4590},
+  {name:"🏬 Costco Kahului", en:"대용량·주유 저렴", desc:"물·간식·주유(회원). 한국 카드 OK. 공항 근처.", addr:"540 Haleakala Hwy, Kahului", lat:20.8917, lng:-156.4620},
+  {name:"🛒 Hasegawa General Store", en:"하나 잡화", desc:"하나 마을 100년 잡화점. 하나에서 필요한 소소한 것.", addr:"5165 Hana Hwy, Hana", lat:20.7560, lng:-155.9910},
+];
+
+const STAY = [
+  {name:"Kaapana (Airbnb)", en:"Day 1–2 · 2박", lat:20.8500, lng:-156.3800, notes:["도착·휴식 베이스","해변 근처·스노클","실제 주소/체크인 방법 예약 후 메모"], pill:"teal"},
+  {name:"Hāna (Airbnb)", en:"Day 3 · 1박", lat:20.7576, lng:-155.9905, notes:["로드투하나 종착 후 1박","원격지 — 주유·식료품 미리","신호 약함 — 오프라인 대비"], pill:"sun"},
+  {name:"Mikela (Airbnb)", en:"Day 4 · 1박", lat:20.6500, lng:-156.2500, notes:["마우이 남부·마지막 밤","⚠️ 하나서 접근 경로 확인(뒷길 통제)","다음날 OGG 반납 동선"], pill:"coral"},
+];
+
+const TIPS = [
+  {cat:"운전", t:"우측 통행 · mph", b:"한국과 같은 우측 통행, 속도는 mph(1mph≈1.6km/h). 빨간불 우회전 가능(Stop 후). 국제운전면허증 지참."},
+  {cat:"전압", t:"110V · Type A", b:"220V 어댑터·멀티탭 필수. USB 포트 있는 멀티탭 1개면 충분."},
+  {cat:"팁", t:"식사 15–20%", b:"레스토랑 음식값 기준 15–20%. 카운터 캐주얼(피시마켓·노점)은 팁 없어도 됨. 우버도 15–20%."},
+  {cat:"통신", t:"eSIM 미리 활성화", b:"Airalo eSIM 7일 $7~10 가성비. 비행 전 한국에서 설치. 동부·하나는 음영 있음 — 오프라인 대비."},
+  {cat:"돈", t:"현금 소액 필수", b:"나히쿠·일부 노점 현금만. $1·$5 지폐 챙기기. 팁·주차용."},
+  {cat:"건강", t:"멀미·물놀이 감염", b:"멀미약 미리 복용(로드투하나). 흐린 계곡물엔 상처 있으면 안 들어가기(렙토스피라증)."},
+  {cat:"모기", t:"동부·폭포는 모기", b:"하나·우림·폭포 근처 모기 많음. 벌레 기피제 필수(현지 구매 가능)."},
+  {cat:"짐도난", t:"차에 두지 않기", b:"주차장 유리 파손 도난 잦음. 트렁크도 X. 귀중품은 들고 다니기."},
+];
+
+const OFFLINE_CHK = [
+  {t:"이 대시보드 파일 폰에 저장 · 홈 화면 추가", s:"기내/음영에서 즉시 열림"},
+  {t:"구글맵 '오프라인 지역'에 East Maui 저장", s:"설정→오프라인 지도→직접 선택"},
+  {t:"Shaka Guide (또는 GyPSy) 로드투하나 다운로드", s:"GPS 기반 자동 안내 · 오프라인"},
+  {t:"할레아칼라 예약 확인 메일 스크린샷", s:"입구서 확인 필요 · 오프라인 필수"},
+  {t:"와이아나파나파 예약 확인 스크린샷", s:"예약 시간 30분 내 도착"},
+  {t:"숙소 3곳 주소·체크인·와이파이 오프라인 메모", s:"신호 없어도 찾아가기"},
+  {t:"여권·ESTA·e티켓·보험증서 사진 저장", s:"앨범 한 폴더에"},
+  {t:"현금 소액($1·$5) · 리프세이프 선크림 준비", s:"노점 현금만 · 선크림 의무"},
+  {t:"보조배터리 · 차량 충전기", s:"일출·풀데이 드라이브 소모 큼"},
+];
+
+const PACK_CHK = [
+  {t:"리프세이프(미네랄) 선크림", s:"옥시벤존 X · 현지 구매 OK"},
+  {t:"물놀이용 아쿠아슈즈·래시가드", s:"용암·산호 바닥 대비"},
+  {t:"스노클 마스크·핀 (개인용 권장)", s:"대여보다 편함 · 어지럼 덜함"},
+  {t:"방수 백·건조 타월", s:"폭포·해변"},
+  {t:"가벼운 바람막이·긴팔", s:"할레아칼라 새벽 5°C · 우림 서늘"},
+  {t:"벌레기피제·멀미약", s:"동부 모기 · 로드투하나 멀미"},
+  {t:"보조배터리·차량 충전기·어댑터(110V)", s:"오프라인 필수템"},
+  {t:"현금 소액·신용카드 2종", s:"노점 현금 · 예비 카드"},
+  {t:"재사용 물통(1갤런)·간식", s:"드라이브 중 보급"},
+  {t:"모자·선글라스·립밤", s:"자외선 강함"},
+];
+
+/* ═══════════════════════ HELPERS ═══════════════════════ */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const LS = { get:(k,d)=>{try{const v=localStorage.getItem('maui_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+             set:(k,v)=>{try{localStorage.setItem('maui_'+k,JSON.stringify(v))}catch(e){}} };
+const enc = encodeURIComponent;
+function gmap(q){ return 'https://www.google.com/maps/search/?api=1&query='+enc(q); }
+function fmt(n){ return '$'+n.toLocaleString('en-US'); }
+function krw(n){ const r=+($('#rateInput').value)||1385; return '₩'+Math.round(n*r).toLocaleString('ko-KR'); }
+function coordLink(lat,lng,name){
+  if(lat==null) return '';
+  const q = name?name:(lat+','+lng);
+  return `<a class="gmap-link" href="${gmap(q)}" target="_blank" rel="noopener">지도</a>
+    <button class="copybtn" data-copy="${lat},${lng}">좌표복사</button>`;
+}
+
+/* ═══════════════════════ RENDER ═══════════════════════ */
+function renderBudget(){
+  const tb = $('#budgetTable tbody'); tb.innerHTML='';
+  BUDGET.forEach(r=>{
+    const tr=document.createElement('tr'); if(r.isTotal) tr.className='total';
+    tr.innerHTML = `<td>${r.item}<span class="krw">${r.note||''}</span></td>
+      <td class="num">${fmt(r.low)}<span class="krw">${krw(r.low)}</span></td>
+      <td class="num">${fmt(r.mid)}<span class="krw">${krw(r.mid)}</span></td>
+      <td class="num">${fmt(r.high)}<span class="krw">${krw(r.high)}</span></td>`;
+    tb.appendChild(tr);
+  });
+  const total = BUDGET.find(b=>b.isTotal);
+  $('#kpiCost').textContent = fmt(total.mid);
+  $('#kpiCostKrw').textContent = '2인 · '+krw(total.mid);
+}
+
+function renderRTH(){
+  const el=$('#rthList'); el.innerHTML='';
+  RTH.forEach((s,i)=>{
+    const d=document.createElement('div'); d.className='rth-stop'+(i===0?' open':'');
+    d.innerHTML=`
+      <div class="rth-head">
+        <div class="rth-mm"><span class="mm-num">${s.mm}</span><span class="mm-lab">MILE</span></div>
+        <div class="rth-title"><div class="rt-name">${s.name}</div><div class="rt-en">${s.en} · <span class="pill">${s.cat}</span></div></div>
+        <div class="rth-toggle">▸</div>
+      </div>
+      <div class="rth-body">
+        <div class="rt-desc">${s.desc}</div>
+        <div class="kv"><span class="k">💡 팁</span><span class="v">${s.tips}</span></div>
+        <div class="kv"><span class="k">💳 결제</span><span class="v">${s.cash} · 🚻 화장실 ${s.rest}</span></div>
+        <div class="kv"><span class="k">📌 좌표</span><span class="v mono">${s.lat}, ${s.lng} &nbsp; ${coordLink(s.lat,s.lng,s.name+' Maui')}</span></div>
+      </div>`;
+    d.querySelector('.rth-head').addEventListener('click',()=>d.classList.toggle('open'));
+    el.appendChild(d);
+  });
+}
+
+function renderItin(){
+  const el=$('#itinList'); el.innerHTML='';
+  ITIN.forEach(day=>{
+    const head=document.createElement('div'); head.className='day-head';
+    head.innerHTML=`<span class="d-badge">Day ${day.day}</span><span class="d-title">${day.title}</span><span class="d-meta">${day.date} · ${day.meta}</span>`;
+    el.appendChild(head);
+    const tl=document.createElement('div'); tl.className='tl';
+    day.items.forEach(it=>{
+      const item=document.createElement('div'); item.className='tl-item'+(it.fix?' fix':'');
+      item.innerHTML=`<div class="tl-time">${it.t} ${it.fix?'●':'○'}</div>
+        <div class="tl-place">${it.p}</div>
+        <div class="tl-note">${it.n}</div>
+        <div class="tl-meta" style="margin-top:4px"><span class="tl-cat pill">${it.cat}</span> ${it.lat!=null?coordLink(it.lat,it.lng,it.p+' Maui'):''}</div>`;
+      tl.appendChild(item);
+    });
+    el.appendChild(tl);
+  });
+}
+
+function starHTML(r){ return '<span class="stars">'+'★'.repeat(r)+'☆'.repeat(5-r)+'</span>'; }
+
+function renderExplore(){
+  const b=$('#beachList'); b.innerHTML='';
+  BEACHES.forEach(x=>{
+    const c=document.createElement('div'); c.className='listcard';
+    c.innerHTML=`<div class="lc-top"><div><span class="lc-name">${x.name}</span> ${starHTML(x.rate)}<div class="lc-en">${x.en}</div></div></div>
+      <div class="lc-desc">${x.desc}</div>
+      <div class="lc-desc"><b>💡</b> ${x.tip}</div>
+      <div class="tags"><span class="mono" style="font-size:11.5px;color:var(--muted)">${x.lat}, ${x.lng}</span> ${coordLink(x.lat,x.lng,x.name+' Maui')}</div>`;
+    b.appendChild(c);
+  });
+  const f=$('#foodList'); f.innerHTML='';
+  FOOD.forEach(x=>{
+    const c=document.createElement('div'); c.className='listcard';
+    c.innerHTML=`<div class="lc-top"><div><span class="lc-name">${x.name}</span> ${starHTML(x.rate)}<div class="lc-en">${x.en}</div></div></div>
+      <div class="lc-desc">${x.desc}</div>
+      <div class="kv"><span class="k">📍 주소</span><span class="v">${x.addr}</span></div>
+      <div class="kv"><span class="k">🕐 영업</span><span class="v">${x.hours}</span></div>
+      <div class="kv"><span class="k">💳 결제</span><span class="v">${x.pay} &nbsp; ${coordLink(x.lat,x.lng,x.name+' Maui')}</span></div>`;
+    f.appendChild(c);
+  });
+  const m=$('#martList'); m.innerHTML='';
+  MART.forEach(x=>{
+    const c=document.createElement('div'); c.className='listcard';
+    c.innerHTML=`<div class="lc-name">${x.name}</div><div class="lc-en">${x.en||''}</div>
+      <div class="lc-desc">${x.desc}</div>
+      <div class="kv"><span class="k">📍</span><span class="v">${x.addr} ${coordLink(x.lat,x.lng,x.name+' Maui')}</span></div>`;
+    m.appendChild(c);
+  });
+}
+
+function renderStay(){
+  const el=$('#stayList'); el.innerHTML='';
+  STAY.forEach(x=>{
+    const c=document.createElement('div'); c.className='card';
+    c.innerHTML=`<h3>${x.name}</h3><div class="lc-en" style="color:var(--muted);font-size:12px;font-weight:700;margin-bottom:8px">${x.en}</div>
+      <ul style="margin:0;padding-left:17px;font-size:12.5px;color:var(--ink2);line-height:1.7">${x.notes.map(n=>`<li>${n}</li>`).join('')}</ul>
+      <div class="tags" style="margin-top:10px"><span class="pill ${x.pill}">${x.lat}, ${x.lng}</span> ${coordLink(x.lat,x.lng,x.name+' Maui')}</div>`;
+    el.appendChild(c);
+  });
+}
+
+function renderTips(){
+  const el=$('#tipList'); el.innerHTML='';
+  TIPS.forEach(x=>{
+    const c=document.createElement('div'); c.className='listcard';
+    c.innerHTML=`<div class="lc-top"><span class="lc-name">${x.t}</span><span class="pill teal">${x.cat}</span></div><div class="lc-desc">${x.b}</div>`;
+    el.appendChild(c);
+  });
+}
+
+/* Checklists with localStorage */
+function renderChk(listEl, barEl, items, key){
+  const el=$(listEl); el.innerHTML='';
+  const state=LS.get(key,{});
+  items.forEach((it,i)=>{
+    const id=key+'_'+i; const done=!!state[id];
+    const row=document.createElement('label'); row.className='chk'+(done?' done':'');
+    row.innerHTML=`<input type="checkbox" ${done?'checked':''}><div class="c-txt">${it.t}<small>${it.s||''}</small></div>`;
+    row.querySelector('input').addEventListener('change',e=>{
+      state[id]=e.target.checked; LS.set(key,state);
+      row.classList.toggle('done',e.target.checked); updateBar();
+    });
+    el.appendChild(row);
+  });
+  function updateBar(){
+    const st=LS.get(key,{}); const done=items.filter((_,i)=>st[key+'_'+i]).length;
+    $(barEl).style.width=(done/items.length*100)+'%';
+  }
+  updateBar();
+}
+
+/* ═══════════════════════ OFFLINE SVG MAP ═══════════════════════ */
+function renderMap(){
+  const svg=$('#mauiSvg');
+  const BB={minLng:-156.72,maxLng:-155.95,minLat:20.55,maxLat:21.06};
+  const W=760,H=540, pad=14;
+  const X=lng=> pad+(lng-BB.minLng)/(BB.maxLng-BB.minLng)*(W-2*pad);
+  const Y=lat=> pad+(BB.maxLat-lat)/(BB.maxLat-BB.minLat)*(H-2*pad);
+  // Maui coastline (approx lng,lat) — recognizable silhouette
+  const coast=[
+    [-156.58,21.025],[-156.63,21.015],[-156.665,20.995],[-156.68,20.955],[-156.685,20.905],
+    [-156.675,20.865],[-156.645,20.825],[-156.60,20.805],[-156.54,20.795],[-156.49,20.79],
+    [-156.465,20.775],[-156.455,20.735],[-156.45,20.695],[-156.445,20.655],[-156.435,20.61],
+    [-156.41,20.585],[-156.375,20.575],[-156.33,20.585],[-156.27,20.60],[-156.20,20.615],
+    [-156.13,20.63],[-156.06,20.645],[-156.005,20.665],[-155.975,20.71],[-155.965,20.755],
+    [-155.98,20.80],[-156.02,20.835],[-156.075,20.865],[-156.14,20.875],[-156.20,20.885],
+    [-156.26,20.905],[-156.315,20.92],[-156.365,20.925],[-156.41,20.918],[-156.45,20.905],
+    [-156.485,20.925],[-156.50,20.955],[-156.525,20.985],[-156.55,21.01],[-156.58,21.025]
+  ];
+  let path='M ';
+  coast.forEach((p,i)=>{ path+=(i?'L ':'')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)+' '; });
+  path+='Z';
+
+  // route (Road to Hana) via itinerary Maui path key points
+  const route=[[-156.3690,20.9028],[-156.2528,20.9192],[-156.1531,20.8625],[-156.0014,20.7867],[-155.9905,20.7576],[-155.9847,20.7217]];
+  let rp='M '; route.forEach((p,i)=>{ rp+=(i?'L ':'')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)+' '; });
+
+  const pts=[
+    {n:"OGG 공항",lat:20.8987,lng:-156.4305,c:"#1266a3"},
+    {n:"Kahului(마트)",lat:20.8730,lng:-156.4590,c:"#e08a1e"},
+    {n:"Paia 파이아",lat:20.9028,lng:-156.3690,c:"#e08a1e"},
+    {n:"Hoʻokipa 거북",lat:20.9339,lng:-156.3567,c:"#e08a1e"},
+    {n:"Twin Falls",lat:20.9192,lng:-156.2528,c:"#d1495b"},
+    {n:"Keʻanae 바나나빵",lat:20.8625,lng:-156.1531,c:"#d1495b"},
+    {n:"Waiʻānapanapa 흑사",lat:20.7867,lng:-156.0014,c:"#d1495b"},
+    {n:"Hana 마을",lat:20.7576,lng:-155.9905,c:"#d1495b"},
+    {n:"Hāmoa Beach",lat:20.7217,lng:-155.9847,c:"#d1495b"},
+    {n:"할레아칼라 정상",lat:20.7097,lng:-156.2533,c:"#7a4bb0"},
+    {n:"Kaapana 숙소",lat:20.8500,lng:-156.3800,c:"#0e7c6b"},
+    {n:"Mikela 숙소",lat:20.6500,lng:-156.2500,c:"#0e7c6b"},
+    {n:"Wailea 남부",lat:20.6847,lng:-156.4433,c:"#e08a1e"},
+  ];
+
+  let dots='';
+  pts.forEach((p,i)=>{
+    const cx=X(p.lng).toFixed(1), cy=Y(p.lat).toFixed(1);
+    dots+=`<g class="mpt" data-name="${p.n}" data-lat="${p.lat}" data-lng="${p.lng}" style="cursor:pointer">
+      <circle cx="${cx}" cy="${cy}" r="6.5" fill="${p.c}" stroke="#fff" stroke-width="2"/>
+      <text x="${cx}" y="${(+cy-11).toFixed(1)}" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--ink)" style="paint-order:stroke;stroke:var(--surface);stroke-width:3px">${p.n}</text>
+    </g>`;
+  });
+
+  svg.innerHTML=`
+    <path d="${path}" fill="var(--teal-soft)" stroke="var(--teal)" stroke-width="2" stroke-linejoin="round"/>
+    <text x="${X(-156.30).toFixed(1)}" y="${Y(20.72).toFixed(1)}" font-size="11" fill="var(--muted)" text-anchor="middle" opacity="0.7">East Maui / Haleakalā</text>
+    <text x="${X(-156.60).toFixed(1)}" y="${Y(20.90).toFixed(1)}" font-size="10" fill="var(--muted)" text-anchor="middle" opacity="0.6">West Maui</text>
+    <path d="${rp}" fill="none" stroke="#d1495b" stroke-width="3" stroke-dasharray="2 5" stroke-linecap="round" opacity="0.85"/>
+    ${dots}`;
+  svg.querySelectorAll('.mpt').forEach(g=>{
+    g.addEventListener('click',()=>{
+      const n=g.dataset.name, la=g.dataset.lat, ln=g.dataset.lng;
+      $('#mapInfo').innerHTML=`<b>${n}</b> &nbsp; <span class="mono">${la}, ${ln}</span> &nbsp; ${coordLink(+la,+ln,n+' Maui')}`;
+      bindCopy();
+    });
+  });
+}
+
+/* ═══════════════════════ INTERACTIONS ═══════════════════════ */
+function bindCopy(){
+  $$('.copybtn').forEach(b=>{
+    if(b.dataset.bound) return; b.dataset.bound='1';
+    b.addEventListener('click',async e=>{
+      e.preventDefault(); e.stopPropagation();
+      const txt=b.dataset.copy;
+      try{ await navigator.clipboard.writeText(txt); }
+      catch(err){ const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(_){}ta.remove(); }
+      const old=b.textContent; b.textContent='복사됨 ✓'; setTimeout(()=>b.textContent=old,1200);
+    });
+  });
+}
+
+function initTabs(){
+  const tabFromHash = location.hash.replace('#','');
+  $$('#tabs .tab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      $$('#tabs .tab').forEach(x=>x.classList.remove('active'));
+      $$('.panel').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      const p=$('#'+t.dataset.tab); if(p)p.classList.add('active');
+      history.replaceState(null,'','#'+t.dataset.tab);
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+  });
+  if(tabFromHash && $('#'+tabFromHash)){
+    const btn=$(`#tabs .tab[data-tab="${tabFromHash}"]`); if(btn)btn.click();
+  }
+}
+
+function initTheme(){
+  const saved=LS.get('theme', (matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');
+  document.documentElement.setAttribute('data-theme',saved);
+  $('#themeLbl').textContent = saved==='dark'?'라이트':'다크';
+  $('#themeBtn').addEventListener('click',()=>{
+    const cur=document.documentElement.getAttribute('data-theme');
+    const nx=cur==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',nx);
+    $('#themeLbl').textContent=nx==='dark'?'라이트':'다크'; LS.set('theme',nx);
+    renderMap();
+  });
+}
+
+function initNet(){
+  function upd(){
+    const on=navigator.onLine;
+    $('#netDot').className='net-dot '+(on?'net-on':'net-off');
+    $('#netLbl').textContent=on?'온라인':'오프라인';
+  }
+  upd(); addEventListener('online',upd); addEventListener('offline',upd);
+}
+
+function initMisc(){
+  $('#rateInput').addEventListener('input',()=>{ renderBudget(); LS.set('rate',$('#rateInput').value); });
+  const savedRate=LS.get('rate',null); if(savedRate) $('#rateInput').value=savedRate;
+  const bt=$('#backtop');
+  addEventListener('scroll',()=>{ bt.classList.toggle('show',scrollY>500); });
+  bt.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+}
+
+/* ═══════════════════════ BOOT ═══════════════════════ */
+renderBudget();
+renderRTH();
+renderItin();
+renderExplore();
+renderStay();
+renderTips();
+renderChk('#offlineChk','#offlineBar',OFFLINE_CHK,'offline');
+renderChk('#packChk','#packBar',PACK_CHK,'pack');
+renderMap();
+initTabs();
+initTheme();
+initNet();
+initMisc();
+bindCopy();
+</script>
+</body>
+</html>
